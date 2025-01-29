@@ -10,7 +10,7 @@
     - You can stop all nodes on this.
 - ![system](imgs/system.png)
 
-### 4. Information shows the information of EVE-NG
+#### 4. Information shows the information of EVE-NG
 - ![info](imgs/info.png)
 
 ## Create Node
