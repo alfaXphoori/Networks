@@ -4,8 +4,8 @@
 
 2. Management shows the User management
     - You can add and delete use on this.
-![manage](imgs/main.png)
+- ![manage](imgs/manage.png)
 
 3. System shows the system status & log
     - You can stop all nodes on this.
-![system](imgs/system.png)
+- ![system](imgs/system.png)
