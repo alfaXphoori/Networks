@@ -9,39 +9,39 @@ EVE-NG
 - EVE-NG.iso (https://www.eve-ng.net/)
 
 ## Installation
-1. login eve-ng
+#### 1. login eve-ng
     - user : root
     - passwd : eve
-![login eve linux](imgs/login.png)
+- ![login eve linux](imgs/login.png)
 
-2. Change the password for EVE-NG
-![change passwd](imgs/chgpasswd.png)
+#### 2. Change the password for EVE-NG
+- ![change passwd](imgs/chgpasswd.png)
 
-3. Config dns domain name
-![conf Dns](imgs/conDns.png)
+#### 3. Config dns domain name
+- ![conf Dns](imgs/conDns.png)
 
-4. Config IP address
+#### 4. Config IP address
     - Using DHCP
 - ![conf IP](imgs/confIP.png)
 
-5. Config NTP server
+#### 5. Config NTP server
     - Default is blank
-![conf NTP](imgs/confNTP.png)
+- ![conf NTP](imgs/confNTP.png)
 
-6. Config the connection for the network.
+#### 6. Config the connection for the network.
     - direct connection
-![conf Conn](imgs/confNTP.png)
+- ![conf Conn](imgs/confNTP.png)
 
-7. Finish installation.
-![finish](imgs/finish.png)
+#### 7. Finish installation.
+- ![finish](imgs/finish.png)
 
-8. Using Eve-NG.
+####8. Using Eve-NG.
     - Open a browser and enter the IP address of the EVE-NG server."
         - user : admin
         - passwd : eve
-![url](imgs/urlEveNG.png)
+- ![url](imgs/urlEveNG.png)
 
-9. Install the Windows Client Side.
+#### 9. Install the Windows Client Side.
     - Download and install this Windows Client Side. \
     (https://www.eve-ng.net/index.php/download/)
-![win pack](imgs/winPack.png)
+- ![win pack](imgs/winPack.png)
