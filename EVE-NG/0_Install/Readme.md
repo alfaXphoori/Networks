@@ -42,5 +42,6 @@ EVE-NG
 ![url](imgs/urlEveNG.png)
 
 9. Install the Windows Client Side.
-    - Download and install this Windows Client Side.
+    - Download and install this Windows Client Side. \
+    (https://www.eve-ng.net/index.php/download/)
 ![win pack](imgs/winPack.png)
