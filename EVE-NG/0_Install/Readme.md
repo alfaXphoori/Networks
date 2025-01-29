@@ -1,4 +1,4 @@
-# Project Title
+# Project
 EVE-NG
 ## Authors
 
@@ -9,8 +9,9 @@ EVE-NG
 - EVE-NG.iso (https://www.eve-ng.net/)
 
 ## Installation
-user : root \
-passwd : eve
+1. login eve-ng
+    - user : root \
+    - passwd : eve
 ![login eve linux](imgs/login.png)
 
 ```bash
