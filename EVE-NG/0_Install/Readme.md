@@ -22,7 +22,7 @@ EVE-NG
 
 4. Config IP address
     - Using DHCP
-![conf IP](imgs/confIP.png)
+- ![conf IP](imgs/confIP.png)
 
 5. Config NTP server
     - Default is blank
