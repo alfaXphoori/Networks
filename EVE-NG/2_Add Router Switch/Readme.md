@@ -7,7 +7,7 @@
 - ![conn Ftp](imgs/connFtp.png)
 
 #### 3. Download the router and switch files, then unzip them.
-    - [Download](https://drive.google.com/drive/folders/1-PfBdcoa2BJnFKN_nMBsjHqRNQ2H4avU?usp=sharing)
+- ![Download](https://drive.google.com/drive/folders/1-PfBdcoa2BJnFKN_nMBsjHqRNQ2H4avU?usp=sharing)
 
 4. 
 ```bash
