@@ -1,14 +1,15 @@
 ## Add Router
-1. Dowload & Install FTP Software.
+#### 1. Dowload & Install FTP Software.
     - https://filezilla-project.org
 -  ![ftp](imgs/ftp.png)
 
-2. Use the IP address to connect to the EVE-NG server on port 22.
+#### 2. Use the IP address to connect to the EVE-NG server on port 22.
 - ![conn Ftp](imgs/connFtp.png)
 
-3. Download Router & Switch File
+#### 3. Download the router and switch files, then unzip them.
     - [Download](https://drive.google.com/drive/folders/1-PfBdcoa2BJnFKN_nMBsjHqRNQ2H4avU?usp=sharing)
 
+4. 
 ```bash
 ip 192.168.1.101 255.255.255.0 192.168.1.1
 ```
