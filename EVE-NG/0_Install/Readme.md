@@ -9,7 +9,7 @@ EVE-NG
 - EVE-NG.iso (https://www.eve-ng.net/)
 
 ## Installation
-user : root
+user : root \
 passwd : eve
 ![login eve linux](imgs/login.png)
 
