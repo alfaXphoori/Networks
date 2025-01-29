@@ -40,3 +40,7 @@ EVE-NG
         - user : admin
         - passwd : eve
 ![url](imgs/urlEveNG.png)
+
+9. Install the Windows Client Side.
+    - Download and install this Windows Client Side.
+![win pack](imgs/winPack.png)
