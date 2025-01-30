@@ -1,4 +1,4 @@
-## Add Router
+## Add Router & Switch
 #### 1. Dowload & Install FTP Software.
     - https://filezilla-project.org
 -  ![ftp](imgs/ftp.png)
