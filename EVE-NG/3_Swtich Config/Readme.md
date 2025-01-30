@@ -32,13 +32,15 @@ enable secret Cisco1234
 ```
 #### Set Bannner
 ```bash
-banner motd #
+banner motd $
 --------------------------------------------
 Switch 1 : Cisco 9200 : Floor 1 : CE Tower
 --------------------------------------------
-#
-```\
-###🔹 Management IP & SSH Configuration
+$
+```
+
+
+## 🔹 Management IP & SSH Configuration
 #### Assign an IP to VLAN 1 for Remote Access
 ```bash
 interface vlan 1
