@@ -1,13 +1,13 @@
 # VLAN Configuration Lab in EVE-NG
 
-## 🔹 Lab Objectives
+### 🔹 Lab Objectives
 1. **Create VLANs** and assign them to ports  
 2. **Configure Trunk Ports** between switches  
 3. **Verify VLAN Configuration** using `show vlan brief`
 
 ---
 
-## 🔹 Step 1: Set Up the Lab in EVE-NG
+### 🔹 Step 1: Set Up the Lab in EVE-NG
 
 1. Open **EVE-NG**.
 2. Create a **New Lab** (e.g., "VLAN_Lab").
@@ -23,7 +23,7 @@
 
 ---
 
-## 🔹 Step 2: Configure VLANs on SW1 and SW2
+### 🔹 Step 2: Configure VLANs on SW1 and SW2
 
 ### **SW1 VLAN Configuration**
 #### Create VLANs
@@ -77,16 +77,16 @@ exit
 
 ---
 
-## 🔹 Step 3: Configure a Trunk Between SW1 and SW2
+### 🔹 Step 3: Configure a Trunk Between SW1 and SW2
 
-### **On SW1**
+#### **On SW1**
 ```bash
 interface fastEthernet 0/24
 switchport mode trunk
 switchport trunk allowed vlan 10,20
 exit
 ```
-### **On SW2**
+#### **On SW2**
 ```bash
 interface fastEthernet 0/24
 switchport mode trunk
@@ -97,7 +97,7 @@ exit
 
 ---
 
-## 🔹 Step 4: Verify VLAN Configuration
+### 🔹 Step 4: Verify VLAN Configuration
 
 ### **Check VLANs on Both Switches**
 ```bash
@@ -113,17 +113,17 @@ show interfaces trunk
 
 ---
 
-## 🔹 Step 5: Test Connectivity
+### 🔹 Step 5: Test Connectivity
 
-### **On PC1, assign an IP address (VLAN 10)**
+#### **On PC1, assign an IP address (VLAN 10)**
 ```bash
 ip 192.168.10.10 255.255.255.0 192.168.10.1
 ```
-### **On PC3, assign an IP address (VLAN 10)**
+#### **On PC3, assign an IP address (VLAN 10)**
 ```bash
 ip 192.168.10.20 255.255.255.0 192.168.10.1
 ```
-### **Test Connectivity with Ping**
+#### **Test Connectivity with Ping**
 ```bash
 ping 192.168.10.20
 ```
