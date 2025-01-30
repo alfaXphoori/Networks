@@ -37,7 +37,7 @@ banner motd #
 Switch 1 : Cisco 9200 : Floor 1 : CE Tower
 --------------------------------------------
 #
-```
+```\
 ###🔹 Management IP & SSH Configuration
 #### Assign an IP to VLAN 1 for Remote Access
 ```bash
