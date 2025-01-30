@@ -27,4 +27,4 @@
 - ![puttyCmd](imgs/puttyCmd.png)
 #### 6. Verify that this was added successfully.
 - Open your browser, enter the IP address, and connect to the EVE-NG site. Click 'Add New Node.' If successful, Cisco IOL and IOS will appear highlighted in blue.
-- ![check node](imgs/checkNode.png)
+- ![check node](imgs/checkWeb.png)
