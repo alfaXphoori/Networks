@@ -10,26 +10,21 @@
 - [Download](https://drive.google.com/drive/folders/1-PfBdcoa2BJnFKN_nMBsjHqRNQ2H4avU?usp=sharing)
 
 #### 4. Go to the dynamips directory on the remote site.
-- Upload router files.
+- Upload router & switch files.
 ```bash
-    /opt/unetlab/addons/dynamips
+    /opt/unetlab/addons/qemu
 ```
 - Drag and drop the router files.
-- ![upload Ftp](imgs/upFtp.png)
+- ![upload Ftp](imgs/upvIOS.png)
 
-#### 5. Go to the iol/bin directory on the remote site.
-- Upload switch files.
-```bash
-    /opt/unetlab/addons/iol/bin
-```
-
-#### 6. Use PuTTY to connect to the EVE-NG server via SSH.
+#### 5. Use PuTTY to connect to the EVE-NG server via SSH.
 - Add an IP address for the connection.
 - ![putty](imgs/putty.png)
 - Log in and execute commands.
 ```bash
     /opt/unetlab/wrappers/unl_wrapper -a fixpermissions
 ```
-#### 7. Verify that this was added successfully.
+- ![puttyCmd](imgs/puttyCmd.png)
+#### 6. Verify that this was added successfully.
 - Open your browser, enter the IP address, and connect to the EVE-NG site. Click 'Add New Node.' If successful, Cisco IOL and IOS will appear highlighted in blue.
 - ![check node](imgs/checkNode.png)
