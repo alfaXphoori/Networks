@@ -1,4 +1,6 @@
 ## 🖧 Add Router & Switch
+### 🔹 0. Make sure Check Virtulize Intel VT-x of AMD-V/RVI
+- ![check](imgs/checkVT.png)
 
 ### 🔹 1. Download & Install FTP Software
 - 🔗 [FileZilla](https://filezilla-project.org)
