@@ -1,59 +1,78 @@
-## EVE-NG Web Gui
-#### 1. Main shows the file manager
+## 🌐 EVE-NG Web GUI
+
+### 🔹 1. Main - File Manager
+- Displays the **file manager** for managing labs and configurations.
 - ![main](imgs/main.png)
 
-#### 2. Management shows the User management
-    - You can add and delete use on this.
+### 🔹 2. Management - User Management
+- Add and delete users in **User Management**.
 - ![manage](imgs/manage.png)
 
-#### 3. System shows the system status & log
-    - You can stop all nodes on this.
+### 🔹 3. System - Status & Logs
+- View **system status** and logs.
+- Stop all running nodes from this panel.
 - ![system](imgs/system.png)
 
-#### 4. Information shows the information of EVE-NG
+### 🔹 4. Information - EVE-NG Details
+- Displays **EVE-NG system information**.
 - ![info](imgs/info.png)
 
-## Create Node
-#### 1. Add Folder
-    - Enter the folder name and add it.
+---
+
+## 🛠 Create Node in EVE-NG
+
+### 🔹 1. Add Folder
+- Enter the **folder name** and add it.
 - ![add folder](imgs/addFolder.png)
 
-#### 2. Add New Lab
-    - Enter the CE-Network and click the 'Add New Lab' icon.
+### 🔹 2. Add New Lab
+1️⃣ Enter **CE-Network** and click **'Add New Lab'**.
 - ![add lab](imgs/addLab.png)
-    - Add lab information.
+2️⃣ Fill in the **lab information**.
 - ![add info](imgs/addInfo.png)
-    - Finish Adding the Lab.
+3️⃣ Finish **adding the lab**.
 - ![finish add lab](imgs/doneLab.png)
 
-#### 3. Add New Object
-    - Right-click and choose 'Node'.
+### 🔹 3. Add New Object (Node)
+1️⃣ Right-click and select **'Node'**.
 - ![add node](imgs/addNode.png)
-    - Choose 'Virtual PC'.
+2️⃣ Choose **'Virtual PC'**.
 - ![choose node](imgs/selectNode.png)
-    - Config Node. You can change the node name, icon, and number of nodes.
+3️⃣ Configure the node (change name, icon, and number of nodes).
 - ![conf node](imgs/confNode.png)
-    - Now you can see two pc on display.
+4️⃣ Two Virtual PCs should now be displayed.
 - ![two vPc](imgs/twoVpc.png)
-    - Connect two PCs by clicking the orange plug and dropping it on the other PC.
+5️⃣ Connect **two PCs** by clicking the **orange plug** and dropping it on the other PC.
 - ![conn node](imgs/connNode.png)
-    - If you are successful, the configuration connection page will pop up, and you can choose an interface to connect between VPCs.
+6️⃣ A **configuration connection page** will pop up. Choose an interface to connect between VPCs.
 - ![conn config](imgs/connConfig.png)
-    - You can add text, shapes, and pictures by right-clicking and selecting the icon
+
+### 🎨 Customization
+- Add **text, shapes, and pictures** by right-clicking and selecting the corresponding icon.
 - ![add text](imgs/addText.png)
-    - Start the VPC by right-clicking and selecting 'Start'.
+
+### 🔹 4. Start & Connect to Virtual PCs
+1️⃣ Start the VPC by **right-clicking and selecting 'Start'**.
 - ![start node](imgs/startNode.png)
-    - Click the VPC icon to remote into the VPC. A pop-up will appear, allowing you to click 'Open SSH'.
+2️⃣ Click the **VPC icon** to open a **remote session**.
+- A **pop-up** will appear, allowing you to click **'Open SSH'**.
 - ![open ssh](imgs/openSsh.png)
-    - Now, you have remotely connected to the VPC via PuTTY. You can configure the IP address using the following code.
+
+### 🔹 5. Configure VPC IP Address
 ```bash
 ip 192.168.1.101 255.255.255.0 192.168.1.1
 ```
 - ![add ip node](imgs/addIpNode.png)
-    - Now, you can verify the connectivity between the two VPCs using ping.
+
+### 🔹 6. Verify Connectivity
+- **Ping the other VPC** to test the connection.
 ```bash
 ping 192.168.1.101
 ```
 - ![ping node](imgs/pingNode.png)
-    - Once you finish the lab, stop the VPC and close it.
+
+### 🔹 7. Stop and Close the Lab
+- Once you finish the lab, **stop the VPC and close it**.
 - ![close lab](imgs/closeLab.png)
+
+✅ **Lab setup and verification completed successfully!** 🚀
