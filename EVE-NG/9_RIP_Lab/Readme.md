@@ -188,7 +188,7 @@ ping 20.0.0.10
 ```bash
 ping 10.0.0.10
 ```
-- ![ping](imgs/ping.png)
+
 ✅ **If successful, RIP routing is functioning correctly!**
 
 ---
