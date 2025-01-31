@@ -1,24 +1,25 @@
 # 🚀 Basic Routing Lab (Static & Default Routes) in EVE-NG
 
 ## 🔹 Lab Objectives
-1️⃣ **Set up static routes**  
-2️⃣ **Configure a default route to the internet**  
-3️⃣ **Verify routing with `show ip route`**
+
+- **Set up static routes**  
+- **Configure a default route to the internet**  
+- **Verify routing with `show ip route`**
 
 ---
 
 ## 🛠 Step 1: Set Up the Lab in EVE-NG
 
-1. Open **EVE-NG**.
-2. Create a **New Lab** (e.g., "Basic_Routing_Lab").
-3. **Add Devices**:
+- 1️⃣ Open **EVE-NG**.
+- 2️⃣ Create a **New Lab** (e.g., "Basic_Routing_Lab").
+- 3️⃣ **Add Devices**:
    - **Two Cisco Routers (R1 & R2)**
    - **Two Virtual PCs (PC1 & PC2)**
-4. **Connect Devices**:
+- 4️⃣ **Connect Devices**:
    - 🔌 **PC1 → R1 (GigabitEthernet 0/1)**
    - 🔌 **PC2 → R2 (GigabitEthernet 0/1)**
    - 🔌 **R1 → R2 (GigabitEthernet 0/0 to GigabitEthernet 0/0)**
-5. **Diagram**:
+- 5️⃣ **Diagram**:
    - ![diagram](imgs/diagram.png)
 
 ---

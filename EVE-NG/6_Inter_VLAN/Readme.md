@@ -2,27 +2,27 @@
 
 ## 🔹 Lab Objectives
 
-1️⃣ **Create VLANs on the switch**  
-2️⃣ **Configure trunking between the switch and router**  
-3️⃣ **Set up subinterfaces on the router for Inter-VLAN Routing**  
-4️⃣ **Assign IP addresses to PCs**  
-5️⃣ **Test connectivity using ping**
+- **Create VLANs on the switch**  
+- **Configure trunking between the switch and router**  
+- **Set up subinterfaces on the router for Inter-VLAN Routing**  
+- **Assign IP addresses to PCs**  
+- **Test connectivity using ping**
 
 ---
 
 ## 🛠 Step 1: Set Up the Lab in EVE-NG
 
-1. Open **EVE-NG**.
-2. Create a **New Lab** (e.g., "Inter-VLAN_Lab").
-3. **Add Devices**:
+- 1️⃣ Open **EVE-NG**.
+- 2️⃣ Create a **New Lab** (e.g., "Inter-VLAN_Lab").
+- 3️⃣ **Add Devices**:
    - **One Cisco Router (R1)**
    - **One Cisco Switch (SW1)**
    - **Two Virtual PCs (PC1 & PC2)**
-4. **Connect Devices**:
+- 4️⃣ **Connect Devices**:
    - 🔌 **PC1 → SW1 (GigabitEthernet 0/0)**
    - 🔌 **PC2 → SW1 (GigabitEthernet 0/1)**
    - 🔌 **SW1 → R1 (GigabitEthernet 1/3) as a trunk link**
-5. **Diagram**:
+- 5️⃣ **Diagram**:
    - ![diagram](imgs/diagram.png)
 
 ---
