@@ -10,16 +10,17 @@
 
 ## 🛠 Step 1: Set Up the Lab in EVE-NG
 
-- 1️⃣ Open **EVE-NG**.
-- 2️⃣ Create a **New Lab** (e.g., "Basic_Switch_Lab").
-- 3️⃣ **Add Devices**:
-- 🖥 **One Cisco Switch (SW1)**
-- 🖥 **Two Virtual PCs (PC1 & PC2)**
-- 4️⃣ **Connect Devices**:
-- 🔌 **PC1 → SW1 (Fa0/1)**
-- 🔌 **PC2 → SW1 (Fa0/2)**
-- 5 **Diagram**
-- ![diagram](imgs/diagram.png)
+1️⃣ **Open EVE-NG**.
+2️⃣ **Create a New Lab** (e.g., "Basic_Switch_Lab").
+3️⃣ **Add Devices**:
+   - 🖥 **One Cisco Switch (SW1)**
+   - 🖥 **Two Virtual PCs (PC1 & PC2)**
+4️⃣ **Connect Devices**:
+   - 🔌 **PC1 → SW1 (GigabitEthernet 0/0)**
+   - 🔌 **PC2 → SW1 (GigabitEthernet 0/1)**
+5️⃣ **Diagram**:
+   - ![diagram](imgs/diagram.png)
+
 ---
 
 ## ⚙️ Step 2: Configure the Switch (SW1)
@@ -30,16 +31,17 @@
 enable
 configure terminal
 hostname SW1
+exit
 ```
 
 ### 🔹 2️⃣ Enable Ports for PC1 and PC2
 
 ```bash
-interface fastEthernet 0/1
+interface gigabitEthernet 0/0
 no shutdown
 exit
 
-interface fastEthernet 0/2
+interface gigabitEthernet 0/1
 no shutdown
 exit
 ```
