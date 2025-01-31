@@ -10,18 +10,18 @@
 
 ## 🛠 Step 1: Set Up the Lab in EVE-NG
 
-1️⃣ **Open EVE-NG**.
-2️⃣ **Create a New Lab** (e.g., "VLAN_Lab").
-3️⃣ **Add Network Devices**:
+- 1️⃣ **Open EVE-NG**.
+- 2️⃣ **Create a New Lab** (e.g., "VLAN_Lab").
+- 3️⃣ **Add Network Devices**:
    - 🖧 **Two Cisco Switches (SW1, SW2)**
    - 🖥 **Four Virtual PCs (PC1, PC2, PC3, PC4)**
-4️⃣ **Connect the Devices**:
+- 4️⃣ **Connect the Devices**:
    - 🔌 **PC1 → SW1 (GigabitEthernet 0/0)**
    - 🔌 **PC2 → SW1 (GigabitEthernet 0/1)**
    - 🔌 **PC3 → SW2 (GigabitEthernet 0/0)**
    - 🔌 **PC4 → SW2 (GigabitEthernet 0/1)**
    - 🔌 **SW1 → SW2 (GigabitEthernet 1/3) as Trunk**
-5️⃣ **Diagram**:
+- 5️⃣ **Diagram**:
    - ![diagram](imgs/diagram.png)
 
 ---
@@ -147,7 +147,6 @@ ip 192.168.10.10 255.255.255.0 192.168.10.1
 ```bash
 ip 192.168.10.20 255.255.255.0 192.168.10.1
 ```
-
 ### 🖥 **On PC2, assign an IP address (VLAN 20)**
 
 ```bash
