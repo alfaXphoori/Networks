@@ -1,36 +1,37 @@
-## Switch Basic Configuare
 
-### 1. Add Switch Nodes
+## 🖧 Switch Basic Configuration
+
+### 1️⃣ Add Switch Nodes
 
 - ![add sw](imgs/addSw.png)
 
-### 2. Launch PuTTY and configure the settings
+### 2️⃣ Launch PuTTY and Configure Settings
 
 - ![putty sw](imgs/puttySW1.png)
 
-### 3. Switch Commands
+### 3️⃣ Switch Commands
 
-### 🔹 Basic Switch Commands
+## 🔹 Basic Switch Commands
 
-#### Enter Privileged Mode
+### 🛠 Enter Privileged Mode
 
 ```bash
 enable
 ```
 
-#### Configure Terminal Mode
+### 🛠 Configure Terminal Mode
 
 ```bash
 configure terminal
 ```
 
-#### Set Hostname
+### 🛠 Set Hostname
 
 ```bash
 hostname SW1
 ```
 
-#### Set Password for Console Access
+### 🛠 Set Password for Console Access
 
 ```bash
 line console 0
@@ -39,13 +40,13 @@ login
 exit
 ```
 
-#### Set Privileged EXEC Mode Password
+### 🛠 Set Privileged EXEC Mode Password
 
 ```bash
 enable secret cisco1234
 ```
 
-#### Set Banner
+### 🛠 Set a Banner Message
 
 ```bash
 banner motd $
@@ -57,7 +58,7 @@ $
 
 ## 🔹 Management IP & SSH Configuration
 
-#### Assign an IP to VLAN 1 for Remote Access
+### 🛠 Assign an IP Address to VLAN 1 for Remote Access
 
 ```bash
 interface vlan 1
@@ -66,26 +67,26 @@ no shutdown
 exit
 ```
 
-#### Set Default Gateway
+### 🛠 Set Default Gateway
 
 ```bash
 ip default-gateway 192.168.1.1
 ```
 
-#### Enable SSH
+### 🛠 Enable SSH
 
 ```bash
 ip domain-name example.com
 crypto key generate rsa
 ```
 
-#### Create an SSH User
+### 🛠 Create an SSH User
 
 ```bash
 username admin privilege 15 secret admin1234
 ```
 
-#### Configure SSH on VTY Lines
+### 🛠 Configure SSH on VTY Lines
 
 ```bash
 line vty 0 4
@@ -94,8 +95,10 @@ login local
 exit
 ```
 
-#### Save Configure
+### 🛠 Save Configuration
 
 ```bash
 write memory
 ```
+
+✅ **Switch configuration is now complete and secured with SSH access.**
