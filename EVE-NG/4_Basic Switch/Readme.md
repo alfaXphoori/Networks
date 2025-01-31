@@ -10,16 +10,16 @@
 
 ## 🛠 Step 1: Set Up the Lab in EVE-NG
 
-1️⃣ **Open EVE-NG**.
-2️⃣ **Create a New Lab** (e.g., "Basic_Switch_Lab").
-3️⃣ **Add Devices**:
+- 1️⃣ **Open EVE-NG**.
+- 2️⃣ **Create a New Lab** (e.g., "Basic_Switch_Lab").
+- 3️⃣ **Add Devices**:
    - 🖥 **One Cisco Switch (SW1)**
    - 🖥 **Two Virtual PCs (PC1 & PC2)**
-4️⃣ **Connect Devices**:
+- 4️⃣ **Connect Devices**:
    - 🔌 **PC1 → SW1 (GigabitEthernet 0/0)**
    - 🔌 **PC2 → SW1 (GigabitEthernet 0/1)**
-5️⃣ **Diagram**:
-   - ![diagram](imgs/diagram.png)
+- 5️⃣ **Diagram**:
+- ![diagram](imgs/diagram.png)
 
 ---
 
