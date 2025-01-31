@@ -1,7 +1,6 @@
 # 🚀 Basic Routing Lab (Static & Default Routes) in EVE-NG
 
 ## 🔹 Lab Objectives
-
 1️⃣ **Set up static routes**  
 2️⃣ **Configure a default route to the internet**  
 3️⃣ **Verify routing with `show ip route`**
@@ -16,41 +15,41 @@
    - **Two Cisco Routers (R1 & R2)**
    - **Two Virtual PCs (PC1 & PC2)**
 4. **Connect Devices**:
-   - **PC1 → R1 (Fa0/1)**
-   - **PC2 → R2 (Fa0/1)**
-   - **R1 → R2 (Fa0/0 to Fa0/0)**
+   - 🔌 **PC1 → R1 (GigabitEthernet 0/1)**
+   - 🔌 **PC2 → R2 (GigabitEthernet 0/1)**
+   - 🔌 **R1 → R2 (GigabitEthernet 0/0 to GigabitEthernet 0/0)**
+5. **Diagram**:
+   - ![diagram](imgs/diagram.png)
 
 ---
 
 ## 🔹 Step 2: Configure IP Addresses
 
-### **On Router R1**
-
+### 🖧 **On Router R1**
 ```bash
 enable
 configure terminal
-interface fastEthernet 0/0
+interface gigabitEthernet 0/0
 ip address 192.168.1.1 255.255.255.0
 no shutdown
 exit
 
-interface fastEthernet 0/1
+interface gigabitEthernet 0/1
 ip address 10.0.0.1 255.255.255.0
 no shutdown
 exit
 ```
 
-### **On Router R2**
-
+### 🖧 **On Router R2**
 ```bash
 enable
 configure terminal
-interface fastEthernet 0/0
+interface gigabitEthernet 0/0
 ip address 192.168.1.2 255.255.255.0
 no shutdown
 exit
 
-interface fastEthernet 0/1
+interface gigabitEthernet 0/1
 ip address 20.0.0.1 255.255.255.0
 no shutdown
 exit
@@ -62,14 +61,12 @@ exit
 
 ## 🔹 Step 3: Configure Static Routes
 
-### **On Router R1** (To reach PC2 network via R2)
-
+### 🛣 **On Router R1** (To reach PC2 network via R2)
 ```bash
 ip route 20.0.0.0 255.255.255.0 192.168.1.2
 ```
 
-### **On Router R2** (To reach PC1 network via R1)
-
+### 🛣 **On Router R2** (To reach PC1 network via R1)
 ```bash
 ip route 10.0.0.0 255.255.255.0 192.168.1.1
 ```
@@ -80,14 +77,12 @@ ip route 10.0.0.0 255.255.255.0 192.168.1.1
 
 ## 🔹 Step 4: Configure a Default Route (Internet Access)
 
-### **On Router R1**
-
+### 🛜 **On Router R1**
 ```bash
 ip route 0.0.0.0 0.0.0.0 192.168.1.2
 ```
 
-### **On Router R2**
-
+### 🛜 **On Router R2**
 ```bash
 ip route 0.0.0.0 0.0.0.0 192.168.1.1
 ```
@@ -98,28 +93,46 @@ ip route 0.0.0.0 0.0.0.0 192.168.1.1
 
 ## 🔹 Step 5: Verify Routing
 
-### **Check Routing Table**
-
+### 📋 **Check Routing Table on R1 & R2**
 ```bash
 show ip route
 ```
+- ![r1](imgs/r1.png)
+- ![r2](imgs/r2.png)
 
 ✅ **This should display static and default routes.**
 
-### **Test Connectivity**
+---
+
+## 🔹 Step 6: Assign IP Addresses to PCs
+
+### 🖥 **On PC1**
+```bash
+ip 10.0.0.10 255.255.255.0 10.0.0.1
+```
+
+### 🖥 **On PC2**
+```bash
+ip 20.0.0.10 255.255.255.0 20.0.0.1
+```
+
+✅ **PCs are assigned their respective IP addresses.**
+
+---
+
+## 🔹 Step 7: Test Connectivity
 
 1️⃣ **From PC1, ping PC2**:
-
 ```bash
-ping 20.0.0.2
+ping 20.0.0.10
 ```
 
 2️⃣ **From PC2, ping PC1**:
-
 ```bash
-ping 10.0.0.2
+ping 10.0.0.10
 ```
 
+- ![ping](imgs/ping.png)
 ✅ **If successful, routing is working correctly!**
 
 ---
