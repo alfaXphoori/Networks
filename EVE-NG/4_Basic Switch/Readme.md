@@ -31,7 +31,6 @@
 enable
 configure terminal
 hostname SW1
-exit
 ```
 
 ### 🔹 2️⃣ Enable Ports for PC1 and PC2
