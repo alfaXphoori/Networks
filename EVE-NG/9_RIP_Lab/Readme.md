@@ -177,6 +177,7 @@ ip 20.0.0.10 255.255.255.0 20.0.0.1
 
 ### 🔹 **Test Connectivity Between PCs**
 
+- ![ping](imgs/ping.png)
 #### **From PC1, ping PC2**
 
 ```bash
@@ -188,9 +189,6 @@ ping 20.0.0.10
 ```bash
 ping 10.0.0.10
 ```
-- 
-- ![ping](imgs/ping.png)
-
 ✅ **If successful, RIP routing is functioning correctly!**
 
 ---
