@@ -94,6 +94,7 @@ encapsulation dot1Q 20
 ip address 192.168.20.1 255.255.255.0
 exit
 
+interface gigabitEthernaet 0/0
 no shutdown
 exit
 ```
