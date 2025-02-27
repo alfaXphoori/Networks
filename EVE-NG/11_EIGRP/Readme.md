@@ -26,7 +26,7 @@
 - **R4 (Gi0/1) ↔ R5 (Gi0/1)** 📟 **10.0.45.1/30 ↔ 10.0.45.2/30**
 
 📌 **Diagram:**
-![diagram](imgs/diagram.png)
+- ![diagram](imgs/diagram.png)
 
 ---
 
@@ -194,7 +194,7 @@ show ip eigrp neighbors
 show ip route eigrp
 ```
 
-![route](imgs/route.png)
+- [route](imgs/route.png)
 ✅ **If neighbors are established and routes are present, EIGRP is working correctly.**
 
 ---
@@ -207,6 +207,29 @@ ip 192.168.50.55 255.255.255.0 192.168.50.1
 ping 192.168.50.55
 ping 192.168.100.101
 ```
+## 🔹 Step 6: Configure PCs and Test Connectivity
 
-![ping](imgs/ping.png)
+### 🖥 **On PC1**
+
+```bash
+ip 192.168.100.101 255.255.255.0 192.168.100.1
+```
+
+### 🖥 **On PC2**
+
+```bash
+ip 192.168.50.55 255.255.255.0 192.168.50.1
+```
+
+✅ **Both PCs are now in their respective networks.**
+
+### 🔹 **Test Connectivity Between PCs**
+
+#### **From PC1, ping PC2**
+
+```bash
+ping 192.168.50.55
+```
+- ![ping](imgs/ping.png)
+
 ✅ **If pings are successful, EIGRP is routing traffic correctly!**
