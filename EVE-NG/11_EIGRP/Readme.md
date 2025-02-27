@@ -231,6 +231,6 @@ ip 192.168.50.55 255.255.255.0 192.168.50.1
 ```bash
 ping 192.168.50.55
 ```
-- ![ping](imgs/ping.png)
+- ![ping](imgs/route.png)
 
 ✅ **If pings are successful, EIGRP is routing traffic correctly!**
