@@ -14,20 +14,23 @@
 - 🖥 **Three Virtual PCs (PC1, PC2, PC3)**
 
 ### 🔌 **Network Topology & Connections:**
-- **PC1** 🖥 → **R1** (Gi0/0) 🖧 **192.168.10.1/24**
-- **PC2** 🖥 → **R2** (Gi0/0) 🖧 **192.168.20.1/24**
-- **PC3** 🖥 → **R3** (Gi0/0) 🖧 **192.168.30.1/24**
-- **R1 (Gi0/1) ↔ R2 (Gi0/1)** 🖧 **10.1.1.1/24 ↔ 10.1.1.2/24**
-- **R2 (Gi0/2) ↔ R3 (Gi0/2)** 🖧 **10.1.10.1/24 ↔ 10.1.10.2/24**
+- **PC1** 🖥 ↔ **R1 (Gi0/0) 📟 **192.168.10.10 ↔ 192.168.10.1/24**
+- **PC2** 🖥 ↔ **R2 (Gi0/0) 📟 **192.168.20.20 ↔ 192.168.20.1/24**
+- **PC3** 🖥 ↔ **R3 (Gi0/0) 📟 **192.168.30.30 ↔ 192.168.30.1/24**
+- **R1 (Gi0/1) ↔ R2 (Gi0/1)** 📟 **10.1.1.1/24 ↔ 10.1.1.2/24**
+- **R2 (Gi0/2) ↔ R3 (Gi0/2)** 📟 **10.1.10.1/24 ↔ 10.1.10.2/24**
 
 📌 **Diagram:**
-![OSPF Diagram](imgs/ospf_topology.png)
+![OSPF Diagram](imgs/diagram.png)
 
 ---
 
-## 🔹 **Step 2: Configure IP Addresses on Routers**
+## 🔹 **Step 2: Configure IP Addresses and OSPF on Routers**
 
-### 🖧 **On R1**
+### 📟 **On R1**
+
+#### Configure IP Addresses
+
 ```bash
 enable
 configure terminal
@@ -42,7 +45,19 @@ no shutdown
 exit
 ```
 
-### 🖧 **On R2**
+#### Configure EIGRP
+
+```bash
+router ospf 1
+network 192.168.10.0 0.0.0.255 area 0
+network 10.1.1.0 0.0.0.255 area 0
+exit
+```
+
+### 📟 **On R2**
+
+#### Configure IP Addresses
+
 ```bash
 enable
 configure terminal
@@ -62,7 +77,20 @@ no shutdown
 exit
 ```
 
-### 🖧 **On R3**
+#### Configure EIGRP
+
+```bash
+router ospf 1
+network 192.168.20.0 0.0.0.255 area 0
+network 10.1.1.0 0.0.0.255 area 0
+network 10.1.10.0 0.0.0.255 area 0
+exit
+```
+
+### 📟 **On R3**
+
+#### Configure IP Addresses
+
 ```bash
 enable
 configure terminal
@@ -77,48 +105,20 @@ no shutdown
 exit
 ```
 
-✅ **IP addressing is now configured on all routers.**
+#### Configure EIGRP
 
----
-
-## 🔹 **Step 3: Configure OSPF on All Routers**
-
-### 📡 **On R1**
 ```bash
-enable
-configure terminal
-router ospf 1
-network 192.168.10.0 0.0.0.255 area 0
-network 10.1.1.0 0.0.0.255 area 0
-exit
-```
-
-### 📡 **On R2**
-```bash
-enable
-configure terminal
-router ospf 1
-network 192.168.20.0 0.0.0.255 area 0
-network 10.1.1.0 0.0.0.255 area 0
-network 10.1.10.0 0.0.0.255 area 0
-exit
-```
-
-### 📡 **On R3**
-```bash
-enable
-configure terminal
 router ospf 1
 network 192.168.30.0 0.0.0.255 area 0
 network 10.1.10.0 0.0.0.255 area 0
 exit
 ```
 
-✅ **OSPF is now configured on all routers.**
+✅ **IP addressing and OSPF is now configured on all routers.**
 
 ---
 
-## 🔹 **Step 4: Verify OSPF Configuration**
+## 🔹 **Step 3: Verify OSPF Configuration**
 
 ### 📜 **Check OSPF Neighbors**
 ```bash
@@ -131,6 +131,7 @@ show ip ospf neighbor
 show ip route ospf
 ```
 📌 **Displays learned OSPF routes.**
+![route](imgs/route.png)
 
 ✅ **If neighbors are established and routes are present, OSPF is working correctly.**
 
@@ -157,30 +158,12 @@ ip 192.168.30.30 255.255.255.0 192.168.30.1
 
 ### 🔄 **Test Connectivity**
 
-#### 📡 **From PC1, ping PC3**
-```bash
-ping 192.168.30.30
-```
-
-#### 📡 **From PC3, ping PC2**
+#### 📡 **From PC1, ping PC2 , ping PC3**
 ```bash
 ping 192.168.20.20
+ping 192.168.30.30
 ```
 
 ✅ **If pings are successful, OSPF is routing traffic correctly!**
 
 ---
-
-## 🎯 **Conclusion**
-✅ Successfully configured **OSPF** in EVE-NG. 🚀
-✅ Verified OSPF **adjacency and routing tables**. 📜
-✅ End-to-end **connectivity achieved** between PCs. 🌍
-
-🔹 **Next Steps:** Experiment with OSPF areas, authentication, and summarization!
-
----
-
-📌 **Author:** *Your Name*  
-📅 **Date:** *26 Feb 2025*  
-🔗 **EVE-NG Lab Repository:** *[GitHub Link]*
-
