@@ -194,7 +194,7 @@ show ip eigrp neighbors
 show ip route eigrp
 ```
 
-[route](imgs/route.png)
+- ![ping](imgs/ping.png)
 
 ✅ **If neighbors are established and routes are present, EIGRP is working correctly.**
 
@@ -231,6 +231,6 @@ ip 192.168.50.55 255.255.255.0 192.168.50.1
 ```bash
 ping 192.168.50.55
 ```
-- ![ping](imgs/route.png)
+- ![ping](imgs/ping.png)
 
 ✅ **If pings are successful, EIGRP is routing traffic correctly!**
