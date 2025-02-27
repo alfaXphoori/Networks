@@ -276,7 +276,7 @@ network 172.1.2.0 0.0.0.3 area 0
 exit
 ```
 
-### 📟 **On R8 (IP & OSPF)**
+### 📟 **On R9 (IP & OSPF)**
 
 #### Configure IP Addresses
 
@@ -304,6 +304,8 @@ exit
 ✅ **IP addressing and IGP protocol are now configured on all routers.**
 
 ---
+
+## 🔹 **Step 3: Configure BGP on Routers**
 
 ### 📟 **On R1 (BGP)**
 
@@ -338,7 +340,59 @@ router bgp 65002
  exit
 ```
 
-## 🔹 **Step 3: Verify BGP Configuration**
+✅ BGP is now configured on all backbone routers.
+
+## 🔹 **Step 4: Configuring Route Redistribution**
+
+### 📟 **On R1**
+
+```bash
+enable
+configure terminal
+
+router bgp 65001
+ redistribute eigrp 100
+exit
+
+router eigrp 100
+ redistribute bgp 65001 metric 100000 100 255 1 1500
+exit
+```
+
+### 📟 **On R4**
+
+```bash
+enable
+configure terminal
+
+router bgp 65002
+ redistribute rip
+exit
+
+router rip
+ redistribute bgp 65002
+default-information originate
+exit
+```
+
+### 📟 **On R7**
+
+```bash
+enable
+configure terminal
+
+router bgp 65003
+ redistribute ospf 1
+exit
+
+router ospf 1
+ redistribute bgp 65003 subnets
+exit
+```
+
+✅ Route redistribution is now configured on all relevant routers.
+
+## 🔹 **Step 5: Verify BGP Configuration**
 
 ### 📜 **Check BGP Neighbors**
 
