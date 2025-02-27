@@ -342,7 +342,7 @@ router bgp 65002
 
 ✅ BGP is now configured on all backbone routers.
 
-## 🔹 **Step 4: Configuring Route Redistribution**
+## 🔹 **Step 4: Configure Route Redistribution**
 
 ### 📟 **On R1**
 
