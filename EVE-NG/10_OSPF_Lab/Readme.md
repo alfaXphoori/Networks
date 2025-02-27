@@ -163,6 +163,7 @@ ip 192.168.30.30 255.255.255.0 192.168.30.1
 ping 192.168.20.20
 ping 192.168.30.30
 ```
+![ping](imgs/ping.png)
 
 ✅ **If pings are successful, OSPF is routing traffic correctly!**
 
