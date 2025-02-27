@@ -195,6 +195,7 @@ show ip route eigrp
 ```
 
 - [route](imgs/route.png)
+
 ✅ **If neighbors are established and routes are present, EIGRP is working correctly.**
 
 ---
