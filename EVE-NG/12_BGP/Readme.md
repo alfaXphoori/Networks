@@ -3,7 +3,7 @@
 ## 🎯 **Lab Objectives**
 
 - 🔧 Configure **BGP** on routers.
-- 🔧 Configure **IGP RIPv2 OSPF EIGRP** on routers.
+- 🔧 Configure **IGP RIPv2, OSPF, EIGRP** on routers.
 - 🔄 Establish **IGP and EGP** connections.
 - 📶 Test **end-to-end connectivity** between different domains.
 
@@ -199,7 +199,7 @@ no auto-summary
 ```bash
 enable
 configure terminal
-hostname R4
+hostname R6
 interface gigabitEthernet 0/0
  ip address 192.10.2.2 255.255.255.252
  no shutdown
@@ -283,7 +283,7 @@ exit
 ```bash
 enable
 configure terminal
-hostname R8
+hostname R9
 interface gigabitEthernet 0/0
  ip address 172.1.2.2 255.255.255.252
  no shutdown
@@ -338,7 +338,6 @@ router bgp 65002
  exit
 ```
 
-
 ## 🔹 **Step 3: Verify BGP Configuration**
 
 ### 📜 **Check BGP Neighbors**
@@ -356,7 +355,7 @@ show ip route bgp
 ```
 
 📌 **Displays learned BGP routes.**
-![egp](imgs/egp.png)
+- ![egp](imgs/egp.png)
 
 ✅ **If BGP peers are established and routes are present, BGP is working correctly.**
 
@@ -379,7 +378,7 @@ ping 172.1.1.1
 ping 172.1.1.2
 ```
 
-![ping](imgs/ping.png)
+- ![ping](imgs/ping.png)
 
 ✅ **If pings are successful, BGP is routing traffic correctly!**
 
