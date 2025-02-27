@@ -200,15 +200,7 @@ show ip route eigrp
 
 ---
 
-## 🔹 **Step 4: Configure PCs and Test Connectivity**
-
-```bash
-ip 192.168.100.101 255.255.255.0 192.168.100.1
-ip 192.168.50.55 255.255.255.0 192.168.50.1
-ping 192.168.50.55
-ping 192.168.100.101
-```
-## 🔹 Step 6: Configure PCs and Test Connectivity
+## 🔹 Step 4: Configure PCs and Test Connectivity
 
 ### 🖥 **On PC1**
 
