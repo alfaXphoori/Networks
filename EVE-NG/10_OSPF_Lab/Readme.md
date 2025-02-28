@@ -45,7 +45,7 @@ no shutdown
 exit
 ```
 
-#### Configure EIGRP
+#### Configure OSPF
 
 ```bash
 router ospf 1
@@ -77,7 +77,7 @@ no shutdown
 exit
 ```
 
-#### Configure EIGRP
+#### Configure OSPF
 
 ```bash
 router ospf 1
@@ -105,7 +105,7 @@ no shutdown
 exit
 ```
 
-#### Configure EIGRP
+#### Configure OSPF
 
 ```bash
 router ospf 1
