@@ -85,7 +85,7 @@
 
 📌 **ตั้งค่า Dynamic Routing Protocol บน Router**  
 
-- 🔀 **กำหนดเส้นทางแบบไดนามิก **  
+- 🔀 **กำหนดเส้นทาง แบบ Dynamic RIP, OSPF, EIGRP**  
 - 🗺 **ใช้คำสั่ง `show ip route` ตรวจสอบเส้นทางเครือข่าย**  
 
 ---
