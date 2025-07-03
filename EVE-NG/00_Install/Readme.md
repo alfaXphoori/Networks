@@ -8,7 +8,7 @@
 
 ## ⚙️ Environment Variables
 
-- **VMware Workstation Pro**
+- **VMware Workstation Pro** [Download Here]([https://www.eve-ng.net/](https://drive.google.com/file/d/1bxlDTs__T3jXgVUE330gMokMCemzCkCg/view?usp=sharing)
 - **EVE-NG ISO** [Download Here](https://www.eve-ng.net/)
 
 ---
