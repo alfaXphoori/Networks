@@ -11,7 +11,7 @@
 - ![conn Ftp](imgs/connFtp.png)
 
 ### 🔹 3. Download & Unzip Router and Switch Files
-- 📥 [Download Files]([https://drive.google.com/drive/folders/1-PfBdcoa2BJnFKN_nMBsjHqRNQ2H4avU?usp=sharing](https://drive.google.com/drive/folders/14ENNfWrLGDTylXUmcRXCpSXpMo0-dni5?usp=sharing))
+- 📥 [Download Files](https://drive.google.com/drive/folders/14ENNfWrLGDTylXUmcRXCpSXpMo0-dni5?usp=sharing)
 
 ### 🔹 4. Upload Files to the EVE-NG Server
 1️⃣ Navigate to the **Dynamips Directory** on the remote site.
