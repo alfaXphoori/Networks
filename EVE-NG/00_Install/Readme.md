@@ -41,7 +41,7 @@ bcdedit /set hypervisorlaunchtype off
 
 ### 🔹 Turn Off Memory Integrity
 
-- Go to **Settings** → **Privacy & Security** → **Windows Security** → **Device Security**
+- Go to **Start** → **core isolation**
 - **Turn Off Memory Integrity**
 - ![Disable Memory Integrity](imgs/memIntegrity.png)
 
@@ -102,6 +102,7 @@ bcdedit /set hypervisorlaunchtype off
 - ![Windows Client Pack](imgs/winPack.png)
 
 ✅ **Installation and setup completed successfully!** 🚀
+
 
 
 
