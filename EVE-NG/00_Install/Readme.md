@@ -34,7 +34,8 @@ bcdedit /set hypervisorlaunchtype off
 - Open **Edit Group Policy**
 - Navigate to:
   - **Computer Configuration** → **Administrative Templates** → **System** → **Device Guard**
-  - Disable **Deploy App Guard**
+  - Disable **Deploy App Control for Business**
+  - Disable **Turn On Virtualization Base Security**
 - ![Disable Policy](imgs/editGroup.png)
 
 ### 🔹 Turn Off Memory Integrity
@@ -100,3 +101,4 @@ bcdedit /set hypervisorlaunchtype off
 - ![Windows Client Pack](imgs/winPack.png)
 
 ✅ **Installation and setup completed successfully!** 🚀
+
