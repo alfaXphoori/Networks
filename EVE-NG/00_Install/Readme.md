@@ -15,7 +15,7 @@
 
 ## 📥 Installation Guide
 ### 💻 Bios
-- Turn ON Virtualization in Your Bios
+- Turn ON Virtualization in Your BIOS
 ### 💻 Virtualization Settings (Intel or AMD)
 
 - Ensure **Virtualization Technology (VT-x/AMD-V)** is enabled in BIOS.
@@ -102,5 +102,6 @@ bcdedit /set hypervisorlaunchtype off
 - ![Windows Client Pack](imgs/winPack.png)
 
 ✅ **Installation and setup completed successfully!** 🚀
+
 
 
