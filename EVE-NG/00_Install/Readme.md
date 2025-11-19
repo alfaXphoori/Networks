@@ -8,18 +8,14 @@
 
 ## ⚙️ Environment Variables
 
-- **VMware Workstation Pro** [Download Here](https://drive.google.com/file/d/1bxlDTs__T3jXgVUE330gMokMCemzCkCg/view?usp=sharing)
-- **EVE-NG ISO** [Download Here](https://www.eve-ng.net/)
+- **Virtual Box** [Download Here](https://www.virtualbox.org/)
+- **EVE-NG ISO** [Download Here](https://www.eve-ng.net/index.php/download/)
 
 ---
 
 ## 📥 Installation Guide
 ### 💻 Bios
 - Turn ON Virtualization in Your BIOS
-### 💻 Virtualization Settings (Intel or AMD)
-
-- Ensure **Virtualization Technology (VT-x/AMD-V)** is enabled in BIOS.
-- ![Virtualization Check](imgs/checkVirtual.png)
 
 ### 🛠 Disable Hypervisor Launch Type
 
@@ -54,54 +50,153 @@ bcdedit /set hypervisorlaunchtype off
   - **Windows Hypervisor Platform**
 - ![Disable Windows Features](imgs/winFeature.png)
 
----
+### 🔹 Install EVE-NG in Virtual Box
 
-## 🔹 1. Login to EVE-NG
+## 🔹 0. Create New Virtual Machine
 
+- Open **VirtualBox** and click **New** to create a new Virtual Machine
+- ![New Virtual Machine](imgs/_0New%20Virtual.png)
+
+## 🔹 1. Set Virtual Machine Name
+
+- Set the Virtual Machine name such as **EVE-NG**
+- Select Type: **Linux**
+- Select Version: **Ubuntu (64-bit)**
+- ![Create Name](imgs/_01Create%20Name.png)
+
+## 🔹 2. Go to Settings
+
+- Right-click on the created Virtual Machine and select **Settings**
+- ![Go Setting](imgs/_02Go%20Setting.png)
+
+## 🔹 3. Add CPU and RAM
+
+- Go to **System** tab
+- Set **RAM**: Recommended at least **4096 MB (4 GB)**
+- Set **CPU**: Recommended at least **2-4 Cores**
+- ![Add CPU RAM](imgs/_03Add%20CPU%20RAM.png)
+
+## 🔹 4. Enable VT-x/AMD-V
+
+- Go to **System** tab → **Acceleration**
+- Enable **VT-x/AMD-V**
+- ![Open VT](imgs/_04Open%20VT.png)
+
+## 🔹 5. Add Hard Disk
+
+- Go to **Storage** tab
+- Add **Hard Disk** with recommended size at least **30-50 GB**
+- Add the downloaded **EVE-NG ISO file**
+- ![Add HDD](imgs/_05Add%20HDD.png)
+
+## 🔹 6. Configure Network
+
+- Go to **Network** tab
+- Select **Attached to**: **Bridged Adapter**
+- ![Add Network](imgs/_06Add%20Network.png)
+
+## 🔹 7. Start Virtual Machine
+
+- Click **Start** to boot the Virtual Machine
+- ![Start](imgs/_07Start.png)
+
+## 🔹 8. Choose Language
+
+- Select your preferred language such as **English**
+- ![Choose Language](imgs/_08Choose%20laugaue.png)
+
+## 🔹 9. Proceed with Installation
+
+- Click **Install** to begin EVE-NG installation
+- ![Go Next](imgs/_09Go%20next.png)
+
+## 🔹 10. Complete Installation
+
+- Wait for the installation to complete
+- Click **Continue** to proceed
+- ![Continue](imgs/_11Continue.png)
+
+## 🔹 11. Unmount CD/ISO
+
+- After installation completes, **Unmount CD/ISO**
+- Go to **Devices** → **Optical Drives** → **Remove disk from virtual drive**
+- ![Unmount CD](imgs/_11Unmount%20CD.png)
+
+## 🔹 12. Confirm Unmount
+
+- Confirm the unmount action
+- ![Confirm Unmount](imgs/_12Confirm%20Unmount.png)
+
+## 🔹 13. Force Power Off
+
+- Perform **Force Power Off** to shut down the machine
+- ![Force Power Off](imgs/_13Force%20PoweOff.png)
+
+## 🔹 14. First Login
+
+- Start the Virtual Machine again
 - **Username:** `root`
 - **Password:** `eve`
-- ![Login to EVE-NG](imgs/login.png)
+- ![First Login](imgs/_14First%20login.png)
 
-## 🔹 2. Change the EVE-NG Root Password
+## 🔹 15. Change Root Password
 
-- ![Change Password](imgs/chgpasswd.png)
+- The system will prompt you to change the **root password**
+- Enter a new password
+- ![Password](imgs/_15Passwd.png)
 
-## 🔹 3. Configure DNS Domain Name
+## 🔹 16. Confirm Password
 
-- ![Configure DNS](imgs/conDns.png)
+- Confirm the password again
+- ![Confirm Password](imgs/_16Confirm%20Passwd.png)
 
-## 🔹 4. Configure IP Address
+## 🔹 17. Set Hostname
 
-- **Using DHCP**
-- ![Configure IP](imgs/confIP.png)
+- Set the **Hostname** for the EVE-NG machine
+- ![Hostname](imgs/_17Hostname.png)
 
-## 🔹 5. Configure NTP Server
+## 🔹 18. Configure DNS Domain Name
 
-- **Default is blank**
-- ![Configure NTP](imgs/confNTP.png)
+- Configure **DNS Domain Name** (or leave blank)
+- ![DNS](imgs/_18DNS.png)
 
-## 🔹 6. Configure Network Connection
+## 🔹 19. Configure IP Address
 
-- **Direct Connection**
-- ![Configure Network](imgs/confNTP.png)
+- Choose **DHCP** or configure Static IP
+- Recommended to use **DHCP** for initial setup
+- ![DHCP](imgs/_19DHCP.png)
 
-## 🔹 7. Complete Installation
+## 🔹 20. Configure NTP Server
 
-- ![Finish Installation](imgs/finish.png)
+- Configure **NTP Server** (or leave blank to use default)
+- ![NTP](imgs/_20NTP.png)
 
-## 🔹 8. Access EVE-NG Web GUI
+## 🔹 21. Configure Proxy
 
-- Open a **browser** and enter the **EVE-NG server IP address**.
-  - **Username:** `admin`
-  - **Password:** `eve`
-- ![EVE-NG Web Access](imgs/urlEveNG.png)
+- Configure **Proxy** (if available) or leave blank
+- Select **Direct Connection** for direct connection
+- ![Proxy](imgs/_21Proxy.png)
 
-## 🔹 9. Install Windows Client Side
+## 🔹 22. Installation Complete
 
-- Download and install the **Windows Client Side** from [EVE-NG Downloads](https://www.eve-ng.net/index.php/download/).
+- Configuration is complete
+- ![Done](imgs/_22Done.png)
+
+## 🔹 23. Access Web Interface
+
+- Open a web browser and enter the **IP Address** of EVE-NG
+- **Username:** `admin`
+- **Password:** `eve`
+- ![Login Web](imgs/_23LoginWeb.png)
+
+## 🔹 24. Install Windows Client Side
+
+- Download and install **Windows Client Side** from [EVE-NG Downloads](https://www.eve-ng.net/index.php/download/)
 - ![Windows Client Pack](imgs/winPack.png)
 
-✅ **Installation and setup completed successfully!** 🚀
+---
+
+✅ **Installation and configuration completed successfully!** 🚀
 
 
 
