@@ -13,11 +13,15 @@
 
 ---
 
-## 📥 Installation Guide
-### 💻 Bios
-- Turn ON Virtualization in Your BIOS
+## 📥 SET Enviroment Windows
 
-### 🛠 Disable Hypervisor Launch Type
+### 🔹 0. Turn ON Virtualization in BIOS
+- Restart your computer and enter BIOS settings (usually by pressing F2, F10, Del, or Esc during boot)
+- Look for **Virtualization Technology** (Intel VT-x) or **SVM Mode** (AMD-V)
+- **Enable** the virtualization option
+- Save changes and exit BIOS
+
+### 🔹 1. Disable Hypervisor Launch Type
 
 - Open **PowerShell** as Administrator and execute:
 
@@ -26,7 +30,7 @@ bcdedit /set hypervisorlaunchtype off
 ```
 - ![Disable Hypervisor](imgs/powShell.png)
 
-### 🔹 Disable Group Policy Restrictions
+### 🔹 2. Disable Group Policy Restrictions
 
 - Open **Edit Group Policy**
 - Navigate to:
@@ -35,13 +39,13 @@ bcdedit /set hypervisorlaunchtype off
   - Disable **Turn On Virtualization Base Security**
 - ![Disable Policy](imgs/editGroup.png)
 
-### 🔹 Turn Off Memory Integrity
+### 🔹 3. Turn Off Memory Integrity
 
 - Go to **Start** → **core isolation**
 - **Turn Off Memory Integrity**
 - ![Disable Memory Integrity](imgs/memIntegrity.png)
 
-### 🔹 Disable Windows Features
+### 🔹 4. Disable Windows Features
 
 - Open **Turn Windows Features On or Off**
 - **Disable**:
