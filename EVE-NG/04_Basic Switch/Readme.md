@@ -166,11 +166,6 @@ PC2 → SW1 (Gi0/1)
 3. Click the **Start** button on each device individually
 4. Wait for devices to boot (usually 2-3 minutes for the switch)
 
-**Status Indicators:**
-- 🟢 Green = Running/Ready
-- 🟡 Yellow = Booting
-- 🔴 Red = Stopped/Error
-
 > **ℹ️ Note:** Virtual switches take longer to boot than PCs due to IOS loading.
 
 ---
