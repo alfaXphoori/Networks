@@ -1,4 +1,24 @@
+# 🚀 EIGRP Routing Lab
+
+> Configure Enhanced Interior Gateway Routing Protocol (EIGRP) for enterprise networks.
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
 # 🚀 EIGRP Lab in EVE-NG
+
+> 
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
+## 📋 Table of Contents
 
 ## 🎯 **Lab Objectives**
 

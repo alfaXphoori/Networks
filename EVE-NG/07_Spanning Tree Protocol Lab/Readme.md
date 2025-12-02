@@ -1,4 +1,24 @@
+# 🚀 Spanning Tree Protocol (STP) Lab
+
+> Configure Spanning Tree Protocol to prevent loops in switched networks.
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
 # 🚀 Spanning Tree Protocol (STP) Lab in EVE-NG
+
+> 
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
+## 📋 Table of Contents
 
 ## 🔹 Lab Objectives
 

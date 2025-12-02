@@ -1,4 +1,10 @@
-# 🚀 Inter-VLAN Routing Lab in EVE-NG
+# 🚀 Inter-VLAN Routing Lab
+
+> Configure router-on-a-stick to enable communication between different VLANs.
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
 
 ## 🔹 Lab Objectives
 

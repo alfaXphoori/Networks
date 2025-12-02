@@ -1,4 +1,24 @@
+# 🚀 Basic Routing Lab
+
+> Configure static and default routes for network connectivity.
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
 # 🚀 Basic Routing Lab (Static & Default Routes) in EVE-NG
+
+> 
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
+## 📋 Table of Contents
 
 ## 🔹 Lab Objectives
 

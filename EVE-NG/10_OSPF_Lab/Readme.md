@@ -1,4 +1,24 @@
+# 🚀 OSPF Routing Lab
+
+> Configure Open Shortest Path First (OSPF) for advanced dynamic routing.
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
 # 🚀 OSPF Lab in EVE-NG
+
+> 
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
+## 📋 Table of Contents
 
 ## 🎯 **Lab Objectives**
 - 🔧 Configure **OSPF v2** on all routers.

@@ -1,4 +1,24 @@
+# 🖧 VLAN Configuration Lab
+
+> Configure VLANs on switches, set up trunk links, and verify VLAN segmentation.
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
 # 🖧 VLAN Configuration Lab in EVE-NG
+
+> 
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
+## 📋 Table of Contents
 
 ## 🎯 Lab Objectives
 

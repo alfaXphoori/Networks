@@ -1,4 +1,24 @@
+# 🚀 BGP Routing Lab
+
+> Configure Border Gateway Protocol (BGP) with multiple autonomous systems and routing domains.
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
 # 🚀 BGP Lab in EVE-NG
+
+> 
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
+## 📋 Table of Contents
 
 ## 🎯 **Lab Objectives**
 

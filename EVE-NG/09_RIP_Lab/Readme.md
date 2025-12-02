@@ -1,4 +1,24 @@
+# 🚀 RIP Routing Lab
+
+> Configure RIPv2 dynamic routing protocol to automatically learn network routes.
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
 # 🚀 Dynamic Routing with RIP Lab in EVE-NG
+
+> 
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
+## 📋 Table of Contents
 
 ## 🔹 Lab Objectives
 
