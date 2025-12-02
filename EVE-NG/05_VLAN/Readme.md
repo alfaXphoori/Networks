@@ -67,31 +67,6 @@
 
 > **Purpose:** Visualize the network structure you'll create.
 
-### Network Diagram
-
-```
-┌────────────────────────────────────┐
-│          SW1 (Switch 1)            │
-│    VLAN 10 (Sales)                 │
-│    VLAN 20 (IT)                    │
-│  Gi0/0(V10)  Gi0/1(V20)           │
-└──────┬─────────────┬─────────────┬─┘
-       │             │             │
-      PC1           PC2         Gi1/3 (Trunk)
-    VLAN10       VLAN20             │
-                                    │ 802.1Q Trunk
-                                    │
-┌───────────────────────────────────┼─┐
-│          SW2 (Switch 2)          Gi1/3 (Trunk)
-│    VLAN 10 (Sales)                 │
-│    VLAN 20 (IT)                    │
-│  Gi0/0(V10)  Gi0/1(V20)           │
-└──────┬─────────────┬──────────────┘
-       │             │
-      PC3           PC4
-    VLAN10       VLAN20
-```
-
 ### Topology Details
 
 | Device | VLAN | IP Address | Subnet Mask | Role |
