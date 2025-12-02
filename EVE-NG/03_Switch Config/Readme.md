@@ -1,5 +1,37 @@
+# 🖧 Switch Basic Configuration
 
-## 🖧 Switch Basic Configuration
+> Complete guide to configure Cisco switches with hostnames, passwords, SSH access, and management IP addresses.
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
+## 📋 Table of Contents
+
+1. [Prerequisites](#prerequisites)
+2. [Basic Configuration](#basic-configuration)
+3. [SSH Configuration](#ssh-configuration)
+4. [Summary & Next Steps](#summary--next-steps)
+
+---
+
+## ✅ Prerequisites
+
+> **Purpose:** Ensure you have access to switch configuration and necessary tools.
+
+### Requirements
+
+- Access to a Cisco switch via console or SSH
+- PuTTY or similar SSH client installed
+- Basic understanding of Cisco CLI
+
+---
+
+## 🖧 Basic Configuration
+
+> **Purpose:** Configure fundamental switch settings including hostname, passwords, and banners.
 
 ### 1️⃣ Add Switch Nodes
 
