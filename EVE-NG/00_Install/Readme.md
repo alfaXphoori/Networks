@@ -11,11 +11,11 @@
 ## 📋 Table of Contents
 
 1. [Prerequisites & Downloads](#prerequisites--downloads)
-2. [Windows Environment Setup](#-windows-environment-setup)
-3. [Virtual Machine Setup](#-virtual-machine-setup)
-4. [EVE-NG Installation](#-eve-ng-installation)
-5. [Post-Installation Configuration](#-post-installation-configuration)
-6. [Web Interface Access](#-web-interface-access)
+2. [Windows Environment Setup](#windows-environment-setup)
+3. [Virtual Machine Setup](#virtual-machine-setup)
+4. [EVE-NG Installation](#eve-ng-installation)
+5. [Post-Installation Configuration](#post-installation-configuration)
+6. [Web Interface Access](#web-interface-access)
 
 ---
 
