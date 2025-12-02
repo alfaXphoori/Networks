@@ -1,0 +1,73 @@
+EVE-NG Network Configuration Guide
+
+┌─────────────────────────────────────────────────────────────────┐
+│                        Host Machine (Windows)                   │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                    VirtualBox                             │  │
+│  │  ┌─────────────────────────────────────────────────────┐  │  │
+│  │  │          EVE-NG Virtual Machine                     │  │  │
+│  │  │  ┌──────────────────────────────────────────────┐   │  │  │
+│  │  │  │ Network Interface (Bridged Adapter)          │   │  │  │
+│  │  │  │ IP: 192.168.x.x (from DHCP)                  │   │  │  │
+│  │  │  │ Gateway: 192.168.x.1                         │   │  │  │
+│  │  │  │ DNS: Auto-configured                         │   │  │  │
+│  │  │  └──────────────────────────────────────────────┘   │  │  │
+│  │  │          ↓                                          │  │  │
+│  │  │  ┌──────────────────────────────────────────────┐   │  │  │
+│  │  │  │   EVE-NG Web Interface                       │   │  │  │
+│  │  │  │   Access: http://192.168.x.x                 │   │  │  │
+│  │  │  │   Port: 80 (HTTP)                            │   │  │  │
+│  │  │  │   Username: admin                            │   │  │  │
+│  │  │  │   Password: eve                              │   │  │  │
+│  │  │  └──────────────────────────────────────────────┘   │  │  │
+│  │  └─────────────────────────────────────────────────────┘  │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│           ↓                                                     │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │              Local Network (LAN)                          │  │
+│  │  192.168.x.0/24                                           │  │
+│  │  ┌──────────────  Other Computers  ─────────────┐         │  │
+│  │  │  Can access EVE-NG at 192.168.x.x            │         │  │
+│  │  │  Using web browser                           │         │  │
+│  │  └──────────────────────────────────────────────┘         │  │
+│  └───────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+
+NETWORK ADAPTER TYPES:
+
+1. BRIDGED ADAPTER (RECOMMENDED)
+   ├─ EVE-NG VM appears as separate device on network
+   ├─ Gets own IP from DHCP
+   ├─ Accessible from all computers on network
+   ├─ Requires physical network adapter
+   └─ Best for multi-user lab environments
+
+2. HOST-ONLY ADAPTER
+   ├─ Only accessible from host machine
+   ├─ Isolated from physical network
+   ├─ No external internet access
+   └─ Good for secure/isolated labs
+
+3. NAT NETWORK
+   ├─ VM accesses network through host
+   ├─ Not directly accessible from other computers
+   ├─ Good for internet access
+   └─ Used when physical network not available
+
+RECOMMENDED SETUP:
+• Network: Bridged Adapter
+• IP Method: DHCP (automatic)
+• Firewall: Allow HTTP (port 80) and SSH (port 22)
+• Connectivity: Test with ping and web browser
+
+ACCESSING EVE-NG:
+
+From Host Machine:
+  1. Get VM IP: ifconfig (in EVE-NG terminal)
+  2. Open browser: http://192.168.x.x
+  3. Login: admin / eve
+
+From Other Network Computers:
+  1. Find VM IP on network
+  2. Open browser: http://192.168.x.x
+  3. Login: admin / eve

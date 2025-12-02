@@ -432,6 +432,97 @@ bcdedit /set hypervisorlaunchtype off
 
 ---
 
+## 🌐 Network Configuration
+
+> **Purpose:** Understand and configure the network setup for EVE-NG to ensure proper connectivity.
+
+### EVE-NG Network Overview
+
+**What:** EVE-NG can be accessed from your host machine or other devices on the network.
+
+**Network Architecture:**
+- **VirtualBox Network**: Bridged Adapter (VM appears on local network)
+- **Host-Only Network**: Access only from host machine
+- **NAT Network**: VM can access external networks through host
+
+**Step-by-Step Network Configuration:**
+
+![GoNetwork](imgs/_24go_network.png)
+
+> **Step 1 - Go to Network Settings:**
+> Click on the VirtualBox menu and navigate to **File** → **Preferences** or **Settings** to access network configuration options.
+
+---
+
+![Create Network Adapter](imgs/_25CreateNetwork.png)
+
+> **Step 2 - Create New Network Adapter:**
+> In the Network settings, click the **+** button or **Create** to add a new network adapter for your VM.
+
+---
+
+![Done Network Adapter](imgs/_26DoneNetwork.png)
+
+> **Step 3 - Adapter Created Successfully:**
+> The new network adapter is now created and ready for configuration. You'll see it listed with default settings.
+
+---
+
+![Setting Network Adapter](imgs/_27SettingNetwork.png)
+
+> **Step 4 - Configure Adapter Settings:**
+> Verify the adapter type (should be **Host-Only** or **Bridged** depending on your needs). Check the IPv4 and DHCP settings to ensure proper network range.
+
+---
+
+![config Network Adapter](imgs/_28ConfigNetwork.png)
+
+> **Step 5 - Final Configuration:**
+> Set the DHCP server range and network mask. Typical configuration:
+> - **Network**: 192.168.56.0/24
+> - **DHCP Range**: 192.168.56.101 - 192.168.56.254
+> - **Server**: 192.168.56.1  
+
+**Configuration Options:**
+
+| Option | Benefit | Use Case |
+|--------|---------|----------|
+| **Bridged Adapter** | VM gets IP from network | Access from any device on network |
+| **Host-Only** | Isolated to host machine | Secure, local-only access |
+| **NAT Network** | VM can access internet | External connectivity needed |
+
+**Network Adapter Configuration (From VirtualBox Settings):**
+
+![Network Adapter Settings](imgs/network-adapter-settings.png)
+
+> **Key Points:**
+> - Select **Network** tab in VM settings
+> - Choose **Bridged Adapter** for recommended setup
+> - VM will receive IP from DHCP automatically
+> - Ensure **Enable Network Adapter** is checked
+
+**VirtualBox Network Management:**
+
+![VirtualBox Network Management](imgs/network-management.png)
+
+> **Configuration Details:**
+> - Navigate to **File** → **Preferences** → **Network**
+> - View all available network adapters
+> - See IPv4/IPv6 settings and DHCP configuration
+> - Host-Only adapters provide isolated network access
+
+**Accessing EVE-NG After Network Configuration:**
+
+| Method | Steps |
+|--------|-------|
+| **From Host Machine** | 1. Get VM IP (use `ifconfig` in EVE-NG terminal)<br>2. Open browser: `http://192.168.x.x`<br>3. Login: `admin/eve` |
+| **From Other Computers** | 1. Find VM IP on network<br>2. Open browser: `http://192.168.x.x`<br>3. Login: `admin/eve` |
+| **SSH Access** | `ssh root@192.168.x.x` |
+
+> **Recommended:** Use **Bridged Adapter** for lab access from multiple computers.
+
+---
+
 ### Step 22: Installation Complete
 
 **What:** System configuration is finished.
