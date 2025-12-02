@@ -2,21 +2,14 @@
 
 > Complete guide to accessing EVE-NG web interface and creating your first network lab with virtual PCs.
 
-## 👤 Author
-
-- [@alfaXphoori](https://www.github.com/alfaXphoori)
-
 ---
 
 ## 📋 Table of Contents
 
-1. [Web Interface Overview](#web-interface-overview)
-2. [Creating Your First Lab](#creating-your-first-lab)
-3. [Configuring Virtual PCs](#configuring-virtual-pcs)
-4. [Testing Connectivity](#testing-connectivity)
-5. [Summary & Next Steps](#summary--next-steps)
-6. [Troubleshooting](#troubleshooting)
-7. [Useful Commands](#useful-commands-for-vpcs)
+1. [Web Interface Overview](#-web-interface-overview)
+2. [Creating Your First Lab](#-creating-your-first-lab)
+3. [Configuring Virtual PCs](#-configuring-virtual-pcs)
+4. [Testing Connectivity](#-testing-connectivity)
 
 ---
 
