@@ -8,49 +8,55 @@
 
 ---
 
-# 🖧 VLAN Configuration Lab in EVE-NG
+## 📋 Table of Contents
 
-> 
-
-## 👤 Author
-
-- [@alfaXphoori](https://www.github.com/alfaXphoori)
+1. [Lab Objectives](#lab-objectives)
+2. [Lab Setup](#lab-setup)
+3. [VLAN Configuration](#vlan-configuration)
+4. [Trunk Configuration](#trunk-configuration)
+5. [Testing Connectivity](#testing-connectivity)
+6. [Summary & Next Steps](#summary--next-steps)
+7. [Troubleshooting](#troubleshooting)
 
 ---
-
-## 📋 Table of Contents
 
 ## 🎯 Lab Objectives
 
-- 📌 **Create VLANs and assign them to ports**  
-- 📌 **Configure Trunk Ports between switches**  
-- 📌 **Verify VLAN Configuration using `show vlan brief`**
+> **Purpose:** Learn to segment networks using VLANs and establish trunk links.
+
+- ✅ Create VLANs on switches
+- ✅ Assign ports to VLANs
+- ✅ Configure trunk links between switches
+- ✅ Verify VLAN configuration and connectivity
 
 ---
 
-## 🛠 Step 1: Set Up the Lab in EVE-NG
+## 🛠️ Lab Setup
 
-- 1️⃣ **Open EVE-NG**.
-- 2️⃣ **Create a New Lab** (e.g., "VLAN_Lab").
-- 3️⃣ **Add Network Devices**:
-   - 🖧 **Two Cisco Switches (SW1, SW2)**
-   - 🖥 **Four Virtual PCs (PC1, PC2, PC3, PC4)**
-- 4️⃣ **Connect the Devices**:
-   - 🔌 **PC1 → SW1 (GigabitEthernet 0/0)**
-   - 🔌 **PC2 → SW1 (GigabitEthernet 0/1)**
-   - 🔌 **PC3 → SW2 (GigabitEthernet 0/0)**
-   - 🔌 **PC4 → SW2 (GigabitEthernet 0/1)**
-   - 🔌 **SW1 → SW2 (GigabitEthernet 1/3) as Trunk**
-- 5️⃣ **Diagram**:
-   - ![diagram](imgs/diagram.png)
+> **Purpose:** Create a multi-switch VLAN topology.
+
+### Step 1: Create Lab Topology
+
+**What:** Set up devices and connections for VLAN testing.
+
+**How to:**
+1. Create a new lab named "VLAN_Lab"
+2. Add devices: Two Cisco Switches (SW1, SW2), Four Virtual PCs (PC1, PC2, PC3, PC4)
+3. Connect: PC1→SW1(Gi0/0), PC2→SW1(Gi0/1), PC3→SW2(Gi0/0), PC4→SW2(Gi0/1), SW1→SW2(Gi1/3-Trunk)
+
+![diagram](imgs/diagram.png)
+
+> **✅ Checkpoint:** Topology created.
 
 ---
 
-## ⚙️ Step 2: Configure VLANs on SW1 and SW2
+## ⚙️ VLAN Configuration
 
-### 🔹 SW1 VLAN Configuration
+> **Purpose:** Create VLANs and assign ports to them.
 
-#### 🏷️ Create VLANs
+### Step 2: Configure VLANs on SW1 and SW2
+
+**SW1 Configuration:**
 
 ```bash
 enable
@@ -61,11 +67,7 @@ exit
 vlan 20
 name IT
 exit
-```
 
-#### 🔌 Assign VLANs to Ports
-
-```bash
 interface gigabitEthernet 0/0
 switchport mode access
 switchport access vlan 10
@@ -77,9 +79,7 @@ switchport access vlan 20
 exit
 ```
 
-### 🔹 SW2 VLAN Configuration
-
-#### 🏷️ Create VLANs on SW2 (Same VLAN IDs)
+**SW2 Configuration:**
 
 ```bash
 enable
@@ -90,11 +90,7 @@ exit
 vlan 20
 name IT
 exit
-```
 
-#### 🔌 Assign VLANs to Ports
-
-```bash
 interface gigabitEthernet 0/0
 switchport mode access
 switchport access vlan 10
@@ -108,9 +104,25 @@ exit
 
 ---
 
-## 🔄 Step 3: Configure a Trunk Between SW1 and SW2
+## 🔄 Trunk Configuration
 
-### 🔹 On SW1
+> **Purpose:** Configure trunk links between switches.
+
+### Step 3: Configure Trunk Between SW1 and SW2
+
+```bash
+interface gigabitEthernet 1/3
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk allowed vlan 10,20
+exit
+## 🔄 Trunk Configuration
+
+> **Purpose:** Configure trunk links between switches.
+
+### Step 3: Configure Trunk Between SW1 and SW2
+
+**On SW1:**
 
 ```bash
 interface gigabitEthernet 1/3
@@ -120,7 +132,7 @@ switchport trunk allowed vlan 10,20
 exit
 ```
 
-### 🔹 On SW2
+**On SW2:**
 
 ```bash
 interface gigabitEthernet 1/3
@@ -130,65 +142,81 @@ switchport trunk allowed vlan 10,20
 exit
 ```
 
-✅ **The trunk link allows VLAN 10 & VLAN 20 to communicate across switches.**
+> **✅ Checkpoint:** Trunk link allows VLAN 10 & 20 to communicate across switches.
 
 ---
 
-## 🔍 Step 4: Verify VLAN Configuration
+## 🔍 Testing Connectivity
 
-### 📋 Check VLANs on Both Switches
+> **Purpose:** Verify VLAN configuration and connectivity.
+
+### Step 4: Verify VLAN Configuration
+
+**Check VLANs:**
 
 ```bash
 show vlan brief
 ```
-- ![vlan](imgs/vlanBr.png)
-✅ **You should see VLAN 10 & VLAN 20 assigned to ports.**
 
-### 📋 Check Trunk Ports
+![vlan](imgs/vlanBr.png)
+
+**Check Trunk Ports:**
 
 ```bash
 show interfaces trunk
 ```
-- ![trunk](imgs/intTrunk.png)
-✅ **Confirms that Gi1/3 is operating as a trunk.**
+
+![trunk](imgs/intTrunk.png)
 
 ---
 
-## 🌐 Step 5: Test Connectivity
+### Step 5: Configure PCs and Test Connectivity
 
-### 🖥 **On PC1, assign an IP address (VLAN 10)**
+**PC IP Configuration:**
+- PC1 (VLAN 10): `ip 192.168.10.10 255.255.255.0 192.168.10.1`
+- PC3 (VLAN 10): `ip 192.168.10.30 255.255.255.0 192.168.10.1`
+- PC2 (VLAN 20): `ip 192.168.20.20 255.255.255.0 192.168.20.1`
+- PC4 (VLAN 20): `ip 192.168.20.40 255.255.255.0 192.168.20.1`
 
-```bash
-ip 192.168.10.10 255.255.255.0 192.168.10.1
-```
-
-### 🖥 **On PC3, assign an IP address (VLAN 10)**
-
-```bash
-ip 192.168.10.30 255.255.255.0 192.168.10.1
-```
-### 🖥 **On PC2, assign an IP address (VLAN 20)**
+**Test Results:**
+- PC1 ↔ PC3 (VLAN 10): ✅ Success
+- PC2 ↔ PC4 (VLAN 20): ✅ Success
+- PC1 ↔ PC2 (Different VLAN): ❌ Should fail
 
 ```bash
-ip 192.168.10.20 255.255.255.0 192.168.10.1
+ping 192.168.10.30
 ```
 
-### 🖥 **On PC4, assign an IP address (VLAN 20)**
+![ping](imgs/ping.png)
 
-```bash
-ip 192.168.10.40 255.255.255.0 192.168.10.1
-```
-
-### 📡 **Test Connectivity with Ping**
-
-- **PC1 ↔ PC3 (VLAN 10) - Success** ✅
-- **PC2 ↔ PC4 (VLAN 20) - Success** ✅
-- **PC1 ↔ PC2 / PC3 ↔ PC4 - Should Fail** ❌
-
-```bash
-ping 192.168.10.20
-```
-- ![ping](imgs/ping.png)
-✅ **If successful, VLAN communication is working correctly.**
+> **✅ Success:** VLAN isolation working correctly!
 
 ---
+
+## ✅ Summary & Next Steps
+
+**Accomplished:**
+- ✅ Created VLANs on multiple switches
+- ✅ Assigned ports to VLANs
+- ✅ Configured trunk links
+- ✅ Verified VLAN isolation and connectivity
+
+**Next:**
+1. Inter-VLAN Routing
+2. Advanced VLAN Features
+3. Network Segmentation
+
+---
+
+## 🆘 Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| Trunk not carrying VLANs | Verify `switchport mode trunk` and allowed VLANs |
+| VLAN doesn't appear | Check VLAN creation and port assignment with `show vlan` |
+| Ports show as down | Use `no shutdown` on trunk ports; verify connections |
+| Can't ping across VLANs | Normal - need router for inter-VLAN routing |
+
+---
+
+✅ **VLAN configuration lab completed successfully!** 🚀
