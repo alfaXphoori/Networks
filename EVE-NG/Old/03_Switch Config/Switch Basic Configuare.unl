@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<lab name="Switch Basic Configuare" id="435958ec-80c6-4381-b61c-ddb548e5908d" version="1" scripttimeout="300" lock="0" author="Phoori">
+  <topology>
+    <nodes>
+      <node id="1" name="Switch" type="qemu" template="viosl2" image="viosl2-adventerprisek9-m.ssa.high_iron_20200929" console="telnet" cpu="1" cpulimit="0" ram="1024" ethernet="8" uuid="101b94a4-b68b-4af2-af52-93b544537a8d" qemu_options="-machine type=pc,accel=kvm -serial mon:stdio -nographic -no-user-config -nodefaults -rtc base=utc -cpu host" qemu_version="2.4.0" qemu_arch="x86_64" delay="0" icon="Switch-2D-L3-Generic-S.svg" config="0" left="288" top="129"/>
+    </nodes>
+  </topology>
+</lab>
