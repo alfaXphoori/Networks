@@ -447,7 +447,7 @@ bcdedit /set hypervisorlaunchtype off
 
 **Step-by-Step Network Configuration:**
 
-![GoNetwork](imgs/_24go_network.png)
+![GoNetwork](imgs/_24go_Network.png)
 
 > **Step 1 - Go to Network Settings:**
 > Click on the VirtualBox menu and navigate to **File** → **Preferences** or **Settings** to access network configuration options.
@@ -468,7 +468,7 @@ bcdedit /set hypervisorlaunchtype off
 
 ---
 
-![Setting Network Adapter](imgs/_27SettingNetwork.png)
+![Setting Network Adapter](imgs/_27SettingMachine.png)
 
 > **Step 4 - Configure Adapter Settings:**
 > Verify the adapter type (should be **Host-Only** or **Bridged** depending on your needs). Check the IPv4 and DHCP settings to ensure proper network range.
@@ -493,33 +493,6 @@ bcdedit /set hypervisorlaunchtype off
 
 **Network Adapter Configuration (From VirtualBox Settings):**
 
-![Network Adapter Settings](imgs/network-adapter-settings.png)
-
-> **Key Points:**
-> - Select **Network** tab in VM settings
-> - Choose **Bridged Adapter** for recommended setup
-> - VM will receive IP from DHCP automatically
-> - Ensure **Enable Network Adapter** is checked
-
-**VirtualBox Network Management:**
-
-![VirtualBox Network Management](imgs/network-management.png)
-
-> **Configuration Details:**
-> - Navigate to **File** → **Preferences** → **Network**
-> - View all available network adapters
-> - See IPv4/IPv6 settings and DHCP configuration
-> - Host-Only adapters provide isolated network access
-
-**Accessing EVE-NG After Network Configuration:**
-
-| Method | Steps |
-|--------|-------|
-| **From Host Machine** | 1. Get VM IP (use `ifconfig` in EVE-NG terminal)<br>2. Open browser: `http://192.168.x.x`<br>3. Login: `admin/eve` |
-| **From Other Computers** | 1. Find VM IP on network<br>2. Open browser: `http://192.168.x.x`<br>3. Login: `admin/eve` |
-| **SSH Access** | `ssh root@192.168.x.x` |
-
-> **Recommended:** Use **Bridged Adapter** for lab access from multiple computers.
 
 ---
 
