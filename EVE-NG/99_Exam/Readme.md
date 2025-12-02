@@ -1,583 +1,923 @@
-# 🚀 ข้อสอบปฏิบัติรายวิชา การสื่อสารข้อมูลและเครือข่ายคอมพิวเตอร์
+# 📝 Comprehensive Networking Exam Lab
 
-📚 **คณะวิศวกรรมศาสตร์และเทคโนโลยีอุตสาหกรรม**  
-💻 **สาขาวิศวกรรมคอมพิวเตอร์**  
-🏫 **มหาวิทยาลัยกาฬสินธุ์**
+> Practical assessment combining VLAN, Inter-VLAN Routing, and OSPF dynamic routing in a multi-domain network with six PCs across three domains.
 
----
+## 👤 Author
 
-## 📌 คำชี้แจง
-
-✅ **นักศึกษาต้องดำเนินการต่อวงจรและตั้งค่าระบบเครือข่ายตามที่กำหนด**  
-💻 **ใช้ซอฟต์แวร์จำลองเครือข่าย EVE-NG**  
-📜 **ให้นำส่งไฟล์ภาพผลลัพธ์การทดสอบเครือข่าย ทั้งหมด 9 ข้อ**  
-🔢 **คะแนนเต็ม 20 คะแนน**  
-⏰ **ส่งงานภายในเวลาที่กำหนด 13.00 วันที่ 22/10/2025**  
-📋 **ส่งคำตอบผ่าน Google Form:** [🔗 คลิกที่นี่](https://forms.gle/y3Gbu9YovdmbBQgb7)
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
 
 ---
 
-## 🖧 รายละเอียดเครือข่าย
+## 📋 Table of Contents
 
-### 🛠 1. โครงสร้างเครือข่าย
-
-ดูไดอะแกรมเครือข่าย: ![Network Topology](src/network_exam.png)
-
-**อุปกรณ์ที่ใช้ในการสอบ:**
-- 🌐 **เราเตอร์ (Router) 3 ตัว:** R1, R2, R3
-- 🔌 **สวิตช์ (Switch) 3 ตัว:** SW1, SW2, SW3
-- 🖥 **พีซี (PC) 6 เครื่อง:** PC11, PC12, PC21, PC22, PC31, PC32
-
-**📡 Routing Protocol:**
-- ใช้ **OSPF (Open Shortest Path First)** สำหรับ Dynamic Routing
-- OSPF Area 0 (Backbone Area)
-
-### 📌 2. การกำหนด IP Address และ VLAN
-
-**📋 กฎการกำหนดค่า:**
-- 🆔 **XX** = เลขที่นักศึกษา (01-08)
-- 🏢 **VLAN 1XX** = ชื่อจริง (First Name) ของนักศึกษา
-- 🏭 **VLAN 2XX** = นามสกุล (Last Name) ของนักศึกษา
-
-**ตัวอย่าง IP Address (XX = เลขที่นักศึกษา):**
-- PC11: **10.1.XX.10/24**, Gateway: **10.1.XX.1**
-- PC12: **10.2.XX.20/24**, Gateway: **10.2.XX.1**
-- PC21: **20.1.XX.10/24**, Gateway: **20.1.XX.1**
-- PC22: **20.2.XX.20/24**, Gateway: **20.2.XX.1**
-- PC31: **30.1.XX.10/24**, Gateway: **30.1.XX.1**
-- PC32: **30.2.XX.20/24**, Gateway: **30.2.XX.1**
-
-**ตัวอย่างเฉพาะ (นักศึกษาเลขที่ 01):**
-- PC11: 10.1.**01**.10/24, Gateway: 10.1.**01**.1
-- PC12: 10.2.**01**.20/24, Gateway: 10.2.**01**.1
-- VLAN **101** name = **THANATORN**
-- VLAN **201** name = **ONTONGLANG**
+1. [Lab Objectives](#lab-objectives)
+2. [Prerequisites](#prerequisites)
+3. [Lab Topology](#lab-topology)
+4. [Creating the Lab](#creating-the-lab)
+5. [Network Configuration](#network-configuration)
+6. [Switch VLAN Configuration](#switch-vlan-configuration)
+7. [Router Inter-VLAN Configuration](#router-inter-vlan-configuration)
+8. [OSPF Dynamic Routing](#ospf-dynamic-routing)
+9. [PC Configuration](#pc-configuration)
+10. [Testing Connectivity](#testing-connectivity)
+11. [Troubleshooting](#troubleshooting)
+12. [Summary & Next Steps](#summary--next-steps)
 
 ---
 
-## 📝 โจทย์ปฏิบัติ
+## 🎯 Lab Objectives
 
-### 1️⃣ การกำหนด IP Address ให้กับ PC ทุกเครื่อง (4 คะแนน)
+> **Purpose:** Assess comprehensive understanding of VLAN segmentation, inter-VLAN routing, and dynamic routing protocols.
 
-📌 **กำหนด IP Address, Subnet Mask และ Default Gateway ให้กับ PC ทุกเครื่อง**
+### By the end of this lab, you will:
 
-**ขั้นตอนการดำเนินการ:**
-- 🏷 **กำหนด IP Address** ให้กับ PC11, PC12, PC21, PC22, PC31, PC32
-- 🔧 **กำหนด Subnet Mask** ให้ถูกต้องตามโจทย์
-- 🗺 **ตั้งค่า Default Gateway** สำหรับแต่ละ PC
-
-**คำสั่งที่ใช้ตรวจสอบ:**
-```
-show ip
-```
-
-**การส่งงาน:**
-- ✅ **ข้อ 1:** แนบภาพแคปหน้าจอคำสั่ง `show ip` ของ PC ทุกเครื่อง (PC11, PC12, PC21, PC22, PC31, PC32)
-
-**ตัวอย่างภาพ:** ![PC Config](src/1.pc_config.png)
+- ✅ Configure VLANs on multiple switches with logical naming
+- ✅ Implement inter-VLAN routing using router subinterfaces
+- ✅ Configure OSPF dynamic routing protocol
+- ✅ Establish IP addressing scheme based on student identification
+- ✅ Configure trunk links between switches and routers
+- ✅ Verify connectivity within and across VLANs
+- ✅ Test communication between all PC endpoints
+- ✅ Troubleshoot connectivity issues using proper commands
+- ✅ Document network configuration and validation results
 
 ---
 
-### 2️⃣ การตั้งค่า VLAN บน Switch (3 คะแนน)
+## ✅ Prerequisites
 
-📌 **สร้าง VLAN และกำหนด port ให้ถูกต้องตามโจทย์**
+> **Purpose:** Ensure knowledge of foundational concepts and available resources.
 
-**ขั้นตอนการดำเนินการ:**
-- 🏢 **สร้าง VLAN 1XX (ชื่อจริง)** และ **VLAN 2XX (นามสกุล)** โดย XX = เลขที่นักศึกษา
-- 🔌 **กำหนด Access Port** สำหรับเชื่อมต่อ PC แต่ละตัว
-- 🏷 **ตั้งชื่อ VLAN** ให้ตรงกับชื่อจริงและนามสกุลของนักศึกษา (ภาษาอังกฤษตัวพิมพ์ใหญ่)
+### Required Knowledge
 
-**ตัวอย่าง (นักศึกษาเลขที่ 01):**
-- VLAN 101 name = THANATORN
-- VLAN 201 name = ONTONGLANG
+| Topic | Why It Matters | Reference |
+|-------|---------------|---------  |
+| **VLAN Fundamentals** | Segmentation of networks | 05_VLAN Lab |
+| **Inter-VLAN Routing** | Communication across VLANs | 06_Inter_VLAN Lab |
+| **OSPF Routing** | Dynamic routing configuration | 10_OSPF_Lab Lab |
+| **IP Addressing** | Network addressing and subnetting | 04_Basic Switch Lab |
+| **Router CLI** | Configure routers and interfaces | 03_Switch Config Lab |
 
-**คำสั่งที่ใช้ตรวจสอบ:**
-```
-show vlan brief
-```
+### Required Resources
 
-**การส่งงาน:**
-- ✅ **ข้อ 2:** แนบภาพแคปหน้าจอคำสั่ง `show vlan brief` ของ Switch ทั้ง 3 ตัว (SW1, SW2, SW3)
-
-**ตัวอย่างภาพ:** ![VLAN Config](src/2.sw_vlan.png)
-
----
-
-### 3️⃣ การตั้งค่า Trunk Port บน Switch (3 คะแนน)
-
-📌 **กำหนด Trunk Port สำหรับเชื่อมต่อระหว่าง Switch และ Router**
-
-**ขั้นตอนการดำเนินการ:**
-- 🔄 **กำหนด Trunk Port** บน interface Gi0/0 ของ Switch ทั้ง 3 ตัว
-- 🌐 **อนุญาต VLAN 1XX และ 2XX** ผ่าน trunk (XX = เลขที่นักศึกษา)
-- 📡 **ตั้งค่า encapsulation 802.1q**
-
-**ตัวอย่าง (นักศึกษาเลขที่ 01):**
-- `switchport trunk allowed vlan 101,201`
-
-**คำสั่งที่ใช้ตรวจสอบ:**
-```
-show interfaces trunk
-```
-
-**การส่งงาน:**
-- ✅ **ข้อ 3:** แนบภาพแคปหน้าจอคำสั่ง `show interfaces trunk` ของ Switch ทั้ง 3 ตัว (SW1, SW2, SW3)
-
-**ตัวอย่างภาพ:** ![Trunk Config](src/3.sw_trunk.png)
+- ✅ EVE-NG installed and running
+- ✅ Cisco IOSv router and switch images
+- ✅ VPCS (virtual PC simulator) available
+- ✅ Access to EVE-NG web interface
+- ✅ Text editor for documentation
 
 ---
 
-### 4️⃣ การตั้งค่า Routing Table บน Router R1 (1.2 คะแนน)
+## 📊 Lab Topology
 
-📌 **ตรวจสอบ Routing Table ของ Router R1 ที่ใช้ OSPF**
+> **Purpose:** Visualize the three-domain network with VLAN segmentation and OSPF backbone.
 
-**ขั้นตอนการตั้งค่า OSPF บน R1:**
+### Network Structure Overview
+
 ```
+┌──────────────────────┐       ┌──────────────────────┐       ┌──────────────────────┐
+│    Domain 1 (SW1)    │       │    Domain 2 (SW2)    │       │    Domain 3 (SW3)    │
+│  ┌────────────────┐  │       │  ┌────────────────┐  │       │  ┌────────────────┐  │
+│  │ PC11           │  │       │  │ PC21           │  │       │  │ PC31           │  │
+│  │ VLAN 1XX       │  │       │  │ VLAN 1XX       │  │       │  │ VLAN 1XX       │  │
+│  └────────┬───────┘  │       │  └────────┬───────┘  │       │  └────────┬───────┘  │
+│  ┌────────┴───────┐  │       │  ┌────────┴───────┐  │       │  ┌────────┴───────┐  │
+│  │ PC12           │  │       │  │ PC22           │  │       │  │ PC32           │  │
+│  │ VLAN 2XX       │  │       │  │ VLAN 2XX       │  │       │  │ VLAN 2XX       │  │
+│  └────────┬───────┘  │       │  └────────┬───────┘  │       │  └────────┬───────┘  │
+│           │          │       │           │          │       │           │          │
+│           │                  │           │                  │           │          │
+│      Trunk │                 │      Trunk │                 │      Trunk │          │
+│           │                  │           │                  │           │          │
+│        ┌──┴────┐          ┌──┴────┐       │              ┌──┴────┐      │          │
+└────────│  SW1  │──────────│  R1   │───────┴──────────────│  R2   │──────┴──────────┘
+         └───────┘          └────┬──┘                       └───┬───┘
+                                 │                             │
+                         OSPF Backbone Link (Area 0)
+```
+
+### Detailed Topology Information
+
+**Topology Components:**
+- 🌐 **3 Switches** (SW1, SW2, SW3) for VLAN segmentation
+- 🔀 **3 Routers** (R1, R2, R3) for inter-domain routing
+- 🖥️ **6 PCs** (2 per domain) for connectivity testing
+- 📡 **OSPF Area 0** backbone connecting routers
+- 🔗 **Trunk Links** between switches and routers
+
+### Network IP Addressing Scheme
+
+> **Note:** XX = Student ID Number (01-08)
+
+#### Domain 1 Addressing (SW1 ↔ R1)
+
+| Device | Interface | IP Address | Subnet | VLAN | Purpose |
+|--------|-----------|-----------|--------|------|---------|
+| **PC11** | - | 10.1.XX.10 | /24 | 1XX | First VLAN PC |
+| **PC12** | - | 10.2.XX.20 | /24 | 2XX | Second VLAN PC |
+| **R1** | Gi0/0.1XX | 10.1.XX.1 | /24 | 1XX | Default Gateway for VLAN 1XX |
+| **R1** | Gi0/0.2XX | 10.2.XX.1 | /24 | 2XX | Default Gateway for VLAN 2XX |
+
+#### Domain 2 Addressing (SW2 ↔ R2)
+
+| Device | Interface | IP Address | Subnet | VLAN | Purpose |
+|--------|-----------|-----------|--------|------|---------|
+| **PC21** | - | 20.1.XX.10 | /24 | 1XX | First VLAN PC |
+| **PC22** | - | 20.2.XX.20 | /24 | 2XX | Second VLAN PC |
+| **R2** | Gi0/0.1XX | 20.1.XX.1 | /24 | 1XX | Default Gateway for VLAN 1XX |
+| **R2** | Gi0/0.2XX | 20.2.XX.1 | /24 | 2XX | Default Gateway for VLAN 2XX |
+
+#### Domain 3 Addressing (SW3 ↔ R3)
+
+| Device | Interface | IP Address | Subnet | VLAN | Purpose |
+|--------|-----------|-----------|--------|------|---------|
+| **PC31** | - | 30.1.XX.10 | /24 | 1XX | First VLAN PC |
+| **PC32** | - | 30.2.XX.20 | /24 | 2XX | Second VLAN PC |
+| **R3** | Gi0/0.1XX | 30.1.XX.1 | /24 | 1XX | Default Gateway for VLAN 1XX |
+| **R3** | Gi0/0.2XX | 30.2.XX.1 | /24 | 2XX | Default Gateway for VLAN 2XX |
+
+#### OSPF Backbone Links
+
+| Router | Interface | IP Address | Subnet | Link |
+|--------|-----------|-----------|--------|------|
+| **R1** | Gi0/1 | 1.1.XX.1 | /30 | R1-R2 |
+| **R2** | Gi0/1 | 1.1.XX.2 | /30 | R1-R2 |
+| **R2** | Gi0/2 | 2.2.XX.1 | /30 | R2-R3 |
+| **R3** | Gi0/2 | 2.2.XX.2 | /30 | R2-R3 |
+
+---
+
+## 🔧 Creating the Lab
+
+> **Purpose:** Set up the practical exam topology with three switches, three routers, and six PCs.
+
+### Step 1: Create Lab Project
+
+**What:** Create EVE-NG lab for comprehensive networking exam.
+
+**How to:**
+1. Log into EVE-NG web interface
+2. Click **Add Lab**
+3. Configure:
+   - **Lab Name**: `EXAM_Lab`
+   - **Description**: `Comprehensive Networking Exam with VLAN and OSPF`
+   - **Version**: `1.0`
+4. Click **Create**
+
+---
+
+### Step 2: Add Network Devices
+
+**What:** Add all required switches, routers, and PCs for exam topology.
+
+**How to:**
+1. Click **Add Node** multiple times:
+   - **Switches**: SW1, SW2, SW3 (3x Cisco IOSv L3 or L2)
+   - **Routers**: R1, R2, R3 (3x Cisco IOSv)
+   - **PCs**: PC11, PC12, PC21, PC22, PC31, PC32 (6x VPCS)
+
+> **ℹ️ Note:** Total of 12 network nodes across three domains.
+
+---
+
+### Step 3: Connect All Devices
+
+**What:** Create all required connections as per topology.
+
+**Domain 1 Connections:**
+- PC11 → SW1 Gi0/1
+- PC12 → SW1 Gi0/2
+- SW1 Gi0/0 ↔ R1 Gi0/0 (Trunk)
+
+**Domain 2 Connections:**
+- PC21 → SW2 Gi0/1
+- PC22 → SW2 Gi0/2
+- SW2 Gi0/0 ↔ R2 Gi0/0 (Trunk)
+
+**Domain 3 Connections:**
+- PC31 → SW3 Gi0/1
+- PC32 → SW3 Gi0/2
+- SW3 Gi0/0 ↔ R3 Gi0/0 (Trunk)
+
+**OSPF Backbone Links:**
+- R1 Gi0/1 ↔ R2 Gi0/1
+- R2 Gi0/2 ↔ R3 Gi0/2
+
+---
+
+### Step 4: Start Lab
+
+**What:** Power on all devices and verify connectivity.
+
+**How to:**
+1. Right-click lab name
+2. Select **Start Lab**
+3. Wait for all devices to boot (8-10 minutes)
+4. Verify all nodes show green status
+
+---
+
+## ⚙️ Network Configuration
+
+> **Purpose:** Configure basic IP addressing on router backbone links.
+
+### Step 5: Configure R1 Backbone Link
+
+**What:** Configure R1 Gi0/1 interface for OSPF backbone.
+
+**Commands:**
+```bash
+enable
+configure terminal
+hostname R1
+
+interface gigabitEthernet 0/1
+ip address 1.1.XX.1 255.255.255.252
+no shutdown
+exit
+
+end
+```
+
+> **ℹ️ Note:** Replace XX with student ID (01-08).
+
+---
+
+### Step 6: Configure R2 Backbone Links
+
+**What:** Configure R2 interfaces for OSPF backbone connectivity.
+
+**Commands:**
+```bash
+enable
+configure terminal
+hostname R2
+
+interface gigabitEthernet 0/1
+ip address 1.1.XX.2 255.255.255.252
+no shutdown
+exit
+
+interface gigabitEthernet 0/2
+ip address 2.2.XX.1 255.255.255.252
+no shutdown
+exit
+
+end
+```
+
+---
+
+### Step 7: Configure R3 Backbone Link
+
+**What:** Configure R3 Gi0/2 interface for OSPF backbone.
+
+**Commands:**
+```bash
+enable
+configure terminal
+hostname R3
+
+interface gigabitEthernet 0/2
+ip address 2.2.XX.2 255.255.255.252
+no shutdown
+exit
+
+end
+```
+
+> **✅ Checkpoint:** All backbone links configured and operational.
+
+---
+
+## 🏢 Switch VLAN Configuration
+
+> **Purpose:** Create VLANs for logical network segmentation.
+
+### Step 8: Configure VLAN on SW1
+
+**What:** Create VLAN 1XX (student first name) and VLAN 2XX (student last name).
+
+**Commands:**
+```bash
+enable
+configure terminal
+
+vlan 1XX
+name FIRSTNAME
+exit
+
+vlan 2XX
+name LASTNAME
+exit
+
+interface gigabitEthernet 1/1
+switchport mode access
+switchport access vlan 1XX
+exit
+
+interface gigabitEthernet 1/2
+switchport mode access
+switchport access vlan 2XX
+exit
+
+interface gigabitEthernet 0/0
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk allowed vlan 1XX,2XX
+exit
+
+end
+```
+
+**VLAN Naming Examples:**
+- Student 01: VLAN 101 name = **THANATORN**, VLAN 201 name = **ONTONGLANG**
+- Student 02: VLAN 102 name = **FIRSTNAME**, VLAN 202 name = **LASTNAME**
+
+---
+
+### Step 9: Configure VLAN on SW2
+
+**What:** Replicate VLAN configuration on second switch.
+
+**Commands:** (Same as Step 8 for SW2)
+
+> **ℹ️ Note:** Use same VLAN IDs (1XX, 2XX) across all switches for consistency.
+
+---
+
+### Step 10: Configure VLAN on SW3
+
+**What:** Replicate VLAN configuration on third switch.
+
+**Commands:** (Same as Step 8 for SW3)
+
+> **✅ Checkpoint:** All switches have matching VLAN configuration.
+
+---
+
+## 🔀 Router Inter-VLAN Configuration
+
+> **Purpose:** Configure router subinterfaces for inter-VLAN routing.
+
+### Step 11: Configure R1 Subinterfaces
+
+**What:** Create subinterfaces on R1 Gi0/0 for VLAN 1XX and 2XX.
+
+**Commands:**
+```bash
+enable
+configure terminal
+
+interface gigabitEthernet 0/0
+no ip address
+no shutdown
+exit
+
+interface gigabitEthernet 0/0.1XX
+encapsulation dot1Q 1XX
+ip address 10.1.XX.1 255.255.255.0
+exit
+
+interface gigabitEthernet 0/0.2XX
+encapsulation dot1Q 2XX
+ip address 10.2.XX.1 255.255.255.0
+exit
+
+end
+```
+
+**Verification:**
+```bash
+show ip interface brief
+show interfaces gigabitEthernet 0/0.1XX
+```
+
+---
+
+### Step 12: Configure R2 Subinterfaces
+
+**What:** Create subinterfaces on R2 Gi0/0 for Domain 2 VLANs.
+
+**Commands:**
+```bash
+enable
+configure terminal
+
+interface gigabitEthernet 0/0
+no ip address
+no shutdown
+exit
+
+interface gigabitEthernet 0/0.1XX
+encapsulation dot1Q 1XX
+ip address 20.1.XX.1 255.255.255.0
+exit
+
+interface gigabitEthernet 0/0.2XX
+encapsulation dot1Q 2XX
+ip address 20.2.XX.1 255.255.255.0
+exit
+
+end
+```
+
+---
+
+### Step 13: Configure R3 Subinterfaces
+
+**What:** Create subinterfaces on R3 Gi0/0 for Domain 3 VLANs.
+
+**Commands:**
+```bash
+enable
+configure terminal
+
+interface gigabitEthernet 0/0
+no ip address
+no shutdown
+exit
+
+interface gigabitEthernet 0/0.1XX
+encapsulation dot1Q 1XX
+ip address 30.1.XX.1 255.255.255.0
+exit
+
+interface gigabitEthernet 0/0.2XX
+encapsulation dot1Q 2XX
+ip address 30.2.XX.1 255.255.255.0
+exit
+
+end
+```
+
+> **✅ Checkpoint:** All routers have subinterfaces configured for inter-VLAN routing.
+
+---
+
+## 📡 OSPF Dynamic Routing
+
+> **Purpose:** Configure OSPF routing protocol to enable inter-domain communication.
+
+### Step 14: Configure OSPF on R1
+
+**What:** Enable OSPF on R1 with all network prefixes.
+
+**Commands:**
+```bash
+enable
+configure terminal
+
 router ospf 1
 network 10.1.XX.0 0.0.0.255 area 0
 network 10.2.XX.0 0.0.0.255 area 0
 network 1.1.XX.0 0.0.0.3 area 0
-network 2.1.XX.0 0.0.0.3 area 0
 exit
+
+end
 ```
 
-**คำสั่งที่ใช้ตรวจสอบ:**
-```
-show ip route
+**Verification:**
+```bash
 show ip ospf neighbor
+show ip ospf interface brief
 show ip protocols
 ```
 
-**การส่งงาน:**
-- ✅ **ข้อ 4:** แนบภาพแคปหน้าจอคำสั่ง `show ip route` ของ Router R1
-
-**ตัวอย่างภาพ:** ![R1 Routes](src/4.R1.png)
+> **ℹ️ Note:** Verify ospf neighbor adjacency with R2.
 
 ---
 
-### 5️⃣ การตั้งค่า Routing Table บน Router R2 (1.2 คะแนน)
+### Step 15: Configure OSPF on R2
 
-📌 **ตรวจสอบ Routing Table ของ Router R2 ที่ใช้ OSPF**
+**What:** Enable OSPF on R2 with all network prefixes.
 
-**ขั้นตอนการตั้งค่า OSPF บน R2:**
-```
+**Commands:**
+```bash
+enable
+configure terminal
+
 router ospf 1
 network 20.1.XX.0 0.0.0.255 area 0
 network 20.2.XX.0 0.0.0.255 area 0
 network 1.1.XX.0 0.0.0.3 area 0
 network 2.2.XX.0 0.0.0.3 area 0
 exit
+
+end
 ```
 
-**คำสั่งที่ใช้ตรวจสอบ:**
-```
-show ip route
-show ip ospf neighbor
-show ip protocols
-```
-
-**การส่งงาน:**
-- ✅ **ข้อ 5:** แนบภาพแคปหน้าจอคำสั่ง `show ip route` ของ Router R2
-
-**ตัวอย่างภาพ:** ![R2 Routes](src/5.R2.png)
+> **ℹ️ Note:** R2 is central hub connecting R1 and R3.
 
 ---
 
-### 6️⃣ การตั้งค่า Routing Table บน Router R3 (1.2 คะแนน)
+### Step 16: Configure OSPF on R3
 
-📌 **ตรวจสอบ Routing Table ของ Router R3 ที่ใช้ OSPF**
+**What:** Enable OSPF on R3 with all network prefixes.
 
-**ขั้นตอนการตั้งค่า OSPF บน R3:**
-```
-router ospf 1
-network 30.1.XX.0 0.0.0.255 area 0
-network 30.2.XX.0 0.0.0.255 area 0
-network 2.1.XX.0 0.0.0.3 area 0
-network 2.2.XX.0 0.0.0.3 area 0
-exit
-```
-
-**คำสั่งที่ใช้ตรวจสอบ:**
-```
-show ip route
-show ip ospf neighbor
-show ip protocols
-```
-
-**การส่งงาน:**
-- ✅ **ข้อ 6:** แนบภาพแคปหน้าจอคำสั่ง `show ip route` ของ Router R3
-
-**ตัวอย่างภาพ:** ![R3 Routes](src/6.R3.png)
-
----
-
-### 7️⃣ การทดสอบ Ping ภายใน VLAN 1 (1.2 คะแนน)
-
-📌 **ทดสอบการเชื่อมต่อระหว่าง PC ที่อยู่ใน VLAN 1XX (ชื่อจริง)**
-
-**ขั้นตอนการทดสอบ:**
-- 📡 **PC11 ping PC21** (VLAN 1XX - ชื่อจริง)
-- 📡 **PC11 ping PC31** (VLAN 1XX - ชื่อจริง)
-
-**คำสั่งที่ใช้ทดสอบ:**
-```
-ping <IP-Address>
-```
-
-**การส่งงาน:**
-- ✅ **ข้อ 7:** แนบภาพแคปหน้าจอการ ping จาก PC11 ไปยัง PC ที่อยู่ใน VLAN 1XX
-
-**ตัวอย่างภาพ:** ![Ping VLAN 1](src/7.ping_vlan_1.png)
-
----
-
-### 8️⃣ การทดสอบ Ping ภายใน VLAN 2 (1.2 คะแนน)
-
-📌 **ทดสอบการเชื่อมต่อระหว่าง PC ที่อยู่ใน VLAN 2XX (นามสกุล)**
-
-**ขั้นตอนการทดสอบ:**
-- 📡 **PC12 ping PC22** (VLAN 2XX - นามสกุล)
-- 📡 **PC12 ping PC32** (VLAN 2XX - นามสกุล)
-
-**คำสั่งที่ใช้ทดสอบ:**
-```
-ping <IP-Address>
-```
-
-**การส่งงาน:**
-- ✅ **ข้อ 8:** แนบภาพแคปหน้าจอการ ping จาก PC12 ไปยัง PC ที่อยู่ใน VLAN 2XX
-
-**ตัวอย่างภาพ:** ![Ping VLAN 2](src/8.ping_vlan_2.png)
-
----
-
-### 9️⃣ การต่อวงจรเครือข่ายใน EVE-NG (4 คะแนน)
-
-📌 **แสดงโครงสร้างเครือข่ายที่ต่อสายเคเบิลเสร็จสมบูรณ์**
-
-**การส่งงาน:**
-- ✅ **ข้อ 9:** แนบภาพแคปหน้าจอของโครงสร้างเครือข่ายใน EVE-NG ที่แสดงการเชื่อมต่อทั้งหมด
-
-**ตัวอย่างภาพ:** ![Network Topology](src/network_exam.png)
-
----
-
-## ✅ การส่งงาน
-
-### 📤 ไฟล์ที่ต้องส่ง
-
-📌 **นักศึกษาต้อง Capture รูปจากหน้าคอมพิวเตอร์ในหัวข้อต่างๆ และส่งตามลิ้งที่กำหนดให้**
-
-**รายการภาพที่ต้องส่ง:**
-
-| 🔢 ข้อที่ | 📝 รายการ | 🖥️ อุปกรณ์ | 📋 คำสั่ง/รายละเอียด |
-|---------|----------|------------|---------------------|
-| 1 | IP Address Configuration | PC11, PC12, PC21, PC22, PC31, PC32 | show ip |
-| 2 | VLAN Configuration | SW1, SW2, SW3 | show vlan brief |
-| 3 | Trunk Configuration | SW1, SW2, SW3 | show interfaces trunk |
-| 4 | Routing Table R1 | R1 | show ip route |
-| 5 | Routing Table R2 | R2 | show ip route |
-| 6 | Routing Table R3 | R3 | show ip route |
-| 7 | Ping Test VLAN 1 | PC11 | ping PC21, ping PC31 |
-| 8 | Ping Test VLAN 2 | PC12 | ping PC22, ping PC32 |
-| 9 | Network Topology | EVE-NG | ภาพโครงสร้างเครือข่ายโดยรวม |
-
-### 📋 รูปแบบการส่งงาน
-- 📋 **ส่งผ่าน Google Form:** [🔗 คลิกที่นี่เพื่อส่งงาน](https://forms.gle/y3Gbu9YovdmbBQgb7)
-- 📸 **ส่งภาพแคปหน้าจอแต่ละข้อตามที่กำหนด (ทั้งหมด 9 ข้อ)**
-- ⏰ **ส่งภายในเวลาที่กำหนด** (ไม่รับงานที่ส่งช้า)
-
----
-
-## 🎯 เกณฑ์การให้คะแนน
-
-| 🔢 ข้อที่ | 📝 รายการ | 🎯 คะแนน |
-|---------|----------|---------|
-| 1 | การกำหนด IP Address ให้กับ PC ทุกเครื่อง | 4 คะแนน |
-| 2 | การตั้งค่า VLAN บน Switch | 3 คะแนน |
-| 3 | การตั้งค่า Trunk Port บน Switch | 3 คะแนน |
-| 4 | การตั้งค่า Routing Table บน Router R1 | 1.2 คะแนน |
-| 5 | การตั้งค่า Routing Table บน Router R2 | 1.2 คะแนน |
-| 6 | การตั้งค่า Routing Table บน Router R3 | 1.2 คะแนน |
-| 7 | การทดสอบ Ping ภายใน VLAN 1 | 1.2 คะแนน |
-| 8 | การทดสอบ Ping ภายใน VLAN 2 | 1.2 คะแนน |
-| 9 | การต่อวงจรเครือข่ายใน EVE-NG | 4 คะแนน |
-| | **รวมคะแนนทั้งหมด** | **20 คะแนน** |
-
-### 📊 รายละเอียดการให้คะแนนแต่ละข้อ
-
-**ข้อ 1 (4 คะแนน) - PC Configuration:**
-- ✅ กำหนด IP Address ถูกต้องทั้ง 6 เครื่อง = 2 คะแนน
-- ✅ กำหนด Subnet Mask ถูกต้อง = 1 คะแนน
-- ✅ กำหนด Default Gateway ถูกต้อง = 1 คะแนน
-
-**ข้อ 2 (3 คะแนน) - VLAN Configuration:**
-- ✅ สร้าง VLAN 1XX (ชื่อจริง) และ VLAN 2XX (นามสกุล) โดย XX = เลขที่นักศึกษา = 1.5 คะแนน
-- ✅ กำหนด port ให้ถูกต้องตาม VLAN = 1 คะแนน
-- ✅ แคปหน้าจอครบทั้ง 3 Switch = 0.5 คะแนน
-
-**ข้อ 3 (3 คะแนน) - Trunk Configuration:**
-- ✅ ตั้งค่า trunk port บน Gi0/0 = 1.5 คะแนน
-- ✅ อนุญาต VLAN 1XX, 2XX ผ่าน trunk (XX = เลขที่นักศึกษา) = 1 คะแนน
-- ✅ แคปหน้าจอครบทั้ง 3 Switch = 0.5 คะแนน
-
-**ข้อ 4 (1.2 คะแนน) - Router R1:**
-- ✅ แสดง routing table ของ R1 พร้อม OSPF routes = 1.2 คะแนน
-
-**ข้อ 5 (1.2 คะแนน) - Router R2:**
-- ✅ แสดง routing table ของ R2 พร้อม OSPF routes = 1.2 คะแนน
-
-**ข้อ 6 (1.2 คะแนน) - Router R3:**
-- ✅ แสดง routing table ของ R3 พร้อม OSPF routes = 1.2 คะแนน
-
-**ข้อ 7 (1.2 คะแนน) - Ping VLAN 1:**
-- ✅ PC11 ping ไปยัง PC ใน VLAN 1XX สำเร็จ = 1.2 คะแนน
-
-**ข้อ 8 (1.2 คะแนน) - Ping VLAN 2:**
-- ✅ PC12 ping ไปยัง PC ใน VLAN 2XX สำเร็จ = 1.2 คะแนน
-
-**ข้อ 9 (4 คะแนน) - Network Topology:**
-- ✅ แสดงโครงสร้างเครือข่ายที่ต่อครบถ้วน = 4 คะแนน
-
-### 📊 รายละเอียดการหักคะแนน
-
-- ❌ **ไม่ส่งภาพประกอบ** - หัก 100% ของข้อนั้น
-- ❌ **ภาพไม่ชัดเจน/อ่านไม่ได้** - หัก 50% ของข้อนั้น
-- ❌ **ตั้งค่าไม่ถูกต้อง** - หัก 50-100% ของข้อนั้น (ขึ้นกับความผิดพลาด)
-- ❌ **ส่งงานล่าช้า** - ไม่รับงาน (0 คะแนน)
-- ❌ **ตรวจสอบพบว่า Copy งานทั้งหมดของเพื่อนส่ง ** - หัก 100% ทั้งผู้รับและให้ Copy (0 คะแนน)
-
-### ✨ คำสั่งที่ควรจำ
-
-**คำสั่งสำหรับ PC (VPCS):**
-```
-# ตั้งค่า IP Address (XX = เลขที่นักศึกษา)
-ip <IP-Address> <Gateway> <Subnet-Bits>
-
-# ตัวอย่างนักศึกษาเลขที่ 01:
-# PC11 (VLAN 101 - THANATORN)
-ip 10.1.1.10 10.1.1.1 24
-
-# PC12 (VLAN 201 - ONTONGLANG)
-ip 10.2.1.20 10.2.1.1 24
-
-# แสดงข้อมูล IP
-show ip
-
-# ทดสอบ Ping
-ping <IP-Address>
-```
-
-**คำสั่งสำหรับ Switch - VLAN:**
-```
-# เข้าสู่โหมด config
+**Commands:**
+```bash
 enable
 configure terminal
 
-# สร้าง VLAN (ตัวอย่างนักศึกษาเลขที่ 01)
-vlan 101
-name THANATORN
+router ospf 1
+network 30.1.XX.0 0.0.0.255 area 0
+network 30.2.XX.0 0.0.0.255 area 0
+network 2.2.XX.0 0.0.0.3 area 0
 exit
 
-vlan 201
-name ONTONGLANG
-exit
+end
+```
 
-# กำหนด Access Port
-interface gigabitEthernet1/1
-switchport mode access
-switchport access vlan 101
-exit
+> **✅ Checkpoint:** All OSPF routers have formed adjacencies and converged!
 
-interface gigabitEthernet1/2
-switchport mode access
-switchport access vlan 201
-exit
+---
 
-# ตรวจสอบ VLAN
+## 🖥️ PC Configuration
+
+> **Purpose:** Configure IP addressing on all PCs.
+
+### Step 17: Configure PC11 (Domain 1, VLAN 1XX)
+
+**What:** Set IP address for PC11 in VLAN 1XX.
+
+**Commands:**
+```bash
+# For VPCS
+ip 10.1.XX.10 10.1.XX.1 24
+show ip
+```
+
+> **ℹ️ Note:** Replace XX with student ID. Example for student 01: `ip 10.1.1.10 10.1.1.1 24`
+
+---
+
+### Step 18: Configure PC12 (Domain 1, VLAN 2XX)
+
+**What:** Set IP address for PC12 in VLAN 2XX.
+
+**Commands:**
+```bash
+ip 10.2.XX.20 10.2.XX.1 24
+show ip
+```
+
+---
+
+### Step 19: Configure PC21 and PC22 (Domain 2)
+
+**What:** Set IP addresses for PCs in Domain 2.
+
+**Commands (PC21):**
+```bash
+ip 20.1.XX.10 20.1.XX.1 24
+```
+
+**Commands (PC22):**
+```bash
+ip 20.2.XX.20 20.2.XX.1 24
+```
+
+---
+
+### Step 20: Configure PC31 and PC32 (Domain 3)
+
+**What:** Set IP addresses for PCs in Domain 3.
+
+**Commands (PC31):**
+```bash
+ip 30.1.XX.10 30.1.XX.1 24
+```
+
+**Commands (PC32):**
+```bash
+ip 30.2.XX.20 30.2.XX.1 24
+```
+
+> **✅ Checkpoint:** All PCs have IP addresses configured and can reach their gateways.
+
+---
+
+## 🔍 Testing Connectivity
+
+> **Purpose:** Verify connectivity within and across domains.
+
+### Step 21: Test Within VLAN 1XX (First Name Domain)
+
+**What:** Verify PC connectivity within first name VLAN across all domains.
+
+**Test from PC11:**
+```bash
+ping 20.1.XX.10    # Should reach PC21
+ping 30.1.XX.10    # Should reach PC31
+```
+
+**Expected Result:**
+```
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echoes to 20.1.XX.10
+!!!!!
+Success rate is 100 percent (5/5), roundtrip min/avg/max = 10/12/15 ms
+```
+
+> **✅ Success:** VLAN 1XX communication works across all domains!
+
+---
+
+### Step 22: Test Within VLAN 2XX (Last Name Domain)
+
+**What:** Verify PC connectivity within last name VLAN across all domains.
+
+**Test from PC12:**
+```bash
+ping 20.2.XX.20    # Should reach PC22
+ping 30.2.XX.20    # Should reach PC32
+```
+
+> **✅ Success:** VLAN 2XX communication works across all domains!
+
+---
+
+### Step 23: Test Cross-VLAN Communication
+
+**What:** Verify PCs can reach hosts in different VLANs within same domain.
+
+**Test from PC11 (VLAN 1XX):**
+```bash
+ping 10.2.XX.20    # Should reach PC12 (VLAN 2XX in Domain 1)
+```
+
+**Test from PC21 (VLAN 1XX):**
+```bash
+ping 20.2.XX.20    # Should reach PC22 (VLAN 2XX in Domain 2)
+```
+
+> **✅ Success:** Inter-VLAN routing is working correctly!
+
+---
+
+## ✔️ Verification
+
+> **Purpose:** Document network configuration and validate all settings.
+
+### Step 24: Verify VLAN Configuration
+
+**What:** Check VLAN configuration on all switches.
+
+**Commands (on each switch):**
+```bash
 show vlan brief
-show interfaces status
 ```
 
-**คำสั่งสำหรับ Switch - Trunk:**
+**Expected Output:**
 ```
-# ตั้งค่า Trunk Port (ตัวอย่างนักศึกษาเลขที่ 01)
-interface gigabitEthernet0/0
-switchport trunk encapsulation dot1q
-switchport mode trunk
-switchport trunk allowed vlan 101,201
-exit
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Gi0/1, Gi0/2, Gi0/3, Gi1/0, Gi1/1
+1XX  FIRSTNAME                        active    Gi1/1
+2XX  LASTNAME                         active    Gi1/2
+```
 
-# ตรวจสอบ Trunk
+### Step 25: Verify OSPF Convergence
+
+**What:** Check OSPF neighbor status and routing table.
+
+**Commands (on each router):**
+```bash
+show ip ospf neighbor
+show ip ospf interface brief
+show ip route ospf
+```
+
+**Expected OSPF Neighbor Output:**
+```
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+2.2.XX.1          1   FULL/BDR        00:00:37    1.1.XX.2        GigabitEthernet0/1
+```
+
+### Step 26: Verify Routing Tables
+
+**What:** Confirm all routes are learned via OSPF.
+
+**Commands (on R1):**
+```bash
+show ip route
+```
+
+**Expected Routes:**
+```
+O    20.1.XX.0/24 [110/21] via 1.1.XX.2, 00:10:34, GigabitEthernet0/1
+O    20.2.XX.0/24 [110/21] via 1.1.XX.2, 00:10:34, GigabitEthernet0/1
+O    30.1.XX.0/24 [110/31] via 1.1.XX.2, 00:10:34, GigabitEthernet0/1
+O    30.2.XX.0/24 [110/31] via 1.1.XX.2, 00:10:34, GigabitEthernet0/1
+O    2.2.XX.0/30 [110/20] via 1.1.XX.2, 00:10:34, GigabitEthernet0/1
+```
+
+### Step 27: Verify PC Connectivity End-to-End
+
+**What:** Final validation of all connectivity across network.
+
+**Full Connectivity Matrix:**
+```bash
+# From PC11: Should ping all other PCs
+ping 10.2.XX.20    # PC12 (same domain, different VLAN)
+ping 20.1.XX.10    # PC21 (different domain, same VLAN)
+ping 20.2.XX.20    # PC22 (different domain, different VLAN)
+ping 30.1.XX.10    # PC31 (different domain, same VLAN)
+ping 30.2.XX.20    # PC32 (different domain, different VLAN)
+```
+
+> **✅ Confirmed:** Full end-to-end connectivity established across all three domains!
+
+---
+
+## 🆘 Troubleshooting
+
+| 🔴 Issue | 🔧 Diagnosis | ✅ Solution |
+|---------|-----------|-----------|
+| **PC cannot ping gateway** | IP or gateway misconfigured | Verify `show ip` on PC; check router subinterface IP |
+| **VLAN ports not responding** | Access port misconfigured | Check `show vlan brief`; verify access vlan assignment |
+| **Trunk not working** | Trunk encapsulation missing | Verify `switchport trunk encapsulation dot1q` configured |
+| **OSPF neighbors not forming** | Backbone link down | Check `show ip ospf neighbor`; verify backbone IPs configured |
+| **Can ping gateway but not other domains** | OSPF routes not learned | Check `show ip route ospf`; verify OSPF network statements |
+| **Cross-VLAN communication fails** | Subinterface routing disabled | Verify subinterface IPs with `show ip interface brief` |
+
+### Debugging Commands
+
+```bash
+# Check VLAN status
+show vlan brief
 show interfaces trunk
-```
 
-**คำสั่งสำหรับ Router:**
-```
-# กำหนด IP บน Interface
-interface <interface-id>
-ip address <ip-address> <subnet-mask>
-no shutdown
-exit
+# Check OSPF status
+show ip ospf neighbor
+show ip ospf interface brief
+show ip protocols
 
-# Sub-interface สำหรับ Inter-VLAN (ตัวอย่างนักศึกษาเลขที่ 01)
-interface gigabitEthernet0/0.101
-encapsulation dot1Q 101
-ip address 10.1.1.1 255.255.255.0
-exit
-
-interface gigabitEthernet0/0.201
-encapsulation dot1Q 201
-ip address 10.2.1.1 255.255.255.0
-exit
-
-# ตรวจสอบ Routing Table
+# Check routing
 show ip route
+show ip route ospf
+
+# Check interface configuration
 show ip interface brief
-show ip protocols
+show interfaces gigabitEthernet 0/0.1XX
+
+# Enable debugging (if needed)
+debug ip ospf hello
+debug ip ospf adjacency
+undebug all
 ```
 
-**คำสั่งสำหรับ OSPF Routing:**
-```
-# ตั้งค่า OSPF (ตัวอย่างนักศึกษาเลขที่ 01)
+---
+
+## ✅ Summary & Next Steps
+
+### Lab Completion Checklist
+
+**Congratulations!** You have successfully:
+
+- ✅ Configured VLAN segmentation on three switches with proper naming
+- ✅ Implemented inter-VLAN routing on three routers using subinterfaces
+- ✅ Configured OSPF dynamic routing to connect all three domains
+- ✅ Assigned IP addresses following student identification scheme
+- ✅ Verified VLAN functionality and trunk configuration
+- ✅ Verified OSPF neighbor adjacencies and route propagation
+- ✅ Tested end-to-end connectivity across all domains
+- ✅ Validated inter-VLAN and inter-domain communication
+- ✅ Documented network configuration and validation results
+
+### Key Concepts Assessed
+
+| Concept | Description | Key Takeaway |
+|---------|-------------|--------------|
+| **VLAN Segmentation** | Logical network separation | VLANs isolate broadcast domains by ID |
+| **Trunk Encapsulation** | Multiplexing multiple VLANs | 802.1Q tagging enables trunk links |
+| **Inter-VLAN Routing** | Communication across VLANs | Subinterfaces on routers enable routing |
+| **Subinterface Configuration** | Creating virtual router interfaces | One physical link, multiple logical interfaces |
+| **OSPF Adjacency** | Router peer relationship | OSPF uses hello protocol for neighbor formation |
+| **Route Advertisement** | OSPF network statements | Routers announce configured networks to neighbors |
+| **IP Addressing Scheme** | Logical address planning | Consistent numbering simplifies management |
+| **Connectivity Testing** | Ping for network validation | ICMP tests layer 3 reachability |
+
+### Configuration Reference
+
+**Quick Reference - Replace XX with Student ID:**
+
+```bash
+# VLAN Configuration (on each switch)
+vlan 1XX
+name FIRSTNAME
+vlan 2XX
+name LASTNAME
+
+# Trunk Configuration
+interface Gi0/0
+switchport trunk allowed vlan 1XX,2XX
+switchport mode trunk
+
+# Router Subinterfaces
+interface Gi0/0.1XX
+encapsulation dot1Q 1XX
+ip address 10.1.XX.1 255.255.255.0
+
+interface Gi0/0.2XX
+encapsulation dot1Q 2XX
+ip address 10.2.XX.1 255.255.255.0
+
+# OSPF Configuration
 router ospf 1
-network 10.1.1.0 0.0.0.255 area 0
-network 10.2.1.0 0.0.0.255 area 0
-network 1.1.1.0 0.0.0.3 area 0
-network 2.1.1.0 0.0.0.3 area 0
-exit
+network 10.1.XX.0 0.0.0.255 area 0
+network 10.2.XX.0 0.0.0.255 area 0
+network 1.1.XX.0 0.0.0.3 area 0
 
-# ตรวจสอบ OSPF
-show ip ospf neighbor
-show ip ospf interface
-show ip ospf database
-show ip protocols
+# PC Configuration
+ip 10.1.XX.10 10.1.XX.1 24
 ```
 
-### ⚠️ ข้อผิดพลาดที่พบบ่อย
+### What's Next?
 
-1. ❌ **VLAN ID ผิด** - ต้องใช้ VLAN 1XX และ 2XX โดย XX = เลขที่นักศึกษา (เช่น 101, 201)
-2. ❌ **ชื่อ VLAN ผิด** - ต้องใช้ชื่อจริงและนามสกุลภาษาอังกฤษตัวพิมพ์ใหญ่ทั้งหมด
-3. ❌ **IP Address ไม่ตรง** - ต้องใช้ 10.1.XX.10 ไม่ใช่ 10.1.99.10 (XX = เลขที่นักศึกษา)
-4. ❌ **Gateway ไม่ถูกต้อง** - Gateway ต้องลงท้ายด้วย .1 เช่น 10.1.01.1
-5. ❌ **Trunk Port ไม่ทำงาน** - ตรวจสอบ encapsulation dot1q และ allowed vlan 1XX,2XX
-6. ❌ **Inter-VLAN Routing ไม่ทำงาน** - ตรวจสอบ sub-interface Gi0/0.1XX และ Gi0/0.2XX
-7. ❌ **PC ไม่มี Default Gateway** - PC จะ ping ข้าม network ไม่ได้
-8. ❌ **ลืมเปิด Interface** - ใช้คำสั่ง `no shutdown` บน Router sub-interface
-9. ❌ **OSPF Neighbor ไม่ขึ้น** - ตรวจสอบ network statement และ area number
-10. ❌ **Wildcard Mask ผิด** - เช่น /24 = 0.0.0.255, /30 = 0.0.0.3
+**Recommended Advanced Topics:**
 
-### 💡 เทคนิคการทำข้อสอบ
+1. **🔒 Network Security:**
+   - Configure Access Control Lists (ACL) for VLAN security
+   - Implement port security on switch ports
+   - Enable SSH on routers for secure management
 
-**ลำดับการทำงานที่แนะนำ:**
+2. **⚡ Advanced OSPF:**
+   - Implement OSPF areas and summarization
+   - Configure OSPF authentication (MD5)
+   - Optimize OSPF timers for faster convergence
 
-1. **เริ่มจากการต่อวงจร** - ต่อสายเคเบิลให้ถูกต้องตามโจทย์
-2. **ตั้งค่า Interface บน Router** - กำหนด IP Address สำหรับ WAN links
-3. **ตั้งค่า Sub-interface บน Router** - สำหรับ Inter-VLAN Routing
-4. **ตั้งค่า OSPF บน Router ทั้ง 3 ตัว** - ประกาศ network ทั้งหมดใน Area 0
-5. **ตรวจสอบ OSPF Neighbor** - ใช้ `show ip ospf neighbor` เพื่อยืนยัน
-6. **ตั้งค่า Switch** - สร้าง VLAN และกำหนด Access/Trunk port
-7. **ตั้งค่า PC** - กำหนด IP Address, Subnet Mask และ Gateway
-8. **ทดสอบ Ping** - ทดสอบภายใน VLAN และข้าม VLAN
-9. **แคปหน้าจอ** - แคปภาพตามรายการที่กำหนดใน 9 ข้อ
-10. **ตรวจสอบความครบถ้วน** - ตรวจสอบว่าได้ภาพครบทั้ง 9 ข้อ
-11. **ส่งงานผ่าน Google Form** - [https://forms.gle/y3Gbu9YovdmbBQgb7](https://forms.gle/y3Gbu9YovdmbBQgb7)
+3. **🔀 Redundancy & Failover:**
+   - Configure Spanning Tree Protocol (STP) for loop prevention
+   - Implement Hot Standby Router Protocol (HSRP) for gateway redundancy
+   - Test failover scenarios and recovery
+
+4. **📊 Network Monitoring:**
+   - Configure NetFlow for traffic analysis
+   - Implement SNMP for device monitoring
+   - Use syslog for centralized logging
 
 ---
 
-## 📋 รายชื่อนักศึกษาและ VLAN ที่กำหนด
+## 📚 Useful Resources
 
-📌 **การกำหนดค่าเครือข่ายสำหรับนักศึกษาแต่ละคน** 🖥️
-
-### 🔢 กฎการกำหนด:
-- **XX** = เลขที่นักศึกษา (01-08)
-- **VLAN 1XX** = ชื่อจริง (First Name) ภาษาอังกฤษตัวพิมพ์ใหญ่
-- **VLAN 2XX** = นามสกุล (Last Name) ภาษาอังกฤษตัวพิมพ์ใหญ่
-- **IP Address**: 10.1.XX.10, 10.2.XX.20, 20.1.XX.10, ฯลฯ
-
-### 👥 รายชื่อนักศึกษา:
-
-| 🆔 เลขที่ | 👤 ชื่อ-นามสกุล | 🏢 VLAN 1XX | 🏭 VLAN 2XX | 📝 ตัวอย่าง IP |
-|---------|------------------|-------------|-------------|----------------|
-| **01** | นายธนธรณ์ อ่อนทองหลาง | VLAN 101<br>name: **THANATORN** | VLAN 201<br>name: **ONTONGLANG** | 10.1.**01**.10<br>10.2.**01**.20 |
-| **02** | นายภูมิบดี ภูทองเพ็ชร | VLAN 102<br>name: **PHUMIBODEE** | VLAN 202<br>name: **PHUTHONGPHET** | 10.1.**02**.10<br>10.2.**02**.20 |
-| **03** | นายวงศ์ชัยภัทร ดอนภิรมย์ | VLAN 103<br>name: **WONGCHAIPHAT** | VLAN 203<br>name: **DONPHIROM** | 10.1.**03**.10<br>10.2.**03**.20 |
-| **04** | นายก้องภพ เดชพรรณา | VLAN 104<br>name: **KONGPHOP** | VLAN 204<br>name: **DETCHAPHANNA** | 10.1.**04**.10<br>10.2.**04**.20 |
-| **05** | นายศิวากร พิมพะนิตย์ | VLAN 105<br>name: **SIWAKORN** | VLAN 205<br>name: **PHIMPHANIT** | 10.1.**05**.10<br>10.2.**05**.20 |
-| **06** | นายอลงกรณ์ ไชยสา | VLAN 106<br>name: **ALONGKORN** | VLAN 206<br>name: **CHAISA** | 10.1.**06**.10<br>10.2.**06**.20 |
-| **07** | นายชญานิน ฆารโสภณ | VLAN 107<br>name: **CHAYANIN** | VLAN 207<br>name: **KANSOPHON** | 10.1.**07**.10<br>10.2.**07**.20 |
-| **08** | นายพสิษฐ์พล ระดาเขต | VLAN 108<br>name: **PASITPON** | VLAN 208<br>name: **RADAKHET** | 10.1.**08**.10<br>10.2.**08**.20 |
-
-### 📝 ตัวอย่างการตั้งค่าสำหรับนักศึกษาเลขที่ 01:
-
-**Router Configuration (Inter-VLAN Routing):**
-```
-interface GigabitEthernet0/0.101
- encapsulation dot1Q 101
- ip address 10.1.1.1 255.255.255.0
-!
-interface GigabitEthernet0/0.201
- encapsulation dot1Q 201
- ip address 10.2.1.1 255.255.255.0
-!
-! OSPF Configuration
-router ospf 1
- network 10.1.1.0 0.0.0.255 area 0
- network 10.2.1.0 0.0.0.255 area 0
- network 1.1.1.0 0.0.0.3 area 0
- network 2.1.1.0 0.0.0.3 area 0
-```
-
-**Switch Configuration:**
-```
-vlan 101
- name THANATORN
-vlan 201
- name ONTONGLANG
-!
-interface GigabitEthernet1/1
- switchport mode access
- switchport access vlan 101
-!
-interface GigabitEthernet1/2
- switchport mode access
- switchport access vlan 201
-!
-interface GigabitEthernet0/0
- switchport trunk encapsulation dot1q
- switchport mode trunk
- switchport trunk allowed vlan 101,201
-```
-
-**PC Configuration:**
-```
-# PC11 (VLAN 101)
-ip 10.1.1.10 10.1.1.1 24
-
-# PC12 (VLAN 201)
-ip 10.2.1.20 10.2.1.1 24
-```
-
-**ตรวจสอบ OSPF:**
-```
-# ตรวจสอบ OSPF Neighbor
-show ip ospf neighbor
-
-# ตรวจสอบ OSPF Database
-show ip ospf database
-
-# ตรวจสอบ Routing Table
-show ip route
-```
+- [Cisco VLAN Configuration Guide](https://www.cisco.com/c/en/us/support/docs/lan-switching-and-vlan/vlan-trunking-protocol-vtp/98156-vlan-faq.html)
+- [Cisco OSPF Routing Guide](https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html)
+- [Inter-VLAN Routing Best Practices](https://www.cisco.com/c/en/us/support/docs/lan-switching-and-vlan/configure-vlan/10743-12.html)
+- [EVE-NG Documentation](https://www.eve-ng.net/index.php/documentation/)
+- [Cisco IOS Command Reference](https://www.cisco.com/c/en/us/support/ios-nx-os-software/ios-software/products-command-reference-list.html)
 
 ---
 
-## 🎉 ขอให้โชคดีในการสอบ!
+## 💡 Best Practices & Tips
 
-💪 **เชื่อมั่นในตัวเอง ทำอย่างเต็มความสามารถ**  
-📚 **ทบทวนเนื้อหาและฝึกฝนอย่างสม่ำเสมอ**  
-🚀 **สู้ๆ นักศึกษาทุกคน!**
+### ✅ Network Design Best Practices
+
+- **Plan IP Addressing:** Use consistent scheme across all domains (10.x, 20.x, 30.x)
+- **Name Devices:** Clear hostname conventions aid troubleshooting
+- **Document Everything:** Keep track of VLAN IDs, IP addresses, and router configurations
+- **Verify Each Step:** Test configuration after each change to isolate issues
+- **Use Consistent Subnets:** All domains use same subnet structure (/24 for VLANs, /30 for links)
+- **Monitor Convergence:** Allow time for OSPF to converge before testing
+
+### 🔐 Configuration Security
+
+- **Access Control:** Implement ACLs to restrict management access
+- **Device Authentication:** Configure console and enable passwords
+- **Secure Channels:** Use SSH instead of Telnet for remote management
+- **Regular Backups:** Save configurations regularly to restore quickly
+- **Log Monitoring:** Enable and review device logs for issues
+
+### ⚡ Performance Optimization
+
+- **OSPF Tuning:** Adjust hello/dead intervals based on convergence needs
+- **Bandwidth Optimization:** Monitor interface utilization
+- **MTU Configuration:** Verify MTU size across links (typically 1500 bytes)
+- **QoS Implementation:** Prioritize critical traffic if needed
+- **Load Balancing:** Use multiple paths via OSPF cost adjustment
+
+### 🔧 Troubleshooting Methodology
+
+1. **Start with basics:** Verify physical connections and device status
+2. **Check configuration:** Confirm settings match requirements
+3. **Test incrementally:** Validate each component before proceeding
+4. **Use systematic commands:** Progressively test using show commands
+5. **Review outputs carefully:** Look for error messages and unexpected results
+6. **Document issues:** Record problems and solutions for future reference
+7. **Test thoroughly:** Verify fix before moving to next item
+
+### 📋 Common Configuration Mistakes to Avoid
+
+- ❌ Forgetting `no shutdown` on interfaces
+- ❌ Mismatched VLAN IDs on different switches
+- ❌ Incorrect subinterface VLAN tagging
+- ❌ Missing OSPF network statements
+- ❌ Wrong subnet mask or IP address
+- ❌ Forgetting to enable OSPF on backbone links
+- ❌ Incorrect trunk allowed VLAN list
 
 ---
 
-*📝 หมายเหตุ: เอกสารนี้อาจมีการปรับปรุงแก้ไข กรุณาตรวจสอบเวอร์ชันล่าสุดจากอาจารย์ผู้สอน*
+✅ **Comprehensive networking exam lab completed successfully!** 🎓
+
+**You have now demonstrated proficiency in VLAN design, inter-VLAN routing, and dynamic routing protocols! 🚀**
