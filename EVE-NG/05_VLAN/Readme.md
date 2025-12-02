@@ -67,6 +67,8 @@
 
 > **Purpose:** Visualize the network structure you'll create.
 
+![VLAN Lab Diagram](imgs/diagram.png)
+
 ### Topology Details
 
 | Device | VLAN | IP Address | Subnet Mask | Role |
