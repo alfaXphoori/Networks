@@ -1,31 +1,68 @@
-# 🖧 Basic Lab: Connecting PC1 & PC2 to Switch1 in EVE-NG
+# 🖧 Basic Switch Lab: Connecting PCs to a Switch
+
+> Connect two virtual PCs to a Cisco switch, assign IP addresses, and test connectivity.
+
+## 👤 Author
+
+- [@alfaXphoori](https://www.github.com/alfaXphoori)
+
+---
+
+## 📋 Table of Contents
+
+1. [Lab Objectives](#lab-objectives)
+2. [Lab Setup](#lab-setup)
+3. [Switch Configuration](#switch-configuration)
+4. [PC Configuration](#pc-configuration)
+5. [Testing Connectivity](#testing-connectivity)
+6. [Summary & Next Steps](#summary--next-steps)
+
+---
 
 ## 🎯 Lab Objectives
 
-- 📌 **Connect two PCs (PC1 & PC2) to a switch (SW1)**  
-- 📌 **Assign IP addresses to PCs**  
-- 📌 **Test connectivity using ping**
+> **Purpose:** Understand basic switch operation and Layer 2 connectivity.
+
+- ✅ Connect two PCs to a Cisco switch
+- ✅ Assign IP addresses to both PCs
+- ✅ Test connectivity using ping
+- ✅ Verify switch port operation
 
 ---
 
-## 🛠 Step 1: Set Up the Lab in EVE-NG
+## 🛠️ Lab Setup
 
-- 1️⃣ **Open EVE-NG**.
-- 2️⃣ **Create a New Lab** (e.g., "Basic_Switch_Lab").
-- 3️⃣ **Add Devices**:
-  - 🖥 **One Cisco Switch (SW1)**
-  - 🖥 **Two Virtual PCs (PC1 & PC2)**
-- 4️⃣ **Connect Devices**:
-  - 🔌 **PC1 → SW1 (GigabitEthernet 0/0)**
-  - 🔌 **PC2 → SW1 (GigabitEthernet 0/1)**
-- 5️⃣ **Diagram**:
-- ![diagram](imgs/diagram.png)
+> **Purpose:** Create the network topology in EVE-NG.
+
+### Step 1: Create Lab and Add Devices
+
+**What:** Set up the basic lab structure with necessary devices.
+
+**How to:**
+1. Open EVE-NG web interface
+2. Create a new lab named "Basic_Switch_Lab"
+3. Add devices:
+   - One Cisco Switch (SW1)
+   - Two Virtual PCs (PC1 & PC2)
+4. Connect devices:
+   - PC1 → SW1 (GigabitEthernet 0/0)
+   - PC2 → SW1 (GigabitEthernet 0/1)
+
+![diagram](imgs/diagram.png)
+
+> **✅ Checkpoint:** Lab topology created successfully.
 
 ---
 
-## ⚙️ Step 2: Configure the Switch (SW1)
+## ⚙️ Switch Configuration
 
-### 🔹 1️⃣ Access SW1 and Set a Hostname
+> **Purpose:** Configure the switch to support PC connections.
+
+### Step 2: Access SW1 and Set a Hostname
+
+**What:** Connect to the switch and give it a meaningful name.
+
+**How to:**
 
 ```bash
 enable
@@ -33,7 +70,13 @@ configure terminal
 hostname SW1
 ```
 
-### 🔹 2️⃣ Enable Ports for PC1 and PC2
+---
+
+### Step 3: Enable Ports for PC1 and PC2
+
+**What:** Activate the switch ports that connect to the PCs.
+
+**How to:**
 
 ```bash
 interface gigabitEthernet 0/0
@@ -45,29 +88,45 @@ no shutdown
 exit
 ```
 
-✅ **Ports are now active for the PCs.**
+> **✅ Checkpoint:** Ports are now active for the PCs.
 
 ---
 
-## 🌐 Step 3: Assign IP Addresses to PCs
+## 🌐 PC Configuration
 
-### 🖥 **On PC1**
+> **Purpose:** Configure IP addresses on both virtual PCs.
+
+### Step 4: Assign IP Addresses to PCs
+
+**What:** Configure PC network settings.
+
+**How to:**
+
+**On PC1:**
 
 ```bash
 ip 192.168.1.10 255.255.255.0 192.168.1.1
 ```
 
-### 🖥 **On PC2**
+**On PC2:**
 
 ```bash
 ip 192.168.1.20 255.255.255.0 192.168.1.1
 ```
 
-✅ **Both PCs are now in the same network (192.168.1.0/24).**
+> **ℹ️ Note:** Both PCs are now in the same network (192.168.1.0/24).
 
 ---
 
-## 🔍 Step 4: Test Connectivity
+## 🔍 Testing Connectivity
+
+> **Purpose:** Verify that the network connection is working correctly.
+
+### Step 5: Test Connectivity
+
+**What:** Use ping to verify connectivity between PCs.
+
+**How to:**
 
 From **PC1**, ping PC2:
 
@@ -75,7 +134,72 @@ From **PC1**, ping PC2:
 ping 192.168.1.20
 ```
 
-- ![result](imgs/result.png)
-✅ **If the ping is successful, the network is working!**
+![result](imgs/result.png)
+
+> **✅ Success:** If ping replies are received, the network is working!
 
 ---
+
+## ✅ Summary & Next Steps
+
+**Congratulations!** You have:
+- ✅ Created a basic switch lab topology
+- ✅ Configured switch hostname and ports
+- ✅ Assigned IP addresses to both PCs
+- ✅ Tested bidirectional connectivity
+
+### What's Next?
+
+1. **VLAN Configuration:**
+   - Create multiple VLANs
+   - Assign PCs to different VLANs
+   - Test inter-VLAN communication
+
+2. **Switch Security:**
+   - Configure port security
+   - Set up SSH management
+   - Enable AAA authentication
+
+3. **Redundancy:**
+   - Add more switches
+   - Configure Spanning Tree Protocol
+   - Create EtherChannel aggregation
+
+---
+
+## 🆘 Troubleshooting
+
+| Issue | Solution |
+|-------|----------|\n| **Ping fails** | Check IP addresses match same subnet; verify switch ports are active |
+| **Switch port not active** | Confirm `no shutdown` command executed; check cable connection |
+| **PC can't get IP** | Restart PC; check DHCP or manually assign IP |
+| **One-way connectivity** | Verify both PCs have correct subnet mask and gateway |
+
+---
+
+## 📚 Useful Commands
+
+```bash
+# Show switch configuration
+show running-config
+
+# Show VLAN information
+show vlan
+
+# Show interface status
+show interfaces
+
+# Show specific interface
+show interface gigabitEthernet 0/0
+
+# PC commands
+show ip
+ping <destination>
+save
+```
+
+---
+
+✅ **Basic switch lab completed successfully!** 🚀
+
+**Ready to explore advanced switching concepts! 🎓**
