@@ -26,7 +26,7 @@ Before starting the installation, download the required software:
 | Software | Purpose | Link |
 |----------|---------|------|
 | **VirtualBox** | Hypervisor for running virtual machines | [Download](https://www.virtualbox.org/) |
-| **VMWare ** | Hypervisor for running virtual machines | [Download]([https://www.virtualbox.org/](https://drive.google.com/file/d/149EBZ2zX4P6vws69DXrD-YWwnsTeMJZw/view?usp=sharing)) |
+| **VMWare** | Hypervisor for running virtual machines | [Download]([https://www.virtualbox.org/](https://drive.google.com/file/d/149EBZ2zX4P6vws69DXrD-YWwnsTeMJZw/view?usp=sharing)|
 | **EVE-NG ISO** | Network lab environment OS image | [Download](https://www.eve-ng.net/index.php/download/) |
 
 > **⚠️ Important:** Ensure you have at least 8 GB RAM and 60 GB free disk space on your computer.
@@ -601,6 +601,7 @@ bcdedit /set hypervisorlaunchtype off
 ✅ **Installation and configuration completed successfully!** 🚀
 
 **Happy Labbing! 🎓**
+
 
 
 
