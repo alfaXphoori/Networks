@@ -306,7 +306,7 @@ bcdedit /set hypervisorlaunchtype off
 
 **How to:**
 1. After the installation finishes and system reboots
-2. Go to **VM** menu → **Removable Devices** → **CD/DVD** → **Disconnect**
+2. Go to **VM** menu → **Removable Devices** → **CD/DVD** → **Disconnect** → **Yes**
 3. Or simply power off the VM and remove the ISO from settings
 
 ![Remove CD/DVD](imgs/26_CD_Remove.png)
