@@ -33,7 +33,7 @@
 2. Ensure virtualization is **enabled**
 3. This allows EVE-NG to run router and switch simulations
 
-![check](imgs/checkVT.png)
+![check](imgs/check_CPU_VT.png)
 
 > **⚠️ Important:** Without virtualization enabled, router and switch images won't run.
 
