@@ -139,7 +139,7 @@ bcdedit /set hypervisorlaunchtype off
 3. Select **Typical** configuration
 4. Proceed to the next step
 
-![New Virtual Machine](imgs/_0New%20Virtual.png)
+![New Virtual Machine](imgs/1_Create_New_VM.png)
 
 ---
 
@@ -155,7 +155,13 @@ bcdedit /set hypervisorlaunchtype off
 5. Set the VM name: **EVE-NG**
 6. Click **Next**
 
-![Create Name](imgs/_01Create%20Name.png)
+![Choose Typical](imgs/2_Choose%20_Typical.png)
+
+![I will install](imgs/3_Choose_I_will.png)
+
+![Choose OS](imgs/4_Choose_Other_64bit.png)
+
+![Name VM](imgs/5_Rename_EVE-NG.png)
 
 ---
 
@@ -170,7 +176,9 @@ bcdedit /set hypervisorlaunchtype off
 4. Review settings and click **Finish**
 5. After creation, right-click the VM and select **Settings** for additional configuration
 
-![Go Setting](imgs/_02Go%20Setting.png)
+![Disk Size](imgs/6_HDD_50gb.png)
+
+![Go to Edit](imgs/7_Go_Edit.png)
 
 ---
 
@@ -190,7 +198,7 @@ bcdedit /set hypervisorlaunchtype off
 > - CPU: 2-4 cores
 > - Adjust based on your host computer's resources
 
-![Add CPU RAM](imgs/_03Add%20CPU%20RAM.png)
+![Add RAM](imgs/8_Ram_8.png)
 
 ---
 
@@ -204,7 +212,7 @@ bcdedit /set hypervisorlaunchtype off
 3. Check **Virtualize CPU performance counters** (optional)
 4. This should be available if BIOS virtualization is enabled
 
-![Open VT](imgs/_04Open%20VT.png)
+![CPU and VT-x](imgs/9_CPU_4_2_Check.png)
 
 ---
 
@@ -220,7 +228,7 @@ bcdedit /set hypervisorlaunchtype off
 5. Select **Use ISO image file** and browse to the **EVE-NG ISO file**
 6. Click **OK** to save settings
 
-![Add HDD](imgs/_05Add%20HDD.png)
+![Add CD/DVD](imgs/10_Add_CD.png)
 
 ---
 
@@ -234,7 +242,7 @@ bcdedit /set hypervisorlaunchtype off
 3. Check **Replicate physical network connection state**
 4. Click **OK** to save
 
-![Add Network](imgs/_06Add%20Network.png)
+![Network Adapter](imgs/11_NAT_Network.png)
 
 > **ℹ️ Note:** Bridged mode allows the VM to appear on your local network with its own IP address.
 
@@ -252,7 +260,7 @@ bcdedit /set hypervisorlaunchtype off
 1. In VMware Workstation, select the **EVE-NG** VM from the library
 2. Click **Power on this virtual machine** or press **Ctrl+B**
 
-![Start](imgs/_07Start.png)
+![Power On](imgs/12_Power_ON.png)
 
 ---
 
@@ -264,7 +272,7 @@ bcdedit /set hypervisorlaunchtype off
 1. When the bootloader appears, select your preferred language
 2. **English** is recommended (easier to follow guides)
 
-![Choose Language](imgs/_08Choose%20laugaue.png)
+![Choose Language](imgs/14_Choose_Eng.png)
 
 ---
 
@@ -276,7 +284,7 @@ bcdedit /set hypervisorlaunchtype off
 1. Select **Install** from the menu
 2. Follow the on-screen prompts
 
-![Go Next](imgs/_09Go%20next.png)
+![Install EVE-NG](imgs/13_Install_Eve.png)
 
 ---
 
@@ -288,8 +296,8 @@ bcdedit /set hypervisorlaunchtype off
 1. The installer will copy files and configure the system
 2. This may take 5-10 minutes
 3. When prompted, click **Continue**
-
-![Continue](imgs/_11Continue.png)
+![Installation Complete](imgs/15_Done.png)
+![Continue](imgs/16_Continue.png)
 
 ---
 
@@ -301,8 +309,6 @@ bcdedit /set hypervisorlaunchtype off
 1. Go to **VM** menu → **Removable Devices** → **CD/DVD** → **Disconnect**
 2. Or click on the CD icon in the VM toolbar and select **Disconnect**
 
-![Unmount CD](imgs/_11Unmount%20CD.png)
-
 ---
 
 ### Step 12: Confirm Unmount
@@ -310,8 +316,6 @@ bcdedit /set hypervisorlaunchtype off
 **What:** Confirm the removal of the ISO file.
 
 **Action:** Click **OK** or confirm when prompted
-
-![Confirm Unmount](imgs/_12Confirm%20Unmount.png)
 
 ---
 
@@ -322,8 +326,6 @@ bcdedit /set hypervisorlaunchtype off
 **How to:**
 1. Use **VM** menu → **Power** → **Power Off** or
 2. Click **Power Off** button in the toolbar
-
-![Force Power Off](imgs/_13Force%20PoweOff.png)
 
 ---
 
@@ -343,7 +345,7 @@ bcdedit /set hypervisorlaunchtype off
 1. Restart the VM (it should boot automatically)
 2. At the login prompt, enter the credentials above
 
-![First Login](imgs/_14First%20login.png)
+![First Login](imgs/17_login.png)
 
 ---
 
@@ -356,7 +358,7 @@ bcdedit /set hypervisorlaunchtype off
 2. Enter a new secure password
 3. Remember this password for future logins
 
-![Password](imgs/_15Passwd.png)
+![Password](imgs/18_Use_OldPW.png)
 
 > **Security Tip:** Use a strong password with uppercase, lowercase, numbers, and special characters.
 
@@ -370,8 +372,6 @@ bcdedit /set hypervisorlaunchtype off
 1. Re-enter the new password to confirm
 2. Press **Enter**
 
-![Confirm Password](imgs/_16Confirm%20Passwd.png)
-
 ---
 
 ### Step 17: Set Hostname
@@ -382,7 +382,7 @@ bcdedit /set hypervisorlaunchtype off
 1. Enter a hostname (e.g., `eve-ng-lab`, `networking-lab`)
 2. Press **Enter**
 
-![Hostname](imgs/_17Hostname.png)
+![Hostname](imgs/19_Use_OldHost.png)
 
 > **ℹ️ Note:** The hostname is used for network identification.
 
@@ -396,7 +396,7 @@ bcdedit /set hypervisorlaunchtype off
 1. Enter your DNS domain (e.g., `lab.local`, or leave blank)
 2. Press **Enter**
 
-![DNS](imgs/_18DNS.png)
+![DNS](imgs/20_Use_OldDNS.png)
 
 > **⚠️ Optional:** You can leave this blank if you don't have a specific domain.
 
@@ -411,7 +411,7 @@ bcdedit /set hypervisorlaunchtype off
 2. Or configure a **Static IP** if your network requires it
 3. Press **Enter**
 
-![DHCP](imgs/_19DHCP.png)
+![DHCP](imgs/21_Choose_DHCP.png)
 
 > **💡 Tip:** DHCP is easier and works well for lab environments.
 
@@ -425,7 +425,7 @@ bcdedit /set hypervisorlaunchtype off
 1. Enter an NTP server (e.g., `pool.ntp.org`) or leave blank
 2. Press **Enter**
 
-![NTP](imgs/_20NTP.png)
+![NTP](imgs/22_No_NTP.png)
 
 > **✅ Default:** Leaving blank uses system default NTP settings.
 
@@ -440,7 +440,7 @@ bcdedit /set hypervisorlaunchtype off
 2. Otherwise, leave blank and press **Enter**
 3. Select **Direct Connection** option
 
-![Proxy](imgs/_21Proxy.png)
+![Proxy](imgs/23_Direcct_Conn.png)
 
 ---
 
@@ -459,35 +459,17 @@ bcdedit /set hypervisorlaunchtype off
 
 **Step-by-Step Network Configuration:**
 
-![GoNetwork](imgs/_24go_Network.png)
-
 > **Step 1 - Go to Network Settings:**
 > Click on **Edit** → **Virtual Network Editor** from the VMware menu to access network configuration options.
-
----
-
-![Create Network Adapter](imgs/_25CreateNetwork.png)
 
 > **Step 2 - Configure Network Adapter:**
 > In the Virtual Network Editor, you can configure VMnet adapters. VMnet0 is bridged, VMnet1 is host-only, and VMnet8 is NAT.
 
----
-
-![Done Network Adapter](imgs/_26DoneNetwork.png)
-
 > **Step 3 - Verify Network Adapter:**
 > The network adapters are pre-configured in VMware. Verify the settings match your network requirements.
 
----
-
-![Setting Network Adapter](imgs/_27SettingMachine.png)
-
 > **Step 4 - Configure Adapter Settings:**
 > For Host-Only adapter (VMnet1), configure the subnet. For Bridged adapter (VMnet0), it will use your physical network settings automatically.
-
----
-
-![config Network Adapter](imgs/_28ConfigNetwork.png)
 
 > **Step 5 - Final Configuration:**
 > For Host-Only network (VMnet1), configure DHCP if needed. Typical configuration:
@@ -514,7 +496,7 @@ bcdedit /set hypervisorlaunchtype off
 
 **Status:** All configuration steps are now complete.
 
-![Done](imgs/_22Done.png)
+![Done](imgs/24_Finish.png)
 
 > **✅ Checkpoint:** Your EVE-NG system is now configured and ready to use.
 
@@ -536,7 +518,7 @@ bcdedit /set hypervisorlaunchtype off
 - **Username**: `admin`
 - **Password**: `eve`
 
-![Login Web](imgs/_23LoginWeb.png)
+![Login Web](imgs/25_Browser_Conn.png)
 
 > **💡 Tip:** The web interface is where you'll create and manage your network labs.
 
