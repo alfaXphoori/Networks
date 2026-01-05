@@ -33,7 +33,7 @@
 2. Ensure virtualization is **enabled**
 3. This allows EVE-NG to run router and switch simulations
 
-![check](imgs/check_CPU_VT.png)
+![Check VT-x](imgs/check_CPU_VT.png)
 
 > **⚠️ Important:** Without virtualization enabled, router and switch images won't run.
 
@@ -107,7 +107,9 @@
    - Drag and drop them to the remote directory
    - Wait for upload to complete
 
-![upload Ftp](imgs/upvIOS.png)
+![Move Files](imgs/Move_vios.png)
+
+![Upload vIOS](imgs/upvIOS.png)
 
 > **✅ Checkpoint:** All image files are now uploaded to EVE-NG server.
 
@@ -130,6 +132,8 @@
    - Connection type: **SSH**
 
 ![putty](imgs/putty.png)
+
+![Accept SSH Key](imgs/Putty_Accept.png)
 
 2️⃣ **Log in to EVE-NG**
    - Username: `root`
@@ -164,6 +168,8 @@
    - Navigate to `http://<EVE-NG-IP>`
    - Log in with `admin/eve`
 
+![EVE-NG Login](imgs/Login.png)
+
 2️⃣ **Create a New Lab**
    - Create a test lab (or use existing one)
 
@@ -176,7 +182,9 @@
    - These should be highlighted in **blue** (available for use)
    - **Grayed out** entries mean images are missing or not installed
 
-![check node](imgs/checkWeb.png)
+![Check Node Selection](imgs/checkNode.png)
+
+![Check Web Interface](imgs/checkWeb.png)
 
 > **✅ Checkpoint:** If images appear in blue, installation is successful!
 
