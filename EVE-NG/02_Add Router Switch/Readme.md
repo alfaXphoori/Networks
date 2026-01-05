@@ -109,8 +109,6 @@
 
 ![Move Files](imgs/Move_vios.png)
 
-![Upload vIOS](imgs/upvIOS.png)
-
 > **✅ Checkpoint:** All image files are now uploaded to EVE-NG server.
 
 ---
@@ -131,13 +129,14 @@
    - Port: **22**
    - Connection type: **SSH**
 
-![putty](imgs/putty.png)
+![putty](imgs/Putty.png)
 
 ![Accept SSH Key](imgs/Putty_Accept.png)
 
 2️⃣ **Log in to EVE-NG**
    - Username: `root`
    - Password: (your EVE-NG root password)
+![EVE-NG Login](imgs/Login.png)
 
 3️⃣ **Execute Permission Fix Command**
    - Copy and paste this command:
@@ -168,7 +167,6 @@
    - Navigate to `http://<EVE-NG-IP>`
    - Log in with `admin/eve`
 
-![EVE-NG Login](imgs/Login.png)
 
 2️⃣ **Create a New Lab**
    - Create a test lab (or use existing one)
