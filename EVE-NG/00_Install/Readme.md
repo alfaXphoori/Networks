@@ -25,7 +25,6 @@ Before starting the installation, download the required software:
 
 | Software | Purpose | Link |
 |----------|---------|------|
-| **VirtualBox** | Hypervisor for running virtual machines | [Download](https://www.virtualbox.org/) |
 | **VMWare** | Hypervisor for running virtual machines | [Download](https://drive.google.com/file/d/149EBZ2zX4P6vws69DXrD-YWwnsTeMJZw/view?usp=sharing)|
 | **EVE-NG ISO** | Network lab environment OS image | [Download](https://www.eve-ng.net/index.php/download/) |
 
