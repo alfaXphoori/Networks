@@ -35,7 +35,7 @@ Before starting the installation, download the required software:
 
 ## 🖥️ Windows Environment Setup
 
-> **Purpose:** Disable conflicting Windows features that interfere with VirtualBox and virtualization.
+> **Purpose:** Disable conflicting Windows features that interfere with VMware and virtualization.
 
 ### Step 0: Turn ON Virtualization in BIOS
 
@@ -54,7 +54,7 @@ Before starting the installation, download the required software:
 
 ### Step 1: Disable Hypervisor Launch Type
 
-**What:** Disable Windows Hypervisor to avoid conflicts with VirtualBox.
+**What:** Disable Windows Hypervisor to avoid conflicts with VMware.
 
 **How to:**
 1. Press **Windows Key + X** and select **Windows PowerShell (Admin)**
@@ -128,16 +128,17 @@ bcdedit /set hypervisorlaunchtype off
 
 ## 🔧 Virtual Machine Setup
 
-> **Purpose:** Create and configure a virtual machine in VirtualBox with proper resources for EVE-NG.
+-> **Purpose:** Create and configure a virtual machine in VMware with proper resources for EVE-NG.
 
 ### Step 0: Create New Virtual Machine
 
 **What:** Create a new virtual machine container.
 
 **How to:**
-1. Open **VirtualBox**
-2. Click the **New** button in the toolbar
-3. Proceed to the next step
+1. Open **VMware Workstation**
+2. Click **File** → **New Virtual Machine** or press **Ctrl+N**
+3. Select **Typical** configuration
+4. Proceed to the next step
 
 ![New Virtual Machine](imgs/_0New%20Virtual.png)
 
@@ -148,10 +149,12 @@ bcdedit /set hypervisorlaunchtype off
 **What:** Name your VM and select the operating system type.
 
 **How to:**
-1. Set the VM name: **EVE-NG**
-2. Select **Type**: **Linux**
-3. Select **Version**: **Ubuntu (64-bit)** (or similar Linux version)
-4. Click **Continue**
+1. Select **Installer disc image file (iso)** and browse to your EVE-NG ISO
+2. Click **Next**
+3. Select guest operating system: **Linux**
+4. Select version: **Ubuntu 64-bit**
+5. Set the VM name: **EVE-NG**
+6. Click **Next**
 
 ![Create Name](imgs/_01Create%20Name.png)
 
@@ -159,11 +162,14 @@ bcdedit /set hypervisorlaunchtype off
 
 ### Step 2: Go to Settings
 
-**What:** Access the VM settings to configure resources.
+**What:** Configure VM disk size during creation wizard.
 
 **How to:**
-1. In VirtualBox, right-click on the **EVE-NG** virtual machine
-2. Select **Settings**
+1. Specify disk capacity: **50-60 GB** recommended
+2. Select **Store virtual disk as a single file**
+3. Click **Next**
+4. Review settings and click **Finish**
+5. After creation, right-click the VM and select **Settings** for additional configuration
 
 ![Go Setting](imgs/_02Go%20Setting.png)
 
@@ -174,9 +180,11 @@ bcdedit /set hypervisorlaunchtype off
 **What:** Allocate sufficient memory and processing power.
 
 **Configuration:**
-- Go to **System** tab
-- Set **Base Memory (RAM)**: **4096 MB (4 GB minimum)**
-- Set **Processors (CPU)**: **2-4 Cores** (depending on your host)
+- Go to **Hardware** tab → **Memory**
+- Set **Memory for this virtual machine**: **4096 MB (4 GB minimum)**
+- Go to **Processors**
+- Set **Number of processors**: **1**
+- Set **Number of cores per processor**: **2-4** (depending on your host)
 
 > **Recommended:**
 > - RAM: 4-8 GB
@@ -192,9 +200,10 @@ bcdedit /set hypervisorlaunchtype off
 **What:** Enable hardware virtualization acceleration.
 
 **How to:**
-1. Still in **System** tab
-2. Click the **Acceleration** tab
-3. Check **Enable VT-x/AMD-V** (should be available if BIOS is enabled)
+1. Go to **Hardware** tab → **Processors**
+2. Check **Virtualize Intel VT-x/EPT or AMD-V/RVI**
+3. Check **Virtualize CPU performance counters** (optional)
+4. This should be available if BIOS virtualization is enabled
 
 ![Open VT](imgs/_04Open%20VT.png)
 
@@ -202,13 +211,15 @@ bcdedit /set hypervisorlaunchtype off
 
 ### Step 5: Add Hard Disk
 
-**What:** Create and attach storage for the VM.
+**What:** Verify storage configuration.
 
 **How to:**
-1. Go to **Storage** tab
-2. Under **Storage Devices**, add a **Hard Disk** (minimum **30-50 GB**)
-3. Attach the **EVE-NG ISO file** to the optical drive
-4. Click **OK** to save settings
+1. Go to **Hardware** tab → **Hard Disk (SCSI)**
+2. Verify the disk size is **50-60 GB** (as configured during creation)
+3. Go to **CD/DVD (SATA)**
+4. Check **Connect at power on**
+5. Select **Use ISO image file** and browse to the **EVE-NG ISO file**
+6. Click **OK** to save settings
 
 ![Add HDD](imgs/_05Add%20HDD.png)
 
@@ -219,9 +230,10 @@ bcdedit /set hypervisorlaunchtype off
 **What:** Set up network connectivity.
 
 **How to:**
-1. Go to **Network** tab
-2. Set **Attached to**: **Bridged Adapter**
-3. Click **OK** to save
+1. Go to **Hardware** tab → **Network Adapter**
+2. Set **Network connection**: **Bridged: Connected directly to the physical network**
+3. Check **Replicate physical network connection state**
+4. Click **OK** to save
 
 ![Add Network](imgs/_06Add%20Network.png)
 
@@ -238,8 +250,8 @@ bcdedit /set hypervisorlaunchtype off
 **What:** Boot the VM and begin the installation.
 
 **How to:**
-1. In VirtualBox, click the **EVE-NG** VM
-2. Click the **Start** button (green arrow)
+1. In VMware Workstation, select the **EVE-NG** VM from the library
+2. Click **Power on this virtual machine** or press **Ctrl+B**
 
 ![Start](imgs/_07Start.png)
 
@@ -287,8 +299,8 @@ bcdedit /set hypervisorlaunchtype off
 **What:** Remove the installation media from the virtual CD drive.
 
 **How to:**
-1. Go to **Devices** menu → **Optical Drives** → **Remove disk from virtual drive**
-2. Or right-click the CD icon in the VM status bar
+1. Go to **VM** menu → **Removable Devices** → **CD/DVD** → **Disconnect**
+2. Or click on the CD icon in the VM toolbar and select **Disconnect**
 
 ![Unmount CD](imgs/_11Unmount%20CD.png)
 
@@ -309,8 +321,8 @@ bcdedit /set hypervisorlaunchtype off
 **What:** Properly shut down the machine after initial setup.
 
 **How to:**
-1. Use **Machine** → **Power Off** or
-2. Right-click and select **Power Off** → **Force Power Off**
+1. Use **VM** menu → **Power** → **Power Off** or
+2. Click **Power Off** button in the toolbar
 
 ![Force Power Off](imgs/_13Force%20PoweOff.png)
 
@@ -442,57 +454,57 @@ bcdedit /set hypervisorlaunchtype off
 **What:** EVE-NG can be accessed from your host machine or other devices on the network.
 
 **Network Architecture:**
-- **VirtualBox Network**: Bridged Adapter (VM appears on local network)
-- **Host-Only Network**: Access only from host machine
-- **NAT Network**: VM can access external networks through host
+- **VMware Bridged Network**: VM appears on local network with its own IP
+- **Host-Only Network**: Access only from host machine (VMnet1)
+- **NAT Network**: VM can access external networks through host (VMnet8)
 
 **Step-by-Step Network Configuration:**
 
 ![GoNetwork](imgs/_24go_Network.png)
 
 > **Step 1 - Go to Network Settings:**
-> Click on the VirtualBox menu and navigate to **File** → **Preferences** or **Settings** to access network configuration options.
+> Click on **Edit** → **Virtual Network Editor** from the VMware menu to access network configuration options.
 
 ---
 
 ![Create Network Adapter](imgs/_25CreateNetwork.png)
 
-> **Step 2 - Create New Network Adapter:**
-> In the Network settings, click the **+** button or **Create** to add a new network adapter for your VM.
+> **Step 2 - Configure Network Adapter:**
+> In the Virtual Network Editor, you can configure VMnet adapters. VMnet0 is bridged, VMnet1 is host-only, and VMnet8 is NAT.
 
 ---
 
 ![Done Network Adapter](imgs/_26DoneNetwork.png)
 
-> **Step 3 - Adapter Created Successfully:**
-> The new network adapter is now created and ready for configuration. You'll see it listed with default settings.
+> **Step 3 - Verify Network Adapter:**
+> The network adapters are pre-configured in VMware. Verify the settings match your network requirements.
 
 ---
 
 ![Setting Network Adapter](imgs/_27SettingMachine.png)
 
 > **Step 4 - Configure Adapter Settings:**
-> Verify the adapter type (should be **Host-Only** or **Bridged** depending on your needs). Check the IPv4 and DHCP settings to ensure proper network range.
+> For Host-Only adapter (VMnet1), configure the subnet. For Bridged adapter (VMnet0), it will use your physical network settings automatically.
 
 ---
 
 ![config Network Adapter](imgs/_28ConfigNetwork.png)
 
 > **Step 5 - Final Configuration:**
-> Set the DHCP server range and network mask. Typical configuration:
-> - **Network**: 192.168.56.0/24
-> - **DHCP Range**: 192.168.56.101 - 192.168.56.254
-> - **Server**: 192.168.56.1  
+> For Host-Only network (VMnet1), configure DHCP if needed. Typical configuration:
+> - **Subnet IP**: 192.168.137.0
+> - **Subnet mask**: 255.255.255.0
+> - **DHCP Range**: Configure in DHCP Settings tab
 
 **Configuration Options:**
 
 | Option | Benefit | Use Case |
 |--------|---------|----------|
-| **Bridged Adapter** | VM gets IP from network | Access from any device on network |
-| **Host-Only** | Isolated to host machine | Secure, local-only access |
-| **NAT Network** | VM can access internet | External connectivity needed |
+| **Bridged (VMnet0)** | VM gets IP from network | Access from any device on network |
+| **Host-Only (VMnet1)** | Isolated to host machine | Secure, local-only access |
+| **NAT (VMnet8)** | VM can access internet | External connectivity needed |
 
-**Network Adapter Configuration (From VirtualBox Settings):**
+**Network Adapter Configuration (From VMware Virtual Network Editor):**
 
 
 ---
@@ -550,7 +562,7 @@ bcdedit /set hypervisorlaunchtype off
 
 **Congratulations!** You have successfully:
 - ✅ Configured Windows for virtualization
-- ✅ Created and configured a VirtualBox VM
+- ✅ Created and configured a VMware virtual machine
 - ✅ Installed EVE-NG operating system
 - ✅ Configured network and system settings
 - ✅ Accessed the EVE-NG web interface
@@ -581,8 +593,8 @@ bcdedit /set hypervisorlaunchtype off
 
 | Issue | Solution |
 |-------|----------|
-| **Can't access VM** | Check if VM is running; restart VirtualBox |
-| **Network not working** | Verify Bridged Adapter is selected and enabled |
+| **Can't access VM** | Check if VM is running; restart VMware Workstation |
+| **Network not working** | Verify Bridged network is selected in VM settings |
 | **VM is slow** | Increase RAM/CPU allocation in VM settings |
 | **Can't access web interface** | Find VM IP with `ifconfig`; ensure firewall allows traffic |
 | **Login fails** | Use default credentials: `admin/eve` or `root/eve` |
@@ -592,7 +604,7 @@ bcdedit /set hypervisorlaunchtype off
 ## 📚 Useful Resources
 
 - [EVE-NG Official Website](https://www.eve-ng.net/)
-- [VirtualBox Documentation](https://www.virtualbox.org/manual/UserManual.html)
+- [VMware Workstation Documentation](https://docs.vmware.com/en/VMware-Workstation-Pro/)
 - [Network Lab Basics](https://www.eve-ng.net/index.php/documentation/)
 - [Community Forum](https://www.eve-ng.net/index.php/community)
 

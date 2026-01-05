@@ -11,11 +11,11 @@
 ## 📋 Table of Contents
 
 1. [Prerequisites & Downloads](#prerequisites--downloads)
-2. [Windows Environment Setup](#-windows-environment-setup)
-3. [Virtual Machine Setup](#-virtual-machine-setup)
-4. [EVE-NG Installation](#-eve-ng-installation)
-5. [Post-Installation Configuration](#-post-installation-configuration)
-6. [Web Interface Access](#-web-interface-access)
+2. [Windows Environment Setup](#windows-environment-setup)
+3. [Virtual Machine Setup](#virtual-machine-setup)
+4. [EVE-NG Installation](#eve-ng-installation)
+5. [Post-Installation Configuration](#post-installation-configuration)
+6. [Web Interface Access](#web-interface-access)
 
 ---
 
@@ -429,6 +429,70 @@ bcdedit /set hypervisorlaunchtype off
 3. Select **Direct Connection** option
 
 ![Proxy](imgs/_21Proxy.png)
+
+---
+
+## 🌐 Network Configuration
+
+> **Purpose:** Understand and configure the network setup for EVE-NG to ensure proper connectivity.
+
+### EVE-NG Network Overview
+
+**What:** EVE-NG can be accessed from your host machine or other devices on the network.
+
+**Network Architecture:**
+- **VirtualBox Network**: Bridged Adapter (VM appears on local network)
+- **Host-Only Network**: Access only from host machine
+- **NAT Network**: VM can access external networks through host
+
+**Step-by-Step Network Configuration:**
+
+![GoNetwork](imgs/_24go_Network.png)
+
+> **Step 1 - Go to Network Settings:**
+> Click on the VirtualBox menu and navigate to **File** → **Preferences** or **Settings** to access network configuration options.
+
+---
+
+![Create Network Adapter](imgs/_25CreateNetwork.png)
+
+> **Step 2 - Create New Network Adapter:**
+> In the Network settings, click the **+** button or **Create** to add a new network adapter for your VM.
+
+---
+
+![Done Network Adapter](imgs/_26DoneNetwork.png)
+
+> **Step 3 - Adapter Created Successfully:**
+> The new network adapter is now created and ready for configuration. You'll see it listed with default settings.
+
+---
+
+![Setting Network Adapter](imgs/_27SettingMachine.png)
+
+> **Step 4 - Configure Adapter Settings:**
+> Verify the adapter type (should be **Host-Only** or **Bridged** depending on your needs). Check the IPv4 and DHCP settings to ensure proper network range.
+
+---
+
+![config Network Adapter](imgs/_28ConfigNetwork.png)
+
+> **Step 5 - Final Configuration:**
+> Set the DHCP server range and network mask. Typical configuration:
+> - **Network**: 192.168.56.0/24
+> - **DHCP Range**: 192.168.56.101 - 192.168.56.254
+> - **Server**: 192.168.56.1  
+
+**Configuration Options:**
+
+| Option | Benefit | Use Case |
+|--------|---------|----------|
+| **Bridged Adapter** | VM gets IP from network | Access from any device on network |
+| **Host-Only** | Isolated to host machine | Secure, local-only access |
+| **NAT Network** | VM can access internet | External connectivity needed |
+
+**Network Adapter Configuration (From VirtualBox Settings):**
+
 
 ---
 
