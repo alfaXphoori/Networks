@@ -127,7 +127,7 @@ bcdedit /set hypervisorlaunchtype off
 
 ## 🔧 Virtual Machine Setup
 
--> **Purpose:** Create and configure a virtual machine in VMware with proper resources for EVE-NG.
+> **Purpose:** Create and configure a virtual machine in VMware with proper resources for EVE-NG.
 
 ### Step 0: Create New Virtual Machine
 
@@ -150,8 +150,8 @@ bcdedit /set hypervisorlaunchtype off
 **How to:**
 1. Select **Installer disc image file (iso)** and browse to your EVE-NG ISO
 2. Click **Next**
-3. Select guest operating system: **Linux**
-4. Select version: **Ubuntu 64-bit**
+3. Select guest operating system: **Other**
+4. Select version: **Other 64-bit**
 5. Set the VM name: **EVE-NG**
 6. Click **Next**
 
@@ -216,17 +216,15 @@ bcdedit /set hypervisorlaunchtype off
 
 ---
 
-### Step 5: Add Hard Disk
+### Step 5: Configure CD/DVD Drive
 
-**What:** Verify storage configuration.
+**What:** Attach the EVE-NG ISO file to the virtual CD/DVD drive.
 
 **How to:**
-1. Go to **Hardware** tab → **Hard Disk (SCSI)**
-2. Verify the disk size is **50-60 GB** (as configured during creation)
-3. Go to **CD/DVD (SATA)**
-4. Check **Connect at power on**
-5. Select **Use ISO image file** and browse to the **EVE-NG ISO file**
-6. Click **OK** to save settings
+1. Go to **Hardware** tab → **CD/DVD (SATA)**
+2. Check **Connect at power on**
+3. Select **Use ISO image file** and browse to the **EVE-NG ISO file**
+4. Click **OK** to save settings
 
 ![Add CD/DVD](imgs/10_Add_CD.png)
 
@@ -297,35 +295,29 @@ bcdedit /set hypervisorlaunchtype off
 2. This may take 5-10 minutes
 3. When prompted, click **Continue**
 ![Installation Complete](imgs/15_Done.png)
+
 ![Continue](imgs/16_Continue.png)
 
 ---
 
-### Step 11: Unmount CD/ISO
+### Step 11: Remove Installation Media
 
-**What:** Remove the installation media from the virtual CD drive.
+**What:** Disconnect the ISO file after installation completes.
 
 **How to:**
-1. Go to **VM** menu → **Removable Devices** → **CD/DVD** → **Disconnect**
-2. Or click on the CD icon in the VM toolbar and select **Disconnect**
+1. After the installation finishes and system reboots
+2. Go to **VM** menu → **Removable Devices** → **CD/DVD** → **Disconnect**
+3. Or simply power off the VM and remove the ISO from settings
 
 ---
 
-### Step 12: Confirm Unmount
+### Step 12: Reboot the Virtual Machine
 
-**What:** Confirm the removal of the ISO file.
-
-**Action:** Click **OK** or confirm when prompted
-
----
-
-### Step 13: Shut Down the VM
-
-**What:** Properly shut down the machine after initial setup.
+**What:** Restart the VM to boot into the installed EVE-NG system.
 
 **How to:**
-1. Use **VM** menu → **Power** → **Power Off** or
-2. Click **Power Off** button in the toolbar
+1. If the VM doesn't reboot automatically, power it off
+2. Then power it back on to start the newly installed system
 
 ---
 
@@ -333,7 +325,7 @@ bcdedit /set hypervisorlaunchtype off
 
 > **Purpose:** Configure EVE-NG system settings on first boot.
 
-### Step 14: First Login
+### Step 13: First Login
 
 **What:** Log in to EVE-NG for the first time.
 
@@ -349,7 +341,7 @@ bcdedit /set hypervisorlaunchtype off
 
 ---
 
-### Step 15: Change Root Password
+### Step 14: Change Root Password
 
 **What:** Set a secure password for the root user.
 
@@ -364,7 +356,7 @@ bcdedit /set hypervisorlaunchtype off
 
 ---
 
-### Step 16: Confirm Password
+### Step 15: Confirm Password
 
 **What:** Verify the new password.
 
@@ -374,7 +366,7 @@ bcdedit /set hypervisorlaunchtype off
 
 ---
 
-### Step 17: Set Hostname
+### Step 16: Set Hostname
 
 **What:** Give your EVE-NG system a network name.
 
@@ -388,7 +380,7 @@ bcdedit /set hypervisorlaunchtype off
 
 ---
 
-### Step 18: Configure DNS Domain Name
+### Step 17: Configure DNS Domain Name
 
 **What:** Set the DNS domain for your system.
 
@@ -402,7 +394,7 @@ bcdedit /set hypervisorlaunchtype off
 
 ---
 
-### Step 19: Configure IP Address (DHCP)
+### Step 18: Configure IP Address (DHCP)
 
 **What:** Set up network connectivity.
 
@@ -417,7 +409,7 @@ bcdedit /set hypervisorlaunchtype off
 
 ---
 
-### Step 20: Configure NTP Server
+### Step 19: Configure NTP Server
 
 **What:** Set up time synchronization.
 
@@ -431,7 +423,7 @@ bcdedit /set hypervisorlaunchtype off
 
 ---
 
-### Step 21: Configure Proxy
+### Step 20: Configure Proxy
 
 **What:** Set up proxy if your network requires it.
 
@@ -490,7 +482,7 @@ bcdedit /set hypervisorlaunchtype off
 
 ---
 
-### Step 22: Installation Complete
+### Step 21: Configuration Complete
 
 **What:** System configuration is finished.
 
@@ -504,7 +496,7 @@ bcdedit /set hypervisorlaunchtype off
 
 ## 🌐 Web Interface Access
 
-### Step 23: Access EVE-NG Web Interface
+### Step 22: Access EVE-NG Web Interface
 
 **What:** Connect to EVE-NG using a web browser.
 
@@ -524,7 +516,7 @@ bcdedit /set hypervisorlaunchtype off
 
 ---
 
-### Step 24: Install Windows Client Side (Optional)
+### Step 23: Install Windows Client Side (Optional)
 
 **What:** Install client tools for enhanced integration with Windows.
 
