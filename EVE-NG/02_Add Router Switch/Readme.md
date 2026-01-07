@@ -128,7 +128,6 @@
    - Enter **EVE-NG IP address**
    - Port: **22**
    - Connection type: **SSH**
-
 ![putty](imgs/OPutty.png)
 
    - Click **Open**
