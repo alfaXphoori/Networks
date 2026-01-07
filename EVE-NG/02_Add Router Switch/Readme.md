@@ -129,7 +129,7 @@
    - Port: **22**
    - Connection type: **SSH**
 
-![putty](imgs/Putty.png)
+![putty](imgs/OPutty.png)
 
    - Click **Open**
    - If prompted with a security alert, click **Yes** to accept the SSH key
