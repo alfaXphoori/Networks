@@ -131,7 +131,7 @@
 ![putty](imgs/OPutty.png)
 
    - Click **Open**
-   - If prompted with a security alert, click **Yes** to accept the SSH key
+   - If prompted with a security alert, click **Accept** to accept the SSH key
 ![Accept SSH Key](imgs/Putty_Accept.png)
 
 2️⃣ **Log in to EVE-NG**
