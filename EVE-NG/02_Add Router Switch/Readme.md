@@ -129,7 +129,7 @@
    - Port: **22**
    - Connection type: **SSH**
 
-![putty](imgs/Putty.png)
+![Putty](imgs/Putty.png)
 
 ![Accept SSH Key](imgs/Putty_Accept.png)
 
