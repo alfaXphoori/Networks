@@ -15,13 +15,14 @@
 3. [Lab Topology](#lab-topology)
 4. [Creating the Lab](#creating-the-lab)
 5. [ACL Fundamentals](#acl-fundamentals)
-6. [Standard ACL Configuration](#standard-acl-configuration)
-7. [Extended ACL Configuration](#extended-acl-configuration)
-8. [Named ACL Configuration](#named-acl-configuration)
-9. [ACL Placement & Best Practices](#acl-placement--best-practices)
-10. [Testing & Verification](#testing--verification)
-11. [Troubleshooting](#troubleshooting)
-12. [Summary & Next Steps](#summary--next-steps)
+6. [Basic Router & PC Configuration](#basic-router--pc-configuration)
+7. [Standard ACL Configuration](#standard-acl-configuration)
+8. [Extended ACL Configuration](#extended-acl-configuration)
+9. [Named ACL Configuration](#named-acl-configuration)
+10. [ACL Placement & Best Practices](#acl-placement--best-practices)
+11. [Testing & Verification](#testing--verification)
+12. [Troubleshooting](#troubleshooting)
+13. [Summary & Next Steps](#summary--next-steps)
 
 ---
 
@@ -281,6 +282,192 @@ Security Policies:
 │  (filters specifically, block early to save bandwidth)│
 └──────────────────────────────────────────────────────┘
 ```
+
+---
+
+## ⚙️ Basic Router & PC Configuration
+
+> **Purpose:** Configure IP addresses and routing before applying ACLs.
+
+### Step 1: Router IP Configuration
+
+**What:** Configure IP addresses on all router interfaces and enable routing.
+
+**R1 Configuration:**
+
+```bash
+enable
+configure terminal
+
+hostname R1
+
+# Configure Branch network interface
+interface GigabitEthernet0/0
+ ip address 10.1.1.1 255.255.255.0
+ no shutdown
+ exit
+
+# Configure WAN link to R2
+interface GigabitEthernet0/1
+ ip address 10.10.1.1 255.255.255.252
+ no shutdown
+ exit
+
+# Configure routing (OSPF)
+router ospf 1
+ network 10.1.1.0 0.0.0.255 area 0
+ network 10.10.1.0 0.0.0.3 area 0
+ exit
+
+write memory
+```
+
+**R2 Configuration:**
+
+```bash
+enable
+configure terminal
+
+hostname R2
+
+# Configure HQ network interface
+interface GigabitEthernet0/0
+ ip address 10.2.2.1 255.255.255.0
+ no shutdown
+ exit
+
+# Configure WAN link to R1
+interface GigabitEthernet0/1
+ ip address 10.10.1.2 255.255.255.252
+ no shutdown
+ exit
+
+# Configure WAN link to R3
+interface GigabitEthernet0/2
+ ip address 10.20.2.2 255.255.255.252
+ no shutdown
+ exit
+
+# Configure routing (OSPF)
+router ospf 1
+ network 10.2.2.0 0.0.0.255 area 0
+ network 10.10.1.0 0.0.0.3 area 0
+ network 10.20.2.0 0.0.0.3 area 0
+ exit
+
+write memory
+```
+
+**R3 Configuration:**
+
+```bash
+enable
+configure terminal
+
+hostname R3
+
+# Configure DMZ network interface
+interface GigabitEthernet0/0
+ ip address 10.3.3.1 255.255.255.0
+ no shutdown
+ exit
+
+# Configure WAN link to R2
+interface GigabitEthernet0/1
+ ip address 10.20.2.1 255.255.255.252
+ no shutdown
+ exit
+
+# Configure routing (OSPF)
+router ospf 1
+ network 10.3.3.0 0.0.0.255 area 0
+ network 10.20.2.0 0.0.0.3 area 0
+ exit
+
+write memory
+```
+
+---
+
+### Step 2: PC IP Configuration
+
+**What:** Configure IP addresses and default gateways on all PCs.
+
+**PC1 Configuration (Branch Client):**
+
+```bash
+ip 10.1.1.10/24 10.1.1.1
+save
+```
+
+**PC2 Configuration (Branch Client):**
+
+```bash
+ip 10.1.1.20/24 10.1.1.1
+save
+```
+
+**PC3 Configuration (HQ Admin):**
+
+```bash
+ip 10.2.2.10/24 10.2.2.1
+save
+```
+
+**PC4 Configuration (Web Server):**
+
+```bash
+ip 10.3.3.10/24 10.3.3.1
+save
+```
+
+**PC5 Configuration (FTP Server):**
+
+```bash
+ip 10.3.3.20/24 10.3.3.1
+save
+```
+
+---
+
+### Step 3: Verify Basic Connectivity
+
+**What:** Test network connectivity before applying ACLs.
+
+**Test from PC1:**
+
+```bash
+# Ping local gateway
+ping 10.1.1.1
+
+# Ping HQ network
+ping 10.2.2.10
+
+# Ping DMZ network
+ping 10.3.3.10
+
+# All should succeed
+```
+
+**Test from R1:**
+
+```bash
+# Verify OSPF neighbors
+show ip ospf neighbor
+
+# Verify routing table
+show ip route
+
+# Should see routes to all networks
+```
+
+**Expected Results:**
+- ✅ All routers can ping each other
+- ✅ All PCs can ping their gateways
+- ✅ All PCs can ping across networks
+- ✅ OSPF adjacencies established
+
+> **⚠️ Important:** Document this baseline connectivity. After applying ACLs, some pings will fail by design.
 
 ---
 
@@ -578,154 +765,9 @@ Extended ACL:  Place on R1 (near PC1)
 
 ## ✅ Testing & Verification
 
-> **Purpose:** Verify ACL functionality systematically.
+> **Purpose:** Verify ACL functionality after applying security policies.
 
-### Step 1: Basic Router IP Configuration
-
-**R1 Configuration:**
-
-```bash
-enable
-configure terminal
-
-hostname R1
-
-interface GigabitEthernet0/0
- ip address 10.1.1.1 255.255.255.0
- no shutdown
- exit
-
-interface GigabitEthernet0/1
- ip address 10.10.1.1 255.255.255.252
- no shutdown
- exit
-
-# Configure routing (OSPF or static)
-router ospf 1
- network 10.1.1.0 0.0.0.255 area 0
- network 10.10.1.0 0.0.0.3 area 0
- exit
-
-write memory
-```
-
-**R2 Configuration:**
-
-```bash
-enable
-configure terminal
-
-hostname R2
-
-interface GigabitEthernet0/0
- ip address 10.2.2.1 255.255.255.0
- no shutdown
- exit
-
-interface GigabitEthernet0/1
- ip address 10.10.1.2 255.255.255.252
- no shutdown
- exit
-
-interface GigabitEthernet0/2
- ip address 10.20.2.2 255.255.255.252
- no shutdown
- exit
-
-router ospf 1
- network 10.2.2.0 0.0.0.255 area 0
- network 10.10.1.0 0.0.0.3 area 0
- network 10.20.2.0 0.0.0.3 area 0
- exit
-
-write memory
-```
-
-**R3 Configuration:**
-
-```bash
-enable
-configure terminal
-
-hostname R3
-
-interface GigabitEthernet0/0
- ip address 10.3.3.1 255.255.255.0
- no shutdown
- exit
-
-interface GigabitEthernet0/1
- ip address 10.20.2.1 255.255.255.252
- no shutdown
- exit
-
-router ospf 1
- network 10.3.3.0 0.0.0.255 area 0
- network 10.20.2.0 0.0.0.3 area 0
- exit
-
-write memory
-```
-
----
-
-### Step 2: PC IP Configuration
-
-**PC1 Configuration:**
-
-```bash
-ip 10.1.1.10/24 10.1.1.1
-save
-```
-
-**PC2 Configuration:**
-
-```bash
-ip 10.1.1.20/24 10.1.1.1
-save
-```
-
-**PC3 Configuration:**
-
-```bash
-ip 10.2.2.10/24 10.2.2.1
-save
-```
-
-**PC4 Configuration:**
-
-```bash
-ip 10.3.3.10/24 10.3.3.1
-save
-```
-
-**PC5 Configuration:**
-
-```bash
-ip 10.3.3.20/24 10.3.3.1
-save
-```
-
----
-
-### Step 3: Verify Connectivity Before ACLs
-
-**Test from PC1:**
-
-```bash
-# Should all succeed before ACLs are applied
-ping 10.2.2.10  # Ping HQ
-ping 10.3.3.10  # Ping DMZ web
-```
-
-**Test from all PCs:**
-
-- Verify full network connectivity
-- Document baseline before applying ACLs
-
----
-
-### Step 4: Apply ACLs and Test
+### Step 1: Apply ACLs and Test
 
 **Apply ACLs from scenarios above, then test:**
 
@@ -764,7 +806,7 @@ show ip access-lists BRANCH_TO_HQ_FILTER
 
 ---
 
-### Step 5: Verification Commands
+### Step 2: Verification Commands
 
 **Show all ACLs:**
 
