@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<lab name="ACL_Security_Lab" id="acl-lab-001" version="1" scripttimeout="300" lock="0" author="alfaXphoori">
+  <topology>
+    <nodes>
+      <!-- Router R1 - Branch Office -->
+      <node id="1" name="R1" type="qemu" template="vios" image="vios-adventerprisek9-m.SPA.159-3.M6" console="telnet" cpu="1" cpulimit="0" ram="1024" ethernet="8" delay="0" icon="Router-2D-Gen-White-S.svg" config="0" left="150" top="250">
+        <interface id="0" name="Gi0/0" type="ethernet" network_id="1"/>
+        <interface id="1" name="Gi0/1" type="ethernet" network_id="4"/>
+      </node>
+      
+      <!-- Router R2 - HQ Core -->
+      <node id="2" name="R2" type="qemu" template="vios" image="vios-adventerprisek9-m.SPA.159-3.M6" console="telnet" cpu="1" cpulimit="0" ram="1024" ethernet="8" delay="0" icon="Router-2D-Gen-White-S.svg" config="0" left="400" top="250">
+        <interface id="0" name="Gi0/0" type="ethernet" network_id="2"/>
+        <interface id="1" name="Gi0/1" type="ethernet" network_id="4"/>
+        <interface id="2" name="Gi0/2" type="ethernet" network_id="5"/>
+      </node>
+      
+      <!-- Router R3 - DMZ -->
+      <node id="3" name="R3" type="qemu" template="vios" image="vios-adventerprisek9-m.SPA.159-3.M6" console="telnet" cpu="1" cpulimit="0" ram="1024" ethernet="8" delay="0" icon="Router-2D-Gen-White-S.svg" config="0" left="650" top="250">
+        <interface id="0" name="Gi0/0" type="ethernet" network_id="3"/>
+        <interface id="1" name="Gi0/1" type="ethernet" network_id="5"/>
+      </node>
+      
+      <!-- PC1 - Branch Client 1 -->
+      <node id="4" name="PC1" type="vpcs" template="vpcs" image="" console="telnet" delay="0" icon="Desktop.png" config="0" left="80" top="150">
+        <interface id="0" name="eth0" type="ethernet" network_id="1"/>
+      </node>
+      
+      <!-- PC2 - Branch Client 2 -->
+      <node id="5" name="PC2" type="vpcs" template="vpcs" image="" console="telnet" delay="0" icon="Desktop.png" config="0" left="80" top="350">
+        <interface id="0" name="eth0" type="ethernet" network_id="1"/>
+      </node>
+      
+      <!-- PC3 - HQ Admin -->
+      <node id="6" name="PC3" type="vpcs" template="vpcs" image="" console="telnet" delay="0" icon="Desktop.png" config="0" left="400" top="150">
+        <interface id="0" name="eth0" type="ethernet" network_id="2"/>
+      </node>
+      
+      <!-- PC4 - Web Server -->
+      <node id="7" name="PC4" type="vpcs" template="vpcs" image="" console="telnet" delay="0" icon="Server.png" config="0" left="720" top="150">
+        <interface id="0" name="eth0" type="ethernet" network_id="3"/>
+      </node>
+      
+      <!-- PC5 - FTP Server -->
+      <node id="8" name="PC5" type="vpcs" template="vpcs" image="" console="telnet" delay="0" icon="Server.png" config="0" left="720" top="350">
+        <interface id="0" name="eth0" type="ethernet" network_id="3"/>
+      </node>
+    </nodes>
+    
+    <networks>
+      <!-- Network 1: Branch Network (10.1.1.0/24) -->
+      <network id="1" type="bridge" name="Branch_Network" left="150" top="200" visibility="1" icon="lan.png"/>
+      
+      <!-- Network 2: HQ Network (10.2.2.0/24) -->
+      <network id="2" type="bridge" name="HQ_Network" left="400" top="200" visibility="1" icon="lan.png"/>
+      
+      <!-- Network 3: DMZ Network (10.3.3.0/24) -->
+      <network id="3" type="bridge" name="DMZ_Network" left="650" top="200" visibility="1" icon="lan.png"/>
+      
+      <!-- Network 4: R1-R2 Link (10.10.1.0/30) -->
+      <network id="4" type="bridge" name="Link_R1_R2" left="275" top="250" visibility="0" icon="lan.png"/>
+      
+      <!-- Network 5: R2-R3 Link (10.20.2.0/30) -->
+      <network id="5" type="bridge" name="Link_R2_R3" left="525" top="250" visibility="0" icon="lan.png"/>
+    </networks>
+  </topology>
+  
+  <objects>
+    <textobjects>
+      <!-- Label for Branch Office -->
+      <textobject id="1" name="txt_branch" type="text">
+        <data>PGRpdiBpZD0iY3VzdG9tVGV4dDEiIGNsYXNzPSJjdXN0b21TaGFwZSBjdXN0b21UZXh0IiBzdHlsZT0icG9zaXRpb246IGFic29sdXRlOyBsZWZ0OiA2MHB4OyB0b3A6IDUwcHg7IGNvbG9yOiAjMDAwMDAwOyBmb250LXNpemU6IDE0cHg7IGZvbnQtd2VpZ2h0OiBib2xkOyI+PHA+QnJhbmNoIE9mZmljZTwvcD48L2Rpdj4=</data>
+      </textobject>
+      
+      <!-- Label for HQ -->
+      <textobject id="2" name="txt_hq" type="text">
+        <data>PGRpdiBpZD0iY3VzdG9tVGV4dDIiIGNsYXNzPSJjdXN0b21TaGFwZSBjdXN0b21UZXh0IiBzdHlsZT0icG9zaXRpb246IGFic29sdXRlOyBsZWZ0OiAzNzBweDsgdG9wOiA1MHB4OyBjb2xvcjogIzAwMDAwMDsgZm9udC1zaXplOiAxNHB4OyBmb250LXdlaWdodDogYm9sZDsiPjxwPkhlYWRxdWFydGVyczwvcD48L2Rpdj4=</data>
+      </textobject>
+      
+      <!-- Label for DMZ -->
+      <textobject id="3" name="txt_dmz" type="text">
+        <data>PGRpdiBpZD0iY3VzdG9tVGV4dDMiIGNsYXNzPSJjdXN0b21TaGFwZSBjdXN0b21UZXh0IiBzdHlsZT0icG9zaXRpb246IGFic29sdXRlOyBsZWZ0OiA2MzBweDsgdG9wOiA1MHB4OyBjb2xvcjogIzAwMDAwMDsgZm9udC1zaXplOiAxNHB4OyBmb250LXdlaWdodDogYm9sZDsiPjxwPkRNWi9TZXJ2ZXJzPC9wPjwvZGl2Pg==</data>
+      </textobject>
+      
+      <!-- Network label 10.1.1.0/24 -->
+      <textobject id="4" name="txt_net1" type="text">
+        <data>PGRpdiBpZD0iY3VzdG9tVGV4dDQiIGNsYXNzPSJjdXN0b21TaGFwZSBjdXN0b21UZXh0IiBzdHlsZT0icG9zaXRpb246IGFic29sdXRlOyBsZWZ0OiA3MHB4OyB0b3A6IDgwcHg7IGNvbG9yOiAjMDAwMDAwOyBmb250LXNpemU6IDEycHg7Ij48cD4xMC4xLjEuMC8yNDwvcD48L2Rpdj4=</data>
+      </textobject>
+      
+      <!-- Network label 10.2.2.0/24 -->
+      <textobject id="5" name="txt_net2" type="text">
+        <data>PGRpdiBpZD0iY3VzdG9tVGV4dDUiIGNsYXNzPSJjdXN0b21TaGFwZSBjdXN0b21UZXh0IiBzdHlsZT0icG9zaXRpb246IGFic29sdXRlOyBsZWZ0OiAzOTBweDsgdG9wOiA4MHB4OyBjb2xvcjogIzAwMDAwMDsgZm9udC1zaXplOiAxMnB4OyI+PHA+MTAuMi4yLjAvMjQ8L3A+PC9kaXY+</data>
+      </textobject>
+      
+      <!-- Network label 10.3.3.0/24 -->
+      <textobject id="6" name="txt_net3" type="text">
+        <data>PGRpdiBpZD0iY3VzdG9tVGV4dDYiIGNsYXNzPSJjdXN0b21TaGFwZSBjdXN0b21UZXh0IiBzdHlsZT0icG9zaXRpb246IGFic29sdXRlOyBsZWZ0OiA2NDBweDsgdG9wOiA4MHB4OyBjb2xvcjogIzAwMDAwMDsgZm9udC1zaXplOiAxMnB4OyI+PHA+MTAuMy4zLjAvMjQ8L3A+PC9kaXY+</data>
+      </textobject>
+    </textobjects>
+  </objects>
+</lab>
