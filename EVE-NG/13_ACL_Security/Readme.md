@@ -765,44 +765,501 @@ Extended ACL:  Place on R1 (near PC1)
 
 ## ✅ Testing & Verification
 
-> **Purpose:** Verify ACL functionality after applying security policies.
+> **Purpose:** Verify ACL functionality after applying security policies using VPCS commands.
 
-### Step 1: Apply ACLs and Test
+### VPCS Commands Reference
 
-**Apply ACLs from scenarios above, then test:**
+**What:** Essential VPCS commands for testing ACLs in EVE-NG.
 
-#### Test Standard ACL (Scenario 1):
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `ping <ip>` | Test ICMP connectivity | `ping 10.2.2.10` |
+| `ping <ip> -c <count>` | Ping with packet count | `ping 10.2.2.10 -c 5` |
+| `trace <ip>` | Traceroute to destination | `trace 10.3.3.10` |
+| `show ip` | Display PC IP configuration | `show ip` |
+| `arp` | Show ARP table | `arp` |
+| `show` | Display all settings | `show` |
+
+> **💡 Note:** VPCS supports basic ICMP only. For port testing, use router commands or enable telnet on routers.
+
+---
+
+### Step 1: Testing Scenario 1 (Standard ACL)
+
+**Scenario:** Block PC1 (10.1.1.10) from HQ, allow PC2 (10.1.1.20).
+
+**Configuration Applied:**
+- R2: Standard ACL 10 denying 10.1.1.10
+
+**Test from PC1 (Should FAIL):**
 
 ```bash
-# From PC1 (blocked)
+# Open PC1 console in EVE-NG
+# Test ping to HQ network
 ping 10.2.2.10
-# Expected: Failed (timed out)
 
-# From PC2 (allowed)
+# Expected output:
+# 10.2.2.10 icmp_seq=1 timeout
+# 10.2.2.10 icmp_seq=2 timeout
+# 10.2.2.10 icmp_seq=3 timeout
+# 10.2.2.10 icmp_seq=4 timeout
+# 10.2.2.10 icmp_seq=5 timeout
+```
+
+**Test from PC2 (Should SUCCEED):**
+
+```bash
+# Open PC2 console in EVE-NG
+# Test ping to HQ network
 ping 10.2.2.10
+
+# Expected output:
+# 84 bytes from 10.2.2.10 icmp_seq=1 ttl=62 time=20.123 ms
+# 84 bytes from 10.2.2.10 icmp_seq=2 ttl=62 time=15.456 ms
+# 84 bytes from 10.2.2.10 icmp_seq=3 ttl=62 time=18.789 ms
+# 84 bytes from 10.2.2.10 icmp_seq=4 ttl=62 time=16.234 ms
+# 84 bytes from 10.2.2.10 icmp_seq=5 ttl=62 time=17.567 ms
+```
+
+**Verify on R2:**
+
+```bash
+# Check ACL hit counts
+show access-lists 10
+
+# Expected output:
+# Standard IP access list 10
+#     10 deny   10.1.1.10 (5 matches)
+#     20 permit any (5 matches)
+```
+
+**✅ Result:** PC1 blocked, PC2 allowed - ACL working correctly!
+
+---
+
+### Step 2: Testing Scenario 2 (Standard ACL - Network Filtering)
+
+**Scenario:** Only HQ network (10.2.2.0/24) can access DMZ servers.
+
+**Configuration Applied:**
+- R3: Standard ACL 20 permitting 10.2.2.0/24
+
+**Test from PC3 (HQ - Should SUCCEED):**
+
+```bash
+# Open PC3 console
+# Test ping to DMZ Web Server
+ping 10.3.3.10
+
+# Expected: Success
+# 84 bytes from 10.3.3.10 icmp_seq=1 ttl=62 time=...ms
+
+# Test ping to DMZ FTP Server
+ping 10.3.3.20
+
 # Expected: Success
 ```
 
-#### Test Extended ACL (Scenario 3):
+**Test from PC1 (Branch - Should FAIL):**
 
 ```bash
-# From PC1 - test HTTP/HTTPS (would need web server)
-# Use telnet to test ports
+# Open PC1 console
+# Test ping to DMZ Web Server
+ping 10.3.3.10
 
-# From R1 or PC1 (if telnet available):
-telnet 10.2.2.10 80    # Should succeed (HTTP allowed)
-telnet 10.2.2.10 23    # Should fail (Telnet blocked)
+# Expected: Timeout
+# 10.3.3.10 icmp_seq=1 timeout
 ```
 
-#### Test Named ACL:
+**Test from PC2 (Branch - Should FAIL):**
 
 ```bash
-# From any router
+# Open PC2 console
+ping 10.3.3.10
+
+# Expected: Timeout
+```
+
+**✅ Result:** Only HQ can access DMZ - ACL working correctly!
+
+---
+
+### Step 3: Testing Scenario 3 (Extended ACL - Port Filtering)
+
+**Scenario:** Branch can only access HQ on HTTP/HTTPS ports, ICMP allowed for testing.
+
+**Configuration Applied:**
+- R1: Extended ACL 100 (HTTP/HTTPS/ICMP only)
+
+**Test ICMP from PC1 (Should SUCCEED):**
+
+```bash
+# Open PC1 console
+# ICMP is permitted in ACL 100
+ping 10.2.2.10
+
+# Expected: Success (ICMP explicitly permitted)
+# 84 bytes from 10.2.2.10 icmp_seq=1 ttl=62 time=...ms
+```
+
+**Test ICMP from PC2 (Should SUCCEED):**
+
+```bash
+# Open PC2 console
+ping 10.2.2.10
+
+# Expected: Success
+```
+
+> **💡 Note:** VPCS can only test ICMP. To test HTTP/HTTPS blocking, you would need to:
+> 1. Enable telnet on R2 for port testing, OR
+> 2. Run actual web server on PC3, OR  
+> 3. Use `debug ip packet` on routers to see denied traffic
+
+**Alternative Test - Check ACL hits on R1:**
+
+```bash
+# On R1, generate traffic from different protocols
+# Then check ACL statistics
+
+show access-lists 100
+
+# Expected to see:
+# Extended IP access list 100
+#     10 permit tcp 10.1.1.0 0.0.0.255 10.2.2.0 0.0.0.255 eq www (0 matches)
+#     20 permit tcp 10.1.1.0 0.0.0.255 10.2.2.0 0.0.0.255 eq 443 (0 matches)
+#     30 permit icmp 10.1.1.0 0.0.0.255 10.2.2.0 0.0.0.255 (10 matches)
+#     40 deny ip any any (0 matches)
+```
+
+**Simulate Port Traffic from Router (Advanced):**
+
+```bash
+# From R1 (to simulate traffic from Branch network):
+telnet 10.2.2.1 80    # Should be allowed
+telnet 10.2.2.1 23    # Should be blocked
+
+# Or use Extended Ping:
+ping
+Protocol [ip]: 
+Target IP address: 10.2.2.10
+Source address: 10.1.1.10
+# This simulates traffic from PC1
+```
+
+**✅ Result:** ICMP allowed, other ports would be filtered (testable with router commands).
+
+---
+
+### Step 4: Testing Scenario 4 (VTY Access Control)
+
+**Scenario:** Only PC3 (10.2.2.10) can telnet to routers.
+
+**Configuration Applied:**
+- All routers: ACL 101 on VTY lines
+
+**Prerequisites:**
+
+```bash
+# On each router, enable telnet first:
+enable
+configure terminal
+line vty 0 4
+ password cisco
+ login
+ transport input telnet
+ access-class 101 in
+ exit
+```
+
+**Test from PC3 (Should SUCCEED if telnet available):**
+
+> **⚠️ VPCS Limitation:** Standard VPCS doesn't support telnet client. Use router instead.
+
+**Test from R2 (simulating PC3 source):**
+
+```bash
+# From R2 console:
+telnet 10.10.1.1 /source-interface GigabitEthernet0/0
+# Uses 10.2.2.1 as source (close to PC3 network)
+
+# Expected: Connection successful if ACL allows 10.2.2.0/24
+```
+
+**Test from R1 (simulating PC1 source):**
+
+```bash
+# From R1 console:
+telnet 10.10.1.2 /source-interface GigabitEthernet0/0
+# Uses 10.1.1.1 as source (Branch network)
+
+# Expected: Connection refused or timeout
+# % Connection refused by remote host
+```
+
+**Verify on any router:**
+
+```bash
+show access-lists 101
+
+# Expected:
+# Extended IP access list 101
+#     10 permit tcp host 10.2.2.10 any eq telnet (2 matches)
+#     20 deny tcp any any eq telnet (1 match)
+#     30 permit ip any any (1000 matches)
+```
+
+**✅ Result:** Only designated admin IPs can access VTY lines.
+
+---
+
+### Step 5: Testing Scenario 5 (DMZ Server Protection)
+
+**Scenario:** 
+- Web server (10.3.3.10): HTTP/HTTPS from anywhere
+- FTP server (10.3.3.20): FTP from HQ only
+
+**Configuration Applied:**
+- R3: Extended ACL 110 on DMZ interface
+
+**Test ICMP to Web Server (Should SUCCEED - ICMP permitted):**
+
+```bash
+# From PC1 (Branch)
+ping 10.3.3.10
+
+# Expected: Success (ICMP allowed in ACL 110)
+# 84 bytes from 10.3.3.10 icmp_seq=1 ttl=62 time=...ms
+
+# From PC2 (Branch)
+ping 10.3.3.10
+
+# Expected: Success
+
+# From PC3 (HQ)
+ping 10.3.3.10
+
+# Expected: Success
+```
+
+**Test ICMP to FTP Server:**
+
+```bash
+# From PC1 (Branch)
+ping 10.3.3.20
+
+# Expected: Success (ICMP allowed)
+
+# From PC3 (HQ)
+ping 10.3.3.20
+
+# Expected: Success
+```
+
+**Verify ACL hits on R3:**
+
+```bash
+show access-lists 110
+
+# Expected:
+# Extended IP access list 110
+#     10 permit tcp any host 10.3.3.10 eq www (0 matches)
+#     20 permit tcp any host 10.3.3.10 eq 443 (0 matches)
+#     30 permit tcp 10.2.2.0 0.0.0.255 host 10.3.3.20 eq ftp (0 matches)
+#     40 permit icmp any any (15 matches)
+```
+
+**✅ Result:** ICMP works, port-specific rules in place (need router/server for full test).
+
+---
+
+### Step 6: Testing Scenario 6 (Named ACL)
+
+**Scenario:** Named ACL `BRANCH_TO_HQ_FILTER` replacing numbered ACL 100.
+
+**Configuration Applied:**
+- R1: Named ACL applied to Gi0/1
+
+**Test from PC1:**
+
+```bash
+# ICMP should work (permitted in named ACL)
+ping 10.2.2.10
+
+# Expected: Success
+# 84 bytes from 10.2.2.10 icmp_seq=1 ttl=62 time=...ms
+```
+
+**Test from PC2:**
+
+```bash
+ping 10.2.2.10
+
+# Expected: Success
+```
+
+**Verify Named ACL on R1:**
+
+```bash
 show ip access-lists BRANCH_TO_HQ_FILTER
 
-# Check hit counts
-# (matches) column shows how many packets matched each rule
+# Expected output with sequence numbers:
+# Extended IP access list BRANCH_TO_HQ_FILTER
+#     10 remark *** Allow web traffic only ***
+#     20 permit tcp 10.1.1.0 0.0.0.255 10.2.2.0 0.0.0.255 eq www
+#     30 permit tcp 10.1.1.0 0.0.0.255 10.2.2.0 0.0.0.255 eq 443
+#     40 remark *** Allow ICMP for diagnostics ***
+#     50 permit icmp any any (10 matches)
+#     60 remark *** Deny all other traffic ***
+#     70 deny ip any any (0 matches)
 ```
+
+**✅ Result:** Named ACL works identically to numbered ACL but easier to manage!
+
+---
+
+### Step 7: Comprehensive Testing Matrix
+
+**What:** Complete test matrix for all scenarios.
+
+| From PC | To Network | Scenario | Expected Result | VPCS Command |
+|---------|-----------|----------|-----------------|--------------|
+| PC1 | HQ (10.2.2.10) | Scenario 1 | ❌ FAIL | `ping 10.2.2.10` |
+| PC2 | HQ (10.2.2.10) | Scenario 1 | ✅ PASS | `ping 10.2.2.10` |
+| PC1 | DMZ (10.3.3.10) | Scenario 2 | ❌ FAIL | `ping 10.3.3.10` |
+| PC3 | DMZ (10.3.3.10) | Scenario 2 | ✅ PASS | `ping 10.3.3.10` |
+| PC1 | HQ (10.2.2.10) | Scenario 3 | ✅ PASS (ICMP) | `ping 10.2.2.10` |
+| PC1 | DMZ Web (10.3.3.10) | Scenario 5 | ✅ PASS (ICMP) | `ping 10.3.3.10` |
+| PC1 | DMZ FTP (10.3.3.20) | Scenario 5 | ✅ PASS (ICMP) | `ping 10.3.3.20` |
+
+---
+
+### Step 8: Advanced Testing with Traceroute
+
+**What:** Use VPCS traceroute to verify routing path and ACL placement.
+
+**Test path from PC1 to HQ:**
+
+```bash
+# From PC1 console
+trace 10.2.2.10
+
+# Expected output (if ACL blocks):
+# trace to 10.2.2.10, 8 hops max, press Ctrl+C to stop
+#  1   10.1.1.1   5.123 ms  3.456 ms  4.789 ms
+#  2   *   *   *
+#  3   *   *   *
+# (stops at R2 because ACL blocks)
+
+# If ACL allows:
+# trace to 10.2.2.10, 8 hops max
+#  1   10.1.1.1   5.123 ms  3.456 ms  4.789 ms
+#  2   10.10.1.2   8.234 ms  7.567 ms  8.891 ms
+#  3   10.2.2.10   12.345 ms  11.678 ms  13.012 ms
+```
+
+**Test path from PC3 to DMZ:**
+
+```bash
+# From PC3 console
+trace 10.3.3.10
+
+# Expected output (should complete):
+# trace to 10.3.3.10, 8 hops max
+#  1   10.2.2.1   4.123 ms  3.456 ms  5.789 ms
+#  2   10.20.2.1   9.234 ms  8.567 ms  10.891 ms
+#  3   10.3.3.10   14.345 ms  13.678 ms  15.012 ms
+```
+
+**✅ Use Case:** Traceroute helps identify where ACLs are blocking traffic.
+
+---
+
+### Step 9: Real-Time ACL Monitoring
+
+**What:** Monitor ACL hits in real-time during testing.
+
+**On any router with ACLs:**
+
+```bash
+# Clear counters before testing
+clear access-list counters
+
+# From another window, ping from VPCS
+# (e.g., from PC1: ping 10.2.2.10)
+
+# Watch counters increment
+show access-lists
+
+# Refresh multiple times to see changes
+# Or use:
+show access-lists | include matches
+```
+
+**Example output:**
+
+```
+R2#show access-lists 10
+Standard IP access list 10
+    10 deny   10.1.1.10 (12 matches)  ← Incrementing!
+    20 permit any (25 matches)        ← Also incrementing!
+```
+
+---
+
+### Step 10: Troubleshooting Failed Tests
+
+**Problem:** Ping times out unexpectedly.
+
+**Troubleshooting steps:**
+
+1. **Verify PC IP configuration:**
+   ```bash
+   # On VPCS
+   show ip
+   
+   # Expected: Correct IP and gateway
+   # NAME        : PC1
+   # IP/MASK     : 10.1.1.10/24
+   # GATEWAY     : 10.1.1.1
+   ```
+
+2. **Verify gateway reachable:**
+   ```bash
+   ping 10.1.1.1
+   # Should succeed
+   ```
+
+3. **Check routing on routers:**
+   ```bash
+   # On R1
+   show ip route
+   # Should see routes to all networks
+   ```
+
+4. **Verify ACL configuration:**
+   ```bash
+   show access-lists
+   show ip interface <interface>
+   ```
+
+5. **Check ACL direction:**
+   ```bash
+   show ip interface Gi0/1
+   # Look for:
+   # Inbound  access list is...
+   # Outbound access list is...
+   ```
+
+6. **Enable debugging (carefully):**
+   ```bash
+   # On router where ACL is applied
+   debug ip packet detail
+   # Generate traffic, then:
+   undebug all
+   ```
+
+**✅ Result:** Systematic troubleshooting identifies ACL issues quickly!
 
 ---
 
