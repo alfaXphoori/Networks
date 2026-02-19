@@ -459,21 +459,87 @@ save
 
 **PC3 Configuration (HQ Admin):**
 
+**Option 1: Using VPCS**
 ```bash
 ip 10.2.2.10/24 10.2.2.1
 save
 ```
 
+**Option 2: Using Linux (if using Linux VM instead of VPCS)**
+```bash
+# Configure IP address
+sudo ip addr add 10.2.2.10/24 dev ens3
+
+# Add default gateway
+sudo ip route add default via 10.2.2.1 dev ens3
+
+# Verify configuration
+ip addr show ens3
+ip route show
+
+# Make persistent (Ubuntu/Debian)
+sudo nano /etc/netplan/00-installer-config.yaml
+# Add:
+# network:
+#   ethernets:
+#     ens3:
+#       addresses:
+#         - 10.2.2.10/24
+#       routes:
+#         - to: default
+#           via: 10.2.2.1
+#   version: 2
+
+# Apply changes
+sudo netplan apply
+```
+
 **Web_Sv Configuration (Web/DNS Server):**
 
+**Option 1: Using VPCS**
 ```bash
 ip 10.3.3.10/24 10.3.3.1
 save
 ```
 
+**Option 2: Using Linux (if using Linux VM for Web Server)**
+```bash
+# Configure IP address on internal interface
+sudo ip addr add 10.3.3.10/24 dev ens3
+
+# Add default gateway
+sudo ip route add default via 10.3.3.1 dev ens3
+
+# Verify configuration
+ip addr show ens3
+ip route show
+
+# Make persistent (Ubuntu/Debian)
+sudo nano /etc/netplan/00-installer-config.yaml
+# Add:
+# network:
+#   ethernets:
+#     ens3:
+#       addresses:
+#         - 10.3.3.10/24
+#       routes:
+#         - to: default
+#           via: 10.3.3.1
+#   version: 2
+
+# Apply changes
+sudo netplan apply
+
+# Optional: Install web server
+sudo apt update
+sudo apt install apache2 -y
+sudo systemctl start apache2
+sudo systemctl enable apache2
+```
+
 > **💡 Note:** Web_Sv has two interfaces:
-> - **e1**: Connected to Switch3 (10.3.3.10/24) - Internal network
-> - **e0**: Connected to Net (Internet) - External connection
+> - **ens3 (e1)**: Connected to Switch3 (10.3.3.10/24) - Internal network
+> - **ens2 (e0)**: Connected to Net (Internet) - External connection (configure via DHCP or static)
 
 ---
 
