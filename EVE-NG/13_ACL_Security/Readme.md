@@ -117,7 +117,7 @@ Security Policies:
 | **R1** | Gi0/1 | 10.10.1.1 | 255.255.255.252 | Link to R2 (HQ) |
 | **R1** | Gi1/1 | - | - | Link to Switch1 |
 | **Switch1** | - | - | - | Branch LAN switch |
-| **PC1** | eth0/ens3 | 10.1.1.10 | 255.255.255.0 | Branch client |
+| **PC1** | ens3 | 10.1.1.10 | 255.255.255.0 | Branch client |
 | **PC2** | eth0 | 10.1.1.20 | 255.255.255.0 | Branch client |
 
 #### Network B - Headquarters (Trusted)
@@ -129,7 +129,7 @@ Security Policies:
 | **R2** | Gi0/2 | 10.20.2.2 | 255.255.255.252 | Link to R3 (DMZ) |
 | **R2** | Gi1/1 | - | - | Link to Switch2 |
 | **Switch2** | - | - | - | HQ LAN switch |
-| **PC3** | eth0 | 10.2.2.10 | 255.255.255.0 | HQ admin client |
+| **PC3** | ens3 | 10.2.2.10 | 255.255.255.0 | HQ admin client |
 
 #### Network C - DMZ (Public Servers)
 
@@ -139,9 +139,7 @@ Security Policies:
 | **R3** | Gi0/1 | 10.20.2.1 | 255.255.255.252 | Link to R2 (HQ) |
 | **R3** | Gi1/1 | - | - | Link to Switch3 |
 | **Switch3** | - | - | - | DMZ LAN switch |
-| **Web_Sv** | ens3/e1 | 10.3.3.10 | 255.255.255.0 | Web/DNS Server (Internal) |
-| **Web_Sv** | ens4/e0 | DHCP | - | Internet connection (External) |
-| **Net** | - | - | - | Internet cloud |
+| **Web_Sv** | ens3/e1 | 10.3.3.10 | 255.255.255.0 | Web/DNS Server |
 
 ---
 
@@ -217,20 +215,7 @@ Security Policies:
 
 ---
 
-### Step 5: Add Internet Cloud
-
-**What:** Add cloud node to simulate internet connection.
-
-**How to:**
-1. Click **Add Node**
-2. Select **Network** → **Cloud**
-3. Add cloud:
-   - **Name**: Net
-4. Click **Save**
-
----
-
-### Step 6: Connect All Devices
+### Step 5: Connect All Devices
 
 **What:** Create network connections between all devices.
 
@@ -246,14 +231,13 @@ Security Policies:
 | **Switch1** | Gi0/1 | **PC1** | eth0/ens3 | Branch client 1 |
 | **Switch1** | Gi0/2 | **PC2** | eth0 | Branch client 2 |
 | **Switch2** | Gi0/1 | **PC3** | eth0/ens3 | HQ admin client |
-| **Switch3** | Gi0/1 | **Web_Sv** | e1/ens3 | DMZ web server (Internal) |
-| **Web_Sv** | e0/ens4 | **Net** | - | Internet connection (DHCP) |
+| **Switch3** | Gi0/1 | **Web_Sv** | e1/ens3 | DMZ web server |
 
 > **💡 Tip:** Switches allow proper LAN simulation with multiple devices per network.
 
 ---
 
-### Step 7: Start All Devices
+### Step 6: Start All Devices
 
 **What:** Power on all routers, switches, and PCs.
 
@@ -506,7 +490,7 @@ save
 sudo ip addr add 10.2.2.10/24 dev ens3
 
 # Add default gateway
-sudo ip route add default via 10.2.2.1 dev ens3
+sudo route add default gw 10.2.2.1 ens3
 
 # Verify configuration
 ip addr show ens3
@@ -545,12 +529,8 @@ sudo ip addr add 10.3.3.10/24 dev ens3
 # Add default gateway via internal network
 sudo ip route add default via 10.3.3.1 dev ens3
 
-# Configure Internet interface (ens4) with DHCP
-sudo dhclient ens4
-
 # Verify configuration
 ip addr show ens3
-ip addr show ens4
 ip route show
 
 # Make persistent (Ubuntu/Debian)
@@ -564,27 +544,30 @@ sudo nano /etc/netplan/00-installer-config.yaml
 #       routes:
 #         - to: default
 #           via: 10.3.3.1
-#     ens4:
-#       dhcp4: true
 #   version: 2
 
 # Apply changes
 sudo netplan apply
+
+# Configure Debian sources.list (for Debian Stretch archive)
+sudo nano /etc/apt/sources.list
+# Add the following lines:
+# deb https://archive.debian.org/debian/ stretch main contrib
+# deb-src https://archive.debian.org/debian/ stretch main contrib
+
+# Or use command to append directly:
+echo "deb https://archive.debian.org/debian/ stretch main contrib" | sudo tee /etc/apt/sources.list
+echo "deb-src https://archive.debian.org/debian/ stretch main contrib" | sudo tee -a /etc/apt/sources.list
 
 # Optional: Install web server
 sudo apt update
 sudo apt install apache2 -y
 sudo systemctl start apache2
 sudo systemctl enable apache2
-
-# Verify internet connectivity
-ping -c 3 8.8.8.8
-curl -I http://www.google.com
 ```
 
-> **💡 Note:** Web_Sv has two interfaces:
+> **💡 Note:** Web_Sv interface:
 > - **ens3 (e1)**: Connected to Switch3 (10.3.3.10/24) - Internal network
-> - **ens4 (e0)**: Connected to Net (Internet) - External connection (DHCP)
 
 ---
 
@@ -628,19 +611,11 @@ ping -c 3 10.3.3.1
 # Verify routing
 ip route show
 
-# Verify Internet connectivity via DHCP (ens4)
-ping -c 3 8.8.8.8
-
-# Test DNS resolution
-ping -c 3 www.google.com
-
-# Check interfaces
+# Check interface
 ip addr show ens3
-ip addr show ens4
 
 # Expected:
 # ens3: 10.3.3.10/24 (static)
-# ens4: Dynamic IP from DHCP (e.g., 192.168.x.x or public IP)
 ```
 
 **Expected Results:**
