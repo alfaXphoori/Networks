@@ -187,17 +187,18 @@ Result: 3 different PCs share 1 public IP using different ports!
     │ Switch  │              │ Gi0/1   │──────────────│ Gi0/0   │
     └────┬────┘              │         │ 203.0.113.0/30│   R2    │
          │                   │         │              │  ISP    │
-    ┌────┴─────┬──────┐      │ Gi0/0   │              └────┬────┘
-    │          │      │      └────┬────┘                   │
-   PC1        PC2   Web_Sv       │                    ┌────┴────┐
- (.10/24)  (.20/24) (.100/24)    │                    │ Internet│
-                                  │                    │ 8.8.8.8 │
-                             192.168.1.0/24            └─────────┘
+    ┌────┴────┬──────┬───────┐ │ Gi0/0   │              └────┬────┘
+    │         │      │       │ └────┬────┘                   │
+   PC1       PC2  Web_Sv  Mail_Sv  │                    ┌────┴────┐
+ (.10/24) (.20/24)(.100/24)(.200/24)│                    │ Internet│
+                                     │                    │ 8.8.8.8 │
+                                192.168.1.0/24            └─────────┘
 
 NAT Scenarios:
 ├─ PC1, PC2: PAT (share one public IP)
-├─ Web_Sv: Static NAT (permanent public IP)
-└─ Port Forwarding: External access to Web_Sv
+├─ Web_Sv: Static NAT (permanent public IP 203.0.113.5)
+├─ Mail_Sv: Static NAT (permanent public IP 203.0.113.6)
+└─ Port Forwarding: External access to Web_Sv & Mail_Sv
 
 Public IPs Available: 203.0.113.1 - 203.0.113.10
 ```
@@ -213,6 +214,7 @@ Public IPs Available: 203.0.113.1 - 203.0.113.10
 | **PC1** | eth0/ens3 | 192.168.1.10 | 255.255.255.0 | Internal client (uses PAT) |
 | **PC2** | eth0 | 192.168.1.20 | 255.255.255.0 | Internal client (uses PAT) |
 | **Web_Sv** | eth0/ens3 | 192.168.1.100 | 255.255.255.0 | Internal web server (uses Static NAT) |
+| **Mail_Sv** | eth0/ens3 | 192.168.1.200 | 255.255.255.0 | Internal mail server (uses Static NAT) |
 
 #### WAN/Internet Connection (Public)
 
@@ -228,7 +230,10 @@ Public IPs Available: 203.0.113.1 - 203.0.113.10
 |---------|--------------|---------------|------|
 | **PC1, PC2** | 192.168.1.10-20 | 203.0.113.1 | PAT (Overload) |
 | **Web_Sv** | 192.168.1.100 | 203.0.113.5 | Static NAT |
+| **Mail_Sv** | 192.168.1.200 | 203.0.113.6 | Static NAT |
 | **Web_Sv HTTP** | 192.168.1.100:80 | 203.0.113.1:8080 | Port Forwarding |
+| **Mail_Sv SMTP** | 192.168.1.200:25 | 203.0.113.1:25 | Port Forwarding |
+| **Mail_Sv IMAP** | 192.168.1.200:143 | 203.0.113.1:143 | Port Forwarding |
 
 ---
 
@@ -276,6 +281,7 @@ Public IPs Available: 203.0.113.1 - 203.0.113.10
    - **PC1** (VPCS or Linux)
    - **PC2** (VPCS or Linux)
    - **Web_Sv** (Linux recommended for web server)
+   - **Mail_Sv** (Linux recommended for mail server)
 4. Click **Save**
 
 ---
@@ -305,6 +311,7 @@ Public IPs Available: 203.0.113.1 - 203.0.113.10
 | **Switch** | Gi0/1 | **PC1** | eth0/ens3 | Client 1 |
 | **Switch** | Gi0/2 | **PC2** | eth0 | Client 2 |
 | **Switch** | Gi0/3 | **Web_Sv** | eth0/ens3 | Web server |
+| **Switch** | Gi0/4 | **Mail_Sv** | eth0/ens3 | Mail server |
 | **R2** | Gi0/1 | **Internet** | - | Simulated Internet (optional) |
 
 ---
@@ -457,6 +464,52 @@ sudo systemctl enable apache2
 curl http://localhost
 ```
 
+**Mail_Sv Configuration:**
+
+**Using Linux (recommended for mail server)**
+```bash
+sudo ip addr add 192.168.1.200/24 dev ens3
+sudo ip route add default via 192.168.1.1 dev ens3
+
+# Make persistent
+sudo nano /etc/netplan/00-installer-config.yaml
+# Add:
+# network:
+#   ethernets:
+#     ens3:
+#       addresses:
+#         - 192.168.1.200/24
+#       routes:
+#         - to: default
+#           via: 192.168.1.1
+#   version: 2
+
+sudo netplan apply
+
+# Configure Debian sources.list (for Debian Stretch archive)
+echo "deb https://archive.debian.org/debian/ stretch main contrib" | sudo tee /etc/apt/sources.list
+echo "deb-src https://archive.debian.org/debian/ stretch main contrib" | sudo tee -a /etc/apt/sources.list
+
+# Install mail server (Postfix)
+sudo apt update
+sudo apt install postfix -y
+# Select "Internet Site" during installation
+# System mail name: example.com
+
+# Install Dovecot (IMAP server)
+sudo apt install dovecot-imapd -y
+
+# Start services
+sudo systemctl start postfix
+sudo systemctl enable postfix
+sudo systemctl start dovecot
+sudo systemctl enable dovecot
+
+# Verify mail services
+sudo netstat -tuln | grep :25    # SMTP
+sudo netstat -tuln | grep :143   # IMAP
+```
+
 ---
 
 ### Step 4: Verify Basic Connectivity (Before NAT)
@@ -506,9 +559,9 @@ show ip route
 
 ## 🔒 Static NAT Configuration
 
-> **Purpose:** Configure one-to-one permanent IP address mapping for Web_Sv.
+> **Purpose:** Configure one-to-one permanent IP address mapping for servers.
 
-### Scenario: Public Web Server
+### Scenario 1: Public Web Server
 
 **Requirement:** Web_Sv (192.168.1.100) needs a permanent public IP (203.0.113.5) so Internet users can access it.
 
@@ -527,9 +580,12 @@ interface GigabitEthernet0/1
  ip nat outside
  exit
 
-# Configure Static NAT mapping
+# Configure Static NAT mapping for Web Server
 # Syntax: ip nat inside source static <inside-local> <inside-global>
 ip nat inside source static 192.168.1.100 203.0.113.5
+
+# Configure Static NAT mapping for Mail Server
+ip nat inside source static 192.168.1.200 203.0.113.6
 
 write memory
 ```
@@ -547,6 +603,7 @@ show ip nat translations
 # Expected output:
 # Pro Inside global      Inside local       Outside local      Outside global
 # --- 203.0.113.5        192.168.1.100      ---                ---
+# --- 203.0.113.6        192.168.1.200      ---                ---
 ```
 
 **Show NAT statistics:**
@@ -555,7 +612,7 @@ show ip nat translations
 show ip nat statistics
 
 # Expected output:
-# Total active translations: 1 (1 static, 0 dynamic; 0 extended)
+# Total active translations: 2 (2 static, 0 dynamic; 0 extended)
 # Inside interfaces:
 #   GigabitEthernet0/0
 # Outside interfaces:
@@ -566,12 +623,25 @@ show ip nat statistics
 
 ```bash
 # From R2_ISP console
+# Test Web Server
 ping 203.0.113.5
-
 # Expected: Success (pings Web_Sv via Static NAT)
+
+# Test Mail Server
+ping 203.0.113.6
+# Expected: Success (pings Mail_Sv via Static NAT)
 ```
 
 **Test from Web_Sv:**
+
+```bash
+# Ping Internet host
+ping 8.8.8.8
+
+# Expected: Success (return traffic works via Static NAT)
+```
+
+**Test from Mail_Sv:**
 
 ```bash
 # Ping Internet host
@@ -780,9 +850,9 @@ undebug all
 
 ## 🔀 Port Forwarding
 
-> **Purpose:** Allow external users to access internal server on specific port.
+> **Purpose:** Allow external users to access internal servers on specific ports.
 
-### Scenario: External Access to Internal Web Server
+### Scenario 1: External Access to Internal Web Server
 
 **Requirement:** Internet users connect to 203.0.113.1:8080 and reach Web_Sv (192.168.1.100:80).
 
@@ -806,6 +876,36 @@ write memory
 
 ---
 
+### Scenario 2: External Access to Internal Mail Server
+
+**Requirement:** Internet users can send/receive email via Mail_Sv using standard ports.
+
+**R1 Configuration:**
+
+```bash
+enable
+configure terminal
+
+# Forward SMTP port 25 to Mail_Sv (incoming mail)
+ip nat inside source static tcp 192.168.1.200 25 203.0.113.1 25
+
+# Forward SMTP Submission port 587 to Mail_Sv (outgoing mail with auth)
+ip nat inside source static tcp 192.168.1.200 587 203.0.113.1 587
+
+# Forward IMAP port 143 to Mail_Sv (mail retrieval)
+ip nat inside source static tcp 192.168.1.200 143 203.0.113.1 143
+
+# Forward IMAPS port 993 to Mail_Sv (secure IMAP)
+ip nat inside source static tcp 192.168.1.200 993 203.0.113.1 993
+
+# Forward SSH port 2223 to Mail_Sv (remote admin)
+ip nat inside source static tcp 192.168.1.200 22 203.0.113.1 2223
+
+write memory
+```
+
+---
+
 ### Verification
 
 **Show NAT translations:**
@@ -817,10 +917,16 @@ show ip nat translations
 # Pro Inside global        Inside local         Outside local        Outside global
 # tcp 203.0.113.1:8080     192.168.1.100:80     ---                  ---
 # tcp 203.0.113.1:2222     192.168.1.100:22     ---                  ---
+# tcp 203.0.113.1:25       192.168.1.200:25     ---                  ---
+# tcp 203.0.113.1:587      192.168.1.200:587    ---                  ---
+# tcp 203.0.113.1:143      192.168.1.200:143    ---                  ---
+# tcp 203.0.113.1:993      192.168.1.200:993    ---                  ---
+# tcp 203.0.113.1:2223     192.168.1.200:22     ---                  ---
 # --- 203.0.113.5          192.168.1.100        ---                  ---
+# --- 203.0.113.6          192.168.1.200        ---                  ---
 ```
 
-**Test from Internet (R2_ISP):**
+**Test Web Server from Internet (R2_ISP):**
 
 ```bash
 # Test HTTP access (if telnet available)
@@ -832,13 +938,34 @@ telnet 203.0.113.1 8080
 # Should receive HTML response
 ```
 
+**Test Mail Server from Internet (R2_ISP):**
+
+```bash
+# Test SMTP (if telnet available)
+telnet 203.0.113.1 25
+
+# Expected: Connection to Mail_Sv:25
+# 220 example.com ESMTP Postfix
+# (SMTP server greeting)
+
+# Test IMAP
+telnet 203.0.113.1 143
+
+# Expected: Connection to Mail_Sv:143
+# * OK [CAPABILITY...] Dovecot ready
+```
+
 **Test from PC with curl (if Linux):**
 
 ```bash
-# From another network or R2_ISP
+# Test web server
 curl http://203.0.113.1:8080
 
 # Expected: Web server response from 192.168.1.100
+
+# Test SMTP
+telnet 203.0.113.1 25
+# Expected: SMTP greeting from 192.168.1.200
 ```
 
 ---
@@ -1089,29 +1216,34 @@ ip route 0.0.0.0 0.0.0.0 <ISP-gateway>
 
 **Situation:** Company has 1 public IP but wants to host:
 - Web server (HTTP/HTTPS)
-- Mail server (SMTP)
-- FTP server
+- Mail server (SMTP/IMAP)
 
-**Solution: Port Forwarding**
+**Solution: Combination of Static NAT and Port Forwarding**
 
 ```bash
-# Static NAT for Web Server
-ip nat inside source static tcp 192.168.1.10 80 203.0.113.1 80
-ip nat inside source static tcp 192.168.1.10 443 203.0.113.1 443
+# Static NAT for direct server access (optional - uses more IPs)
+ip nat inside source static 192.168.1.100 203.0.113.5   # Web Server
+ip nat inside source static 192.168.1.200 203.0.113.6   # Mail Server
+
+# OR use Port Forwarding to share 1 public IP:
+
+# Port forwarding for Web Server
+ip nat inside source static tcp 192.168.1.100 80 203.0.113.1 80
+ip nat inside source static tcp 192.168.1.100 443 203.0.113.1 443
 
 # Port forwarding for Mail Server
-ip nat inside source static tcp 192.168.1.20 25 203.0.113.1 25
-ip nat inside source static tcp 192.168.1.20 587 203.0.113.1 587
-
-# Port forwarding for FTP Server
-ip nat inside source static tcp 192.168.1.30 21 203.0.113.1 21
+ip nat inside source static tcp 192.168.1.200 25 203.0.113.1 25
+ip nat inside source static tcp 192.168.1.200 587 203.0.113.1 587
+ip nat inside source static tcp 192.168.1.200 143 203.0.113.1 143
+ip nat inside source static tcp 192.168.1.200 993 203.0.113.1 993
 ```
 
 **Result:**
-- ✅ External users access http://203.0.113.1 → Web Server
-- ✅ Mail clients send to 203.0.113.1:25 → Mail Server
-- ✅ FTP clients connect to 203.0.113.1:21 → FTP Server
-- ✅ All services share 1 public IP
+- ✅ External users access http://203.0.113.1 → Web Server (or http://203.0.113.5)
+- ✅ Mail clients send to 203.0.113.1:25 → Mail Server (or 203.0.113.6:25)
+- ✅ IMAP access to 203.0.113.1:143 → Mail Server
+- ✅ Flexible deployment: Static NAT OR Port Forwarding
+- ✅ Can combine both approaches
 
 ---
 
