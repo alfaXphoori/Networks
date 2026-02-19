@@ -139,8 +139,8 @@ Security Policies:
 | **R3** | Gi0/1 | 10.20.2.1 | 255.255.255.252 | Link to R2 (HQ) |
 | **R3** | Gi1/1 | - | - | Link to Switch3 |
 | **Switch3** | - | - | - | DMZ LAN switch |
-| **Web_Sv** | e0 | - | - | Internet connection |
-| **Web_Sv** | e1 | 10.3.3.10 | 255.255.255.0 | Web/DNS Server |
+| **Web_Sv** | ens3/e1 | 10.3.3.10 | 255.255.255.0 | Web/DNS Server (Internal) |
+| **Web_Sv** | ens4/e0 | DHCP | - | Internet connection (External) |
 | **Net** | - | - | - | Internet cloud |
 
 ---
@@ -203,12 +203,17 @@ Security Policies:
 
 **How to:**
 1. Click **Add Node**
-2. Select **Linux** → **VPCS**
+2. Select **Linux** → **VPCS** (for simple testing)
+   - **Alternative**: Use **Linux** → **Linux** (Alpine/Ubuntu) for full Linux features
 3. Add PCs:
-   - **PC1, PC2** (Branch clients)
-   - **PC3** (HQ admin client)
-   - **Web_Sv** (DMZ web server)
+   - **PC1, PC2** (Branch clients) - Use VPCS
+   - **PC3** (HQ admin client) - Use VPCS or Linux
+   - **Web_Sv** (DMZ web server) - Use VPCS or Linux (recommended for running actual web services)
 4. Click **Save**
+
+> **💡 Note:** 
+> - **VPCS**: Lightweight, supports basic ICMP only (~1MB RAM)
+> - **Linux VM**: Full features (HTTP server, telnet, SSH), requires more resources (~256MB+ RAM)
 
 ---
 
@@ -240,9 +245,9 @@ Security Policies:
 | **R3** | Gi1/1 | **Switch3** | Gi0/0 | DMZ router to switch |
 | **Switch1** | Gi0/1 | **PC1** | eth0 | Branch client 1 |
 | **Switch1** | Gi0/2 | **PC2** | eth0 | Branch client 2 |
-| **Switch2** | Gi0/1 | **PC3** | eth0 | HQ admin client |
-| **Switch3** | Gi0/1 | **Web_Sv** | e1 | DMZ web server |
-| **Web_Sv** | e0 | **Net** | - | Internet connection |
+| **Switch2** | Gi0/1 | **PC3** | eth0/ens3 | HQ admin client |
+| **Switch3** | Gi0/1 | **Web_Sv** | e1/ens3 | DMZ web server (Internal) |
+| **Web_Sv** | e0/ens4 | **Net** | - | Internet connection (DHCP) |
 
 > **💡 Tip:** Switches allow proper LAN simulation with multiple devices per network.
 
@@ -504,14 +509,18 @@ save
 
 **Option 2: Using Linux (if using Linux VM for Web Server)**
 ```bash
-# Configure IP address on internal interface
+# Configure IP address on internal interface (ens3)
 sudo ip addr add 10.3.3.10/24 dev ens3
 
-# Add default gateway
+# Add default gateway via internal network
 sudo ip route add default via 10.3.3.1 dev ens3
+
+# Configure Internet interface (ens4) with DHCP
+sudo dhclient ens4
 
 # Verify configuration
 ip addr show ens3
+ip addr show ens4
 ip route show
 
 # Make persistent (Ubuntu/Debian)
@@ -525,6 +534,8 @@ sudo nano /etc/netplan/00-installer-config.yaml
 #       routes:
 #         - to: default
 #           via: 10.3.3.1
+#     ens4:
+#       dhcp4: true
 #   version: 2
 
 # Apply changes
@@ -535,11 +546,15 @@ sudo apt update
 sudo apt install apache2 -y
 sudo systemctl start apache2
 sudo systemctl enable apache2
+
+# Verify internet connectivity
+ping -c 3 8.8.8.8
+curl -I http://www.google.com
 ```
 
 > **💡 Note:** Web_Sv has two interfaces:
 > - **ens3 (e1)**: Connected to Switch3 (10.3.3.10/24) - Internal network
-> - **ens2 (e0)**: Connected to Net (Internet) - External connection (configure via DHCP or static)
+> - **ens4 (e0)**: Connected to Net (Internet) - External connection (DHCP)
 
 ---
 
@@ -895,6 +910,31 @@ Extended ACL:  Place on R1 (near PC1)
 | `show` | Display all settings | `show` |
 
 > **💡 Note:** VPCS supports basic ICMP only. For port testing, use router commands or enable telnet on routers.
+
+---
+
+### Linux Commands Reference (for Linux VMs)
+
+**What:** Advanced testing commands available when using Linux instead of VPCS.
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `ping <ip>` | Test ICMP connectivity | `ping -c 5 10.2.2.10` |
+| `traceroute <ip>` | Trace route to destination | `traceroute 10.3.3.10` |
+| `curl http://<ip>:<port>` | Test HTTP access | `curl http://10.3.3.10:80` |
+| `telnet <ip> <port>` | Test TCP port connectivity | `telnet 10.3.3.10 80` |
+| `nc -zv <ip> <port>` | Scan specific port | `nc -zv 10.3.3.10 80` |
+| `nmap <ip>` | Scan all open ports | `nmap 10.3.3.10` |
+| `wget http://<ip>` | Download from web server | `wget http://10.3.3.10` |
+| `dig @<dns_ip> <domain>` | Test DNS query | `dig @10.3.3.10 example.com` |
+
+**Installing required tools on Linux:**
+```bash
+sudo apt update
+sudo apt install traceroute curl telnet netcat nmap wget dnsutils -y
+```
+
+> **💡 Use Case:** Linux VMs provide full port testing capabilities for Extended ACL scenarios.
 
 ---
 
@@ -1757,4 +1797,4 @@ Questions or issues?
 
 ---
 
-**Remember:** Security is not a product, it's a process. Keep practicing! 🔒
+**Remember:** Security is not a product, it's 
