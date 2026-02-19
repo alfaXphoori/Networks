@@ -179,38 +179,72 @@ Security Policies:
 
 ---
 
-### Step 3: Add PC Nodes
+### Step 3: Add Switch Nodes
 
-**What:** Add five virtual PCs for testing.
+**What:** Add three Cisco switches for LAN connectivity.
+
+**How to:**
+1. Click **Add Node**
+2. Select **Cisco** → **IOSvL2** (switch)
+3. Add three switches:
+   - **Switch1** (Branch LAN)
+   - **Switch2** (HQ LAN)
+   - **Switch3** (DMZ LAN)
+4. Configure each switch:
+   - **Name**: Switch1, Switch2, Switch3
+   - **Image**: vios_l2-adventerprisek9-m
+5. Click **Save**
+
+---
+
+### Step 4: Add PC and Server Nodes
+
+**What:** Add virtual PCs and web server for testing.
 
 **How to:**
 1. Click **Add Node**
 2. Select **Linux** → **VPCS**
-3. Add five PCs:
+3. Add PCs:
    - **PC1, PC2** (Branch clients)
-   - **PC3** (HQ admin)
-   - **PC4, PC5** (DMZ servers)
+   - **PC3** (HQ admin client)
+   - **Web_Sv** (DMZ web server)
 4. Click **Save**
 
 ---
 
-### Step 4: Connect All Devices
+### Step 5: Add Internet Cloud
 
-**What:** Create network connections between routers and PCs.
+**What:** Add cloud node to simulate internet connection.
+
+**How to:**
+1. Click **Add Node**
+2. Select **Network** → **Cloud**
+3. Add cloud:
+   - **Name**: Net
+4. Click **Save**
+
+---
+
+### Step 6: Connect All Devices
+
+**What:** Create network connections between all devices.
 
 **Connection List:**
 
 | From Device | Interface | To Device | Interface | Purpose |
 |-------------|-----------|-----------|-----------|---------|
-| **R1** | Gi0/0 | **PC1** | eth0 | Branch Network A |
-| **R1** | Gi0/0 | **PC2** | eth0 | Branch Network A |
-| **R1** | Gi0/1 | **R2** | Gi0/1 | Branch-to-HQ link |
-| **R2** | Gi0/0 | **PC3** | eth0 | HQ Network B |
-| **R2** | Gi0/2 | **R3** | Gi0/1 | HQ-to-DMZ link |
-| **R3** | Gi0/0 | **PC4** | eth0 | DMZ Network C (Web) |
-| **R3** | Gi0/0 | **PC5** | eth0 | DMZ Network C (FTP) |
+| **R1** | Gi0/1 | **R2** | Gi0/1 | Branch-to-HQ WAN link |
+| **R2** | Gi0/2 | **R3** | Gi0/1 | HQ-to-DMZ WAN link |
+| **R1** | Gi1/1 | **Switch1** | Gi0/0 | Branch router to switch |
+| **R2** | Gi1/1 | **Switch2** | Gi0/0 | HQ router to switch |
+| **R3** | Gi1/1 | **Switch3** | Gi0/0 | DMZ router to switch |
+| **Switch1** | Gi0/1 | **PC1** | eth0 | Branch client 1 |
+| **Switch1** | Gi0/2 | **PC2** | eth0 | Branch client 2 |
+| **Switch2** | Gi0/1 | **PC3** | eth0 | HQ admin client |
+| **Switch3** | Gi0/1 | **Web_Sv** | e1 | DMZ web server |
+| **Web_Sv** | e0 | **Net** | - | Internet connection |
 
-> **💡 Tip:** Connect multiple PCs to the same router interface to simulate a switch network.
+> **💡 Tip:** Switches allow proper LAN simulation with multiple devices per network.
 
 ---
 
@@ -569,32 +603,32 @@ write memory
 
 > **Purpose:** Configure granular filtering with protocol, port, source, and destination.
 
-### Scenario 3: Allow HTTP/HTTPS Only from Branch
+### Scenario 3: Allow Only HQ to Access Web Server
 
-**Requirement:** Branch office can access HQ web services (HTTP/HTTPS) only, block all other traffic.
+**Requirement:** Only HQ network (10.2.2.0/24) can access Web_Sv (10.3.3.10), block all other networks from accessing DMZ web server.
 
-**R1 Configuration (close to source):**
+**R3 Configuration (close to destination):**
 
 ```bash
 enable
 configure terminal
 
 # Create extended ACL 100
-# Permit HTTP (port 80)
-access-list 100 permit tcp 10.1.1.0 0.0.0.255 10.2.2.0 0.0.0.255 eq 80
+# Permit HTTP (port 80) from HQ only
+access-list 100 permit tcp 10.2.2.0 0.0.0.255 host 10.3.3.10 eq 80
 
-# Permit HTTPS (port 443)
-access-list 100 permit tcp 10.1.1.0 0.0.0.255 10.2.2.0 0.0.0.255 eq 443
+# Permit HTTPS (port 443) from HQ only
+access-list 100 permit tcp 10.2.2.0 0.0.0.255 host 10.3.3.10 eq 443
 
-# Permit ICMP for troubleshooting (optional)
-access-list 100 permit icmp 10.1.1.0 0.0.0.255 10.2.2.0 0.0.0.255
+# Permit ICMP for troubleshooting
+access-list 100 permit icmp any host 10.3.3.10
 
 # Deny everything else (implicit, but can be explicit)
 access-list 100 deny ip any any
 
-# Apply ACL outbound on interface to HQ
-interface GigabitEthernet0/1
- ip access-group 100 out
+# Apply ACL inbound on DMZ interface
+interface GigabitEthernet0/0
+ ip access-group 100 in
  exit
 
 write memory
@@ -893,70 +927,76 @@ ping 10.3.3.10
 
 ---
 
-### Step 3: Testing Scenario 3 (Extended ACL - Port Filtering)
+### Step 3: Testing Scenario 3 (Extended ACL - Web Server Access)
 
-**Scenario:** Branch can only access HQ on HTTP/HTTPS ports, ICMP allowed for testing.
+**Scenario:** Only HQ network (10.2.2.0/24) can access Web_Sv, all other networks blocked.
 
 **Configuration Applied:**
-- R1: Extended ACL 100 (HTTP/HTTPS/ICMP only)
+- R3: Extended ACL 100 on Gi0/0 (inbound to DMZ)
 
-**Test ICMP from PC1 (Should SUCCEED):**
+**Test from PC3/HQ (Should SUCCEED):**
+
+```bash
+# Open PC3 console
+# HQ network is permitted to access Web_Sv
+ping 10.3.3.10
+
+# Expected: Success (ICMP permitted)
+# 84 bytes from 10.3.3.10 icmp_seq=1 ttl=62 time=...ms
+```
+
+**Test from PC1/Branch (Should FAIL - denied by ACL):**
 
 ```bash
 # Open PC1 console
-# ICMP is permitted in ACL 100
-ping 10.2.2.10
+ping 10.3.3.10
 
-# Expected: Success (ICMP explicitly permitted)
-# 84 bytes from 10.2.2.10 icmp_seq=1 ttl=62 time=...ms
+# Expected: Timeout (Branch network denied)
+# 10.3.3.10 icmp_seq=1 timeout
 ```
 
-**Test ICMP from PC2 (Should SUCCEED):**
+**Test from PC2/Branch (Should FAIL):**
 
 ```bash
 # Open PC2 console
-ping 10.2.2.10
+ping 10.3.3.10
 
-# Expected: Success
+# Expected: Timeout
 ```
 
-> **💡 Note:** VPCS can only test ICMP. To test HTTP/HTTPS blocking, you would need to:
-> 1. Enable telnet on R2 for port testing, OR
-> 2. Run actual web server on PC3, OR  
-> 3. Use `debug ip packet` on routers to see denied traffic
+> **💡 Note:** VPCS can only test ICMP. To test HTTP/HTTPS port filtering, you would need to:
+> 1. Use telnet from router to test port access, OR
+> 2. Run actual web server on Web_Sv, OR  
+> 3. Use `debug ip packet` on R3 to see denied traffic
 
-**Alternative Test - Check ACL hits on R1:**
+**Verify ACL hits on R3:**
 
 ```bash
-# On R1, generate traffic from different protocols
-# Then check ACL statistics
+# On R3, check ACL statistics after testing
 
 show access-lists 100
 
 # Expected to see:
 # Extended IP access list 100
-#     10 permit tcp 10.1.1.0 0.0.0.255 10.2.2.0 0.0.0.255 eq www (0 matches)
-#     20 permit tcp 10.1.1.0 0.0.0.255 10.2.2.0 0.0.0.255 eq 443 (0 matches)
-#     30 permit icmp 10.1.1.0 0.0.0.255 10.2.2.0 0.0.0.255 (10 matches)
-#     40 deny ip any any (0 matches)
+#     10 permit tcp 10.2.2.0 0.0.0.255 host 10.3.3.10 eq www (0 matches)
+#     20 permit tcp 10.2.2.0 0.0.0.255 host 10.3.3.10 eq 443 (0 matches)
+#     30 permit icmp any host 10.3.3.10 (10 matches from PC3)
+#     40 deny ip any any (10 matches from PC1/PC2)
 ```
 
 **Simulate Port Traffic from Router (Advanced):**
 
 ```bash
-# From R1 (to simulate traffic from Branch network):
-telnet 10.2.2.1 80    # Should be allowed
-telnet 10.2.2.1 23    # Should be blocked
+# From R2 (to simulate HQ network access):
+telnet 10.3.3.10 80 /source-interface Gi0/0
+# Should be allowed (source 10.2.2.1)
 
-# Or use Extended Ping:
-ping
-Protocol [ip]: 
-Target IP address: 10.2.2.10
-Source address: 10.1.1.10
-# This simulates traffic from PC1
+# From R1 (to simulate Branch network access):
+telnet 10.3.3.10 80 /source-interface Gi0/0
+# Should be blocked (source 10.1.1.1)
 ```
 
-**✅ Result:** ICMP allowed, other ports would be filtered (testable with router commands).
+**✅ Result:** Only HQ network can access Web_Sv, Branch network blocked!
 
 ---
 
@@ -1123,7 +1163,8 @@ show ip access-lists BRANCH_TO_HQ_FILTER
 | PC2 | HQ (10.2.2.10) | Scenario 1 | ✅ PASS | `ping 10.2.2.10` |
 | PC1 | DMZ (10.3.3.10) | Scenario 2 | ❌ FAIL | `ping 10.3.3.10` |
 | PC3 | DMZ (10.3.3.10) | Scenario 2 | ✅ PASS | `ping 10.3.3.10` |
-| PC1 | HQ (10.2.2.10) | Scenario 3 | ✅ PASS (ICMP) | `ping 10.2.2.10` |
+| PC3 | DMZ Web (10.3.3.10) | Scenario 3 | ✅ PASS | `ping 10.3.3.10` |
+| PC1 | DMZ Web (10.3.3.10) | Scenario 3 | ❌ FAIL | `ping 10.3.3.10` |
 | PC1 | DMZ Web (10.3.3.10) | Scenario 5 | ✅ PASS (ICMP) | `ping 10.3.3.10` |
 | PC3 | DMZ Web (10.3.3.10) | Scenario 5 | ✅ PASS | `ping 10.3.3.10` |
 
