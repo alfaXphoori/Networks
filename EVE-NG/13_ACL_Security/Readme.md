@@ -77,27 +77,33 @@
 ```
      BRANCH OFFICE              HEADQUARTERS              DMZ/SERVERS
      (Untrusted)                (Trusted Core)            (Public Services)
-  
-┌─────────────────┐         ┌─────────────────┐       ┌─────────────────┐
-│   Network A     │         │   Network B     │       │   Network C     │
-│  10.1.1.0/24    │         │  10.2.2.0/24    │       │  10.3.3.0/24    │
-│                 │         │                 │       │                 │
-│  PC1: .10       │◄───────►│     (HQ)        │◄─────►│  Web: .10       │
-│  PC2: .20       │   ACL1  │                 │  ACL2 │  FTP: .20       │
-└────────┬────────┘         └────────┬────────┘       └────────┬────────┘
-         │                           │                         │
-      Gi0/0                       Gi0/1                     Gi0/0
-         │                           │                         │
-    ┌────┴─────┐               ┌────┴─────┐             ┌────┴─────┐
-    │    R1    │───────────────│    R2    │─────────────│    R3    │
-    │ (Branch) │   Gi0/1       │   (HQ)   │   Gi0/2     │  (DMZ)   │
-    └──────────┘  .1      .2   └──────────┘  .2    .1   └──────────┘
-                10.10.1.0/30              10.20.2.0/30
+     10.1.1.0/24                10.2.2.0/24               10.3.3.0/24
+
+         R1                         R2                        R3
+    ┌─────────┐                ┌─────────┐              ┌─────────┐
+    │ Gi0/1   │───────────────►│ Gi0/1   │              │         │
+    │10.10.1.1│  10.10.1.0/30  │10.10.1.2│              │         │
+    │         │                │         │              │         │
+    │         │                │ Gi0/2   │─────────────►│ Gi0/1   │
+    │         │                │10.20.2.2│ 10.20.2.0/30 │10.20.2.1│
+    │ Gi0/0   │                │ Gi0/0   │              │ Gi0/0   │
+    └────┬────┘                └────┬────┘              └────┬────┘
+         │                          │                        │
+      Gi1/1                      Gi1/1                    Gi1/1
+         │                          │                        │
+    ┌────┴────┐                ┌────┴────┐              ┌────┴────┐
+    │ Switch1 │                │ Switch2 │              │ Switch3 │
+    └──┬───┬──┘                └────┬────┘              └────┬────┘
+       │   │                        │                        │
+   Gi0/0 Gi0/1                   Gi0/0                    Gi0/0
+       │   │                        │                        │
+      PC1 PC2                      PC3                    Web_Sv────►Internet
+   .10/24 .20/24                 .10/24                   .10/24     (Net)
 
 Security Policies:
 ├─ Branch can access HQ HTTP/HTTPS only
 ├─ HQ can access all networks
-├─ DMZ servers accessible from outside on specific ports only
+├─ DMZ web server accessible from outside on specific ports only
 └─ Telnet/SSH restricted to admin network only
 ```
 
@@ -107,8 +113,10 @@ Security Policies:
 
 | Device | Interface | IP Address | Subnet Mask | Role |
 |--------|-----------|-----------|-------------|------|
-| **R1** | Gi0/0 | 10.1.1.1 | 255.255.255.0 | Branch gateway |
+| **R1** | Gi0/0 | 10.1.1.1 | 255.255.255.0 | Branch LAN gateway |
 | **R1** | Gi0/1 | 10.10.1.1 | 255.255.255.252 | Link to R2 (HQ) |
+| **R1** | Gi1/1 | - | - | Link to Switch1 |
+| **Switch1** | - | - | - | Branch LAN switch |
 | **PC1** | eth0 | 10.1.1.10 | 255.255.255.0 | Branch client |
 | **PC2** | eth0 | 10.1.1.20 | 255.255.255.0 | Branch client |
 
@@ -116,19 +124,24 @@ Security Policies:
 
 | Device | Interface | IP Address | Subnet Mask | Role |
 |--------|-----------|-----------|-------------|------|
-| **R2** | Gi0/0 | 10.2.2.1 | 255.255.255.0 | HQ gateway |
+| **R2** | Gi0/0 | 10.2.2.1 | 255.255.255.0 | HQ LAN gateway |
 | **R2** | Gi0/1 | 10.10.1.2 | 255.255.255.252 | Link to R1 (Branch) |
 | **R2** | Gi0/2 | 10.20.2.2 | 255.255.255.252 | Link to R3 (DMZ) |
+| **R2** | Gi1/1 | - | - | Link to Switch2 |
+| **Switch2** | - | - | - | HQ LAN switch |
 | **PC3** | eth0 | 10.2.2.10 | 255.255.255.0 | HQ admin client |
 
 #### Network C - DMZ (Public Servers)
 
 | Device | Interface | IP Address | Subnet Mask | Role |
 |--------|-----------|-----------|-------------|------|
-| **R3** | Gi0/0 | 10.3.3.1 | 255.255.255.0 | DMZ gateway |
+| **R3** | Gi0/0 | 10.3.3.1 | 255.255.255.0 | DMZ LAN gateway |
 | **R3** | Gi0/1 | 10.20.2.1 | 255.255.255.252 | Link to R2 (HQ) |
-| **PC4** | eth0 | 10.3.3.10 | 255.255.255.0 | Web Server |
-| **PC5** | eth0 | 10.3.3.20 | 255.255.255.0 | FTP Server |
+| **R3** | Gi1/1 | - | - | Link to Switch3 |
+| **Switch3** | - | - | - | DMZ LAN switch |
+| **Web_Sv** | e0 | - | - | Internet connection |
+| **Web_Sv** | e1 | 10.3.3.10 | 255.255.255.0 | Web/DNS Server |
+| **Net** | - | - | - | Internet cloud |
 
 ---
 
@@ -201,13 +214,16 @@ Security Policies:
 
 ---
 
-### Step 5: Start All Devices
+### Step 7: Start All Devices
 
-**What:** Power on all routers and PCs.
+**What:** Power on all routers, switches, and PCs.
 
 **How to:**
 1. Click **Start All** or start each device individually
-2. Wait for devices to boot (routers take 1-2 minutes)
+2. Wait for devices to boot:
+   - Routers: 1-2 minutes
+   - Switches: 30-60 seconds
+   - PCs: instant
 3. Verify all devices show "Running" status
 
 ---
@@ -414,19 +430,16 @@ ip 10.2.2.10/24 10.2.2.1
 save
 ```
 
-**PC4 Configuration (Web Server):**
+**Web_Sv Configuration (Web/DNS Server):**
 
 ```bash
 ip 10.3.3.10/24 10.3.3.1
 save
 ```
 
-**PC5 Configuration (FTP Server):**
-
-```bash
-ip 10.3.3.20/24 10.3.3.1
-save
-```
+> **💡 Note:** Web_Sv has two interfaces:
+> - **e1**: Connected to Switch3 (10.3.3.10/24) - Internal network
+> - **e0**: Connected to Net (Internet) - External connection
 
 ---
 
@@ -437,16 +450,16 @@ save
 **Test from PC1:**
 
 ```bash
-# Ping local gateway
+# Ping local gateway (R1)
 ping 10.1.1.1
 
-# Ping HQ network
+# Ping HQ network (PC3)
 ping 10.2.2.10
 
-# Ping DMZ network
+# Ping DMZ network (Web_Sv)
 ping 10.3.3.10
 
-# All should succeed
+# All should succeed before ACLs are applied
 ```
 
 **Test from R1:**
@@ -623,7 +636,8 @@ write memory
 
 **Requirement:** 
 - Web server (10.3.3.10) accessible on HTTP (80) and HTTPS (443) from anywhere
-- FTP server (10.3.3.20) accessible on FTP (21) from HQ only
+- Web server accessible on DNS (53) from anywhere
+- Block all other inbound traffic to DMZ
 
 **R3 Configuration:**
 
@@ -632,12 +646,12 @@ enable
 configure terminal
 
 # Extended ACL 110 for inbound DMZ traffic
-# Allow HTTP to web server
+# Allow HTTP/HTTPS to web server from anywhere
 access-list 110 permit tcp any host 10.3.3.10 eq 80
 access-list 110 permit tcp any host 10.3.3.10 eq 443
 
-# Allow FTP to FTP server from HQ only
-access-list 110 permit tcp 10.2.2.0 0.0.0.255 host 10.3.3.20 eq 21
+# Allow DNS to web server from anywhere
+access-list 110 permit udp any host 10.3.3.10 eq 53
 
 # Allow ICMP for troubleshooting
 access-list 110 permit icmp any any
@@ -853,11 +867,6 @@ ping 10.3.3.10
 
 # Expected: Success
 # 84 bytes from 10.3.3.10 icmp_seq=1 ttl=62 time=...ms
-
-# Test ping to DMZ FTP Server
-ping 10.3.3.20
-
-# Expected: Success
 ```
 
 **Test from PC1 (Branch - Should FAIL):**
@@ -1016,8 +1025,8 @@ show access-lists 101
 ### Step 5: Testing Scenario 5 (DMZ Server Protection)
 
 **Scenario:** 
-- Web server (10.3.3.10): HTTP/HTTPS from anywhere
-- FTP server (10.3.3.20): FTP from HQ only
+- Web server (10.3.3.10): HTTP/HTTPS/DNS from anywhere
+- All other inbound traffic blocked
 
 **Configuration Applied:**
 - R3: Extended ACL 110 on DMZ interface
@@ -1042,20 +1051,6 @@ ping 10.3.3.10
 # Expected: Success
 ```
 
-**Test ICMP to FTP Server:**
-
-```bash
-# From PC1 (Branch)
-ping 10.3.3.20
-
-# Expected: Success (ICMP allowed)
-
-# From PC3 (HQ)
-ping 10.3.3.20
-
-# Expected: Success
-```
-
 **Verify ACL hits on R3:**
 
 ```bash
@@ -1065,11 +1060,11 @@ show access-lists 110
 # Extended IP access list 110
 #     10 permit tcp any host 10.3.3.10 eq www (0 matches)
 #     20 permit tcp any host 10.3.3.10 eq 443 (0 matches)
-#     30 permit tcp 10.2.2.0 0.0.0.255 host 10.3.3.20 eq ftp (0 matches)
+#     30 permit udp any host 10.3.3.10 eq domain (0 matches)
 #     40 permit icmp any any (15 matches)
 ```
 
-**✅ Result:** ICMP works, port-specific rules in place (need router/server for full test).
+**✅ Result:** ICMP works, HTTP/HTTPS/DNS ports accessible (need web server for full test).
 
 ---
 
@@ -1130,7 +1125,7 @@ show ip access-lists BRANCH_TO_HQ_FILTER
 | PC3 | DMZ (10.3.3.10) | Scenario 2 | ✅ PASS | `ping 10.3.3.10` |
 | PC1 | HQ (10.2.2.10) | Scenario 3 | ✅ PASS (ICMP) | `ping 10.2.2.10` |
 | PC1 | DMZ Web (10.3.3.10) | Scenario 5 | ✅ PASS (ICMP) | `ping 10.3.3.10` |
-| PC1 | DMZ FTP (10.3.3.20) | Scenario 5 | ✅ PASS (ICMP) | `ping 10.3.3.20` |
+| PC3 | DMZ Web (10.3.3.10) | Scenario 5 | ✅ PASS | `ping 10.3.3.10` |
 
 ---
 
