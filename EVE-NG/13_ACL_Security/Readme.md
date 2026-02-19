@@ -117,7 +117,7 @@ Security Policies:
 | **R1** | Gi0/1 | 10.10.1.1 | 255.255.255.252 | Link to R2 (HQ) |
 | **R1** | Gi1/1 | - | - | Link to Switch1 |
 | **Switch1** | - | - | - | Branch LAN switch |
-| **PC1** | eth0 | 10.1.1.10 | 255.255.255.0 | Branch client |
+| **PC1** | eth0/ens3 | 10.1.1.10 | 255.255.255.0 | Branch client |
 | **PC2** | eth0 | 10.1.1.20 | 255.255.255.0 | Branch client |
 
 #### Network B - Headquarters (Trusted)
@@ -243,7 +243,7 @@ Security Policies:
 | **R1** | Gi1/1 | **Switch1** | Gi0/0 | Branch router to switch |
 | **R2** | Gi1/1 | **Switch2** | Gi0/0 | HQ router to switch |
 | **R3** | Gi1/1 | **Switch3** | Gi0/0 | DMZ router to switch |
-| **Switch1** | Gi0/1 | **PC1** | eth0 | Branch client 1 |
+| **Switch1** | Gi0/1 | **PC1** | eth0/ens3 | Branch client 1 |
 | **Switch1** | Gi0/2 | **PC2** | eth0 | Branch client 2 |
 | **Switch2** | Gi0/1 | **PC3** | eth0/ens3 | HQ admin client |
 | **Switch3** | Gi0/1 | **Web_Sv** | e1/ens3 | DMZ web server (Internal) |
@@ -450,9 +450,39 @@ write memory
 
 **PC1 Configuration (Branch Client):**
 
+**Option 1: Using VPCS**
 ```bash
 ip 10.1.1.10/24 10.1.1.1
 save
+```
+
+**Option 2: Using Linux (if using Linux VM instead of VPCS)**
+```bash
+# Configure IP address
+sudo ip addr add 10.1.1.10/24 dev ens3
+
+# Add default gateway
+sudo ip route add default via 10.1.1.1 dev ens3
+
+# Verify configuration
+ip addr show ens3
+ip route show
+
+# Make persistent (Ubuntu/Debian)
+sudo nano /etc/netplan/00-installer-config.yaml
+# Add:
+# network:
+#   ethernets:
+#     ens3:
+#       addresses:
+#         - 10.1.1.10/24
+#       routes:
+#         - to: default
+#           via: 10.1.1.1
+#   version: 2
+
+# Apply changes
+sudo netplan apply
 ```
 
 **PC2 Configuration (Branch Client):**
@@ -587,6 +617,30 @@ show ip ospf neighbor
 show ip route
 
 # Should see routes to all networks
+```
+
+**Test from Web_Sv (if using Linux):**
+
+```bash
+# Verify internal interface
+ping -c 3 10.3.3.1
+
+# Verify routing
+ip route show
+
+# Verify Internet connectivity via DHCP (ens4)
+ping -c 3 8.8.8.8
+
+# Test DNS resolution
+ping -c 3 www.google.com
+
+# Check interfaces
+ip addr show ens3
+ip addr show ens4
+
+# Expected:
+# ens3: 10.3.3.10/24 (static)
+# ens4: Dynamic IP from DHCP (e.g., 192.168.x.x or public IP)
 ```
 
 **Expected Results:**
@@ -1797,4 +1851,4 @@ Questions or issues?
 
 ---
 
-**Remember:** Security is not a product, it's 
+**Remember:** Security is not a product, it's a process. Keep practicing! 🔒
