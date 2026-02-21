@@ -197,22 +197,23 @@ Security Policies:
 
 ### Step 4: Add PC and Server Nodes
 
-**What:** Add virtual PCs and web server for testing.
+**What:** Add virtual PCs, Linux VMs (including SLAX), and web server for testing.
 
 **How to:**
-1. Click **Add Node**
-2. Select **Linux** → **VPCS** (for simple testing)
-   - **Alternative**: Use **Linux** → **Linux** (Alpine/Ubuntu) for full Linux features
-3. Add PCs:
-   - **PC1, PC2** (Branch clients) - Use VPCS
-   - **PC3** (HQ admin client) - Use VPCS or Linux
-   - **Web_Sv** (DMZ web server) - Use VPCS or Linux (recommended for running actual web services)
-4. Click **Save**
+1. Click **Add Node** on the lab canvas.
+2. In the node dialog choose **Category: Linux**.
+3. For a simple PC, pick **VPCS**.
+   - For a full Linux VM choose one of the available images (e.g. **Ubuntu**, **Alpine**, **SLAX**). These images must already be uploaded to EVE‑NG as described in **Chapter 2: Add Router & Switch** (see section on uploading images).
+4. Configure RAM/CPU as needed (256 MB+ for Linux VMs).
+5. Add nodes:
+   - **PC1, PC2** (Branch clients) – VPCS is fine.
+   - **PC3** (HQ admin client) – VPCS or full Linux.
+   - **Web_Sv** (DMZ web server) – Linux recommended for running web services; SLAX is a lightweight firewall‑oriented choice.
+6. Click **Save** to close the dialog.
 
 > **💡 Note:** 
-> - **VPCS**: Lightweight, supports basic ICMP only (~1MB RAM)
-> - **Linux VM**: Full features (HTTP server, telnet, SSH), requires more resources (~256MB+ RAM)
-
+> - **VPCS**: Lightweight, supports basic ICMP only (~1 MB RAM).
+> - **Linux VM**: Full features (HTTP server, telnet, SSH), requires more resources (~256 MB+ RAM). You can use Ubuntu, Alpine, SLAX, etc.  See Chapter 2 for steps on obtaining and uploading Linux images into EVE‑NG.
 ---
 
 ### Step 5: Connect All Devices
