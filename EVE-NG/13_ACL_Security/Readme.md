@@ -203,7 +203,7 @@ Security Policies:
 1. Click **Add Node** on the lab canvas.
 2. In the node dialog choose **Category: Linux**.
 3. For a simple PC, pick **VPCS**.
-   - For a full Linux VM choose one of the available images (e.g. **Ubuntu**, **Alpine**, **SLAX**). These images must already be uploaded to EVE‑NG as described in [**Chapter 2: Add Router & Switch**](../02_Add%20Router%20Switch/Readme.md#uploading-images-to-eve-ng) (see section on uploading images).
+   - For a full Linux VM choose one of the available images (e.g. **SLAX 9.11.0**). These images must already be uploaded to EVE‑NG as described in [**Chapter 2: Add Router & Switch**](../02_Add%20Router%20Switch/Readme.md#uploading-images-to-eve-ng) (see section on uploading images).
 4. Configure RAM/CPU as needed (256 MB+ for Linux VMs).
 5. Add nodes:
    - **PC1, PC2** (Branch clients) – VPCS is fine.
