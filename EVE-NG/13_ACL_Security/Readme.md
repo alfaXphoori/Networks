@@ -523,11 +523,13 @@ save
 
 **Option 2: Using Linux (if using Linux VM for Web Server)**
 ```bash
-# Configure IP address on internal interface (ens3)
-sudo ip addr add 10.3.3.10/24 dev ens3
+# Obtain an IP address via DHCP on internal interface (ens3)
+# use dhclient or dhcpcd depending on distribution
+sudo dhclient ens3
 
-# Add default gateway via internal network
-sudo ip route add default via 10.3.3.1 dev ens3
+# Verify configuration
+ip addr show ens3
+ip route show
 
 # Verify configuration
 ip addr show ens3
