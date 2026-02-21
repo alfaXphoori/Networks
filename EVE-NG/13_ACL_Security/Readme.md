@@ -213,7 +213,7 @@ Security Policies:
 
 > **💡 Note:** 
 > - **VPCS**: Lightweight, supports basic ICMP only (~1 MB RAM).
-> - **Linux VM**: Full features (HTTP server, telnet, SSH), requires more resources (~256 MB+ RAM). You can use Ubuntu, Alpine, SLAX, etc.  See Chapter 2 for steps on obtaining and uploading Linux images into EVE‑NG.
+> - **Linux VM**: Full features (HTTP server, telnet, SSH), requires more resources (~256 MB+ RAM). You can use Ubuntu, Alpine, SLAX, etc.  See [Chapter 2: Add Router & Switch](../02_Add Router Switch/Readme.md) for steps on obtaining and uploading Linux images into EVE‑NG.
 ---
 
 ### Step 5: Connect All Devices
