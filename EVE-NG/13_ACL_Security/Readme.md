@@ -635,6 +635,9 @@ ip addr show ens3
 
 ### Scenario 1: Block Specific Host from Branch
 
+![Scenario 1: Block PC1 from HQ](imgs/scenario_1.png)
+<sub>Figure 1: Example result when PC1 (10.1.1.10) is blocked from accessing HQ (10.2.2.10) by ACL policy.</sub>
+
 **Requirement:** Block PC1 (10.1.1.10) from accessing HQ network, but allow PC2.
 
 **R2 Configuration:**
@@ -688,6 +691,9 @@ ping 10.2.2.10
 
 ### Scenario 2: Allow Only Specific Network
 
+![Scenario 2: Only HQ to DMZ](imgs/scenario_2.png)
+<sub>Figure 2: HQ (10.2.2.10) can ping the DMZ, but Branch is blocked by ACL.</sub>
+
 **Requirement:** Allow only HQ network (10.2.2.0/24) to access DMZ servers.
 
 **R3 Configuration:**
@@ -715,6 +721,11 @@ write memory
 > **Purpose:** Configure granular filtering with protocol, port, source, and destination.
 
 ### Scenario 3: Allow Only HQ to Access Web Server
+
+![Scenario 3: Web Access - Command](imgs/scenario_3_cmd.png)
+<sub>Figure 3: HQ uses wget to test HTTP access to Web_Sv (10.3.3.10) successfully.</sub>
+![Scenario 3: Web Access - Web](imgs/scenario_3_web.png)
+<sub>Figure 4: HQ opens a web browser and accesses the Apache2 default page on Web_Sv.</sub>
 
 **Requirement:** Only HQ network (10.2.2.0/24) can access Web_Sv (10.3.3.10), block all other networks from accessing DMZ web server.
 
@@ -748,6 +759,15 @@ write memory
 ---
 
 ### Scenario 4: Restrict Telnet Access
+
+![Scenario 4-1: Telnet Allowed](imgs/scenario_4_1.png)
+<sub>Figure 5: HQ (10.2.2.10) successfully telnets into R1.</sub>
+![Scenario 4-2: Telnet Denied](imgs/scenario_4_2.png)
+<sub>Figure 6: Branch (10.1.1.10) fails to telnet to R1/R2/R3 (No route/Connection refused).</sub>
+![Scenario 4-3: Telnet Allowed - Config](imgs/scenario_4_3.png)
+<sub>Figure 7: HQ successfully telnets into R2/R3 (password prompt shown).</sub>
+![Scenario 4-4: Telnet Denied - Config](imgs/scenario_4_4.png)
+<sub>Figure 8: Branch fails to telnet to R1/R2/R3 (No route to host).</sub>
 
 **Requirement:** Only HQ admin PC (10.2.2.10) can telnet to any router.
 
