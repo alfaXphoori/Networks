@@ -753,6 +753,20 @@ write memory
 
 **Requirement:** Only HQ admin PC (10.2.2.10) can telnet to any router.
 
+**Setup Step 4: Enable Telnet on Routers (Prerequisite)**
+
+```bash
+# On each router, enable telnet first:
+enable
+configure terminal
+line vty 0 4
+ password cisco
+ login
+ transport input telnet
+ access-class 101 in
+ exit
+```
+
 **R1, R2, R3 Configuration (apply on all routers):**
 
 ```bash
@@ -775,115 +789,6 @@ line vty 0 4
  exit
 
 write memory
-```
-
----
-
-### Scenario 5: DMZ Server Access Control
-
-**Requirement:** 
-- Web server (10.3.3.10) accessible on HTTP (80) and HTTPS (443) from anywhere
-- Web server accessible on DNS (53) from anywhere
-- Block all other inbound traffic to DMZ
-
-**R3 Configuration:**
-
-```bash
-enable
-configure terminal
-
-# Extended ACL 110 for inbound DMZ traffic
-# Allow HTTP/HTTPS to web server from anywhere
-access-list 110 permit tcp any host 10.3.3.10 eq 80
-access-list 110 permit tcp any host 10.3.3.10 eq 443
-
-# Allow DNS to web server from anywhere
-access-list 110 permit udp any host 10.3.3.10 eq 53
-
-# Allow ICMP for troubleshooting
-access-list 110 permit icmp any any
-
-# Deny all other traffic (implicit)
-
-# Apply ACL to DMZ interface (inbound to DMZ)
-interface GigabitEthernet0/0
- ip access-group 110 in
- exit
-
-write memory
-```
-
----
-
-## 📝 Named ACL Configuration
-
-> **Purpose:** Use descriptive names for easier ACL management and modification.
-
-### Scenario 6: Named ACL for Branch Security
-
-**Requirement:** Replace numbered ACL with named ACL for better readability.
-
-**R1 Configuration:**
-
-```bash
-enable
-configure terminal
-
-# Remove old numbered ACL if exists
-no access-list 100
-
-# Create named extended ACL
-ip access-list extended BRANCH_TO_HQ_FILTER
- remark *** Allow web traffic only ***
- permit tcp 10.1.1.0 0.0.0.255 10.2.2.0 0.0.0.255 eq 80
- permit tcp 10.1.1.0 0.0.0.255 10.2.2.0 0.0.0.255 eq 443
- remark *** Allow ICMP for diagnostics ***
- permit icmp any any
- remark *** Deny all other traffic ***
- deny ip any any
- exit
-
-# Apply named ACL to interface
-interface GigabitEthernet0/1
- ip access-group BRANCH_TO_HQ_FILTER out
- exit
-
-write memory
-```
-
----
-
-### Named ACL Advantages
-
-✅ **Descriptive names** - `BRANCH_TO_HQ_FILTER` vs `100`
-✅ **Add/remove specific lines** - Can edit without recreating entire ACL
-✅ **Documentation** - Use `remark` statements
-✅ **Sequence numbers** - Reorder rules easily
-
----
-
-### Modifying Named ACLs
-
-**Add a new rule:**
-
-```bash
-ip access-list extended BRANCH_TO_HQ_FILTER
- 15 permit tcp 10.1.1.0 0.0.0.255 10.2.2.0 0.0.0.255 eq 22
- exit
-```
-
-**Remove a specific rule:**
-
-```bash
-ip access-list extended BRANCH_TO_HQ_FILTER
- no 15
- exit
-```
-
-**View with sequence numbers:**
-
-```bash
-show ip access-lists BRANCH_TO_HQ_FILTER
 ```
 
 ---
@@ -1142,10 +1047,7 @@ telnet 10.3.3.10 80 /source-interface Gi0/0
 
 **Scenario:** Only PC3 (10.2.2.10) can telnet to routers.
 
-**Configuration Applied:**
-- All routers: ACL 101 on VTY lines
-
-**Prerequisites:**
+**Setup Step 4: Enable Telnet on Routers (Prerequisite)**
 
 ```bash
 # On each router, enable telnet first:
@@ -1200,16 +1102,6 @@ show access-lists 101
 
 ---
 
-### Step 5: Testing Scenario 5 (DMZ Server Protection)
-
-**Scenario:** 
-- Web server (10.3.3.10): HTTP/HTTPS/DNS from anywhere
-- All other inbound traffic blocked
-
-**Configuration Applied:**
-- R3: Extended ACL 110 on DMZ interface
-
-**Test ICMP to Web Server (Should SUCCEED - ICMP permitted):**
 
 ```bash
 # From PC1 (Branch)
