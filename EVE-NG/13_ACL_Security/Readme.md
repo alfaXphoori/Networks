@@ -18,11 +18,9 @@
 6. [Basic Router & PC Configuration](#basic-router--pc-configuration)
 7. [Standard ACL Configuration](#standard-acl-configuration)
 8. [Extended ACL Configuration](#extended-acl-configuration)
-9. [Named ACL Configuration](#named-acl-configuration)
-10. [ACL Placement & Best Practices](#acl-placement--best-practices)
-11. [Testing & Verification](#testing--verification)
-12. [Troubleshooting](#troubleshooting)
-13. [Summary & Next Steps](#summary--next-steps)
+9. [Testing & Verification](#testing--verification)
+10. [Troubleshooting](#troubleshooting)
+11. [Summary & Next Steps](#summary--next-steps)
 
 ---
 
