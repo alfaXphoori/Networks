@@ -734,14 +734,14 @@ access-list 100 permit tcp 10.2.2.0 0.0.0.255 host 10.3.3.10 eq 80
 access-list 100 permit tcp 10.2.2.0 0.0.0.255 host 10.3.3.10 eq 443
 
 # Permit ICMP for troubleshooting
-access-list 100 permit icmp any host 10.3.3.10
+access-list 100 deny icmp any host 10.3.3.10
 
 # Deny everything else (implicit, but can be explicit)
 access-list 100 deny ip any any
 
 # Apply ACL inbound on DMZ interface
 interface GigabitEthernet0/0
- ip access-group 100 in
+ ip access-group 100 out
  exit
 
 write memory
