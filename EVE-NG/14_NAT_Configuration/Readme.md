@@ -174,55 +174,42 @@ Result: 3 different PCs share 1 public IP using different ports!
 
 ## 📊 Lab Topology
 
-> **Purpose:** Multi-zone network with different NAT types for various scenarios.
+> **Purpose:** Updated topology with Ftp_SV and correct device/interface names.
 
 ![NAT Lab Topology](imgs/diagram.png)
 
-```
-     BRANCH OFFICE              EDGE ROUTER               INTERNET/ISP
-     (Private: 192.168.1.0/24)  (NAT Gateway)             (Public Network)
+**Figure: NAT Lab Topology (with Ftp_SV, Web_SV, PC1, PC2, and correct interface mapping)**
 
-         LAN                       R1                        ISP
-    ┌─────────┐              ┌─────────┐              ┌─────────┐
-    │ Switch  │              │ Gi0/1   │──────────────│ Gi0/0   │
-    └────┬────┘              │         │ 203.0.113.0/30│   R2    │
-         │                   │         │              │  ISP    │
-    ┌────┴────┬──────┬───────┐ │ Gi0/0   │              └────┬────┘
-    │         │      │       │ └────┬────┘                   │
-   PC1       PC2  Web_Sv  Mail_Sv  │                    ┌────┴────┐
- (.10/24) (.20/24)(.100/24)(.200/24)│                    │ Internet│
-                                     │                    │ 8.8.8.8 │
-                                192.168.1.0/24            └─────────┘
+Devices:
+- **R1**: Edge router (Gi0/0 to Internet, Gi0/1 to R2)
+- **R2**: ISP/Internet router (Gi0/0 to R1, Gi0/3 to SW)
+- **SW**: Switch (Gi1/3 uplink, Gi0/0–Gi1/1 to end devices)
+- **PC1, PC2**: Internal clients (e0)
+- **Web_SV, Ftp_SV**: Internal servers (e0)
 
-NAT Scenarios:
-├─ PC1, PC2: PAT (share one public IP)
-├─ Web_Sv: Static NAT (permanent public IP 203.0.113.5)
-├─ Mail_Sv: Static NAT (permanent public IP 203.0.113.6)
-└─ Port Forwarding: External access to Web_Sv & Mail_Sv
-
-Public IPs Available: 203.0.113.1 - 203.0.113.10
-```
+Refer to the diagram above for interface and device connections.
 
 ### Topology Details
+
 
 #### Internal Network (Private)
 
 | Device | Interface | IP Address | Subnet Mask | Role |
 |--------|-----------|-----------|-------------|------|
-| **R1** | Gi0/0 | 192.168.1.1 | 255.255.255.0 | Internal gateway (Inside Interface) |
+| **R1** | Gi0/1 | 10.10.10.1 | 255.255.255.0 | Internal gateway (LAN to R2) |
+| **R2** | Gi0/1 | 10.10.10.2 | 255.255.255.0 | Internal router (LAN from R1) |
 | **Switch** | - | - | - | Internal LAN switch |
-| **PC1** | eth0/ens3 | 192.168.1.10 | 255.255.255.0 | Internal client (uses PAT) |
-| **PC2** | eth0 | 192.168.1.20 | 255.255.255.0 | Internal client (uses PAT) |
-| **Web_Sv** | eth0/ens3 | 192.168.1.100 | 255.255.255.0 | Internal web server (uses Static NAT) |
-| **Mail_Sv** | eth0/ens3 | 192.168.1.200 | 255.255.255.0 | Internal mail server (uses Static NAT) |
+| **PC1** | eth0/ens3 | 10.10.10.10 | 255.255.255.0 | Internal client (uses PAT) |
+| **PC2** | eth0 | 10.10.10.20 | 255.255.255.0 | Internal client (uses PAT) |
+| **Web_Sv** | eth0/ens3 | 10.10.10.100 | 255.255.255.0 | Internal web server (uses Static NAT) |
+| **Mail_Sv** | eth0/ens3 | 10.10.10.200 | 255.255.255.0 | Internal mail server (uses Static NAT) |
 
 #### WAN/Internet Connection (Public)
 
 | Device | Interface | IP Address | Subnet Mask | Role |
 |--------|-----------|-----------|-------------|------|
-| **R1** | Gi0/1 | 203.0.113.1 | 255.255.255.252 | WAN connection (Outside Interface) |
-| **R2 (ISP)** | Gi0/0 | 203.0.113.2 | 255.255.255.252 | ISP edge router |
-| **Internet** | - | 8.8.8.8 | - | Simulated Internet host |
+| **R1** | Gi0/0 | DHCP (from ISP) | (from ISP) | WAN connection (Outside Interface) |
+| **ISP/Internet** | - | - | - | Simulated Internet host |
 
 #### NAT Pool & Mappings
 
@@ -329,6 +316,63 @@ Public IPs Available: 203.0.113.1 - 203.0.113.10
 
 ## ⚙️ Basic Router & PC Configuration
 
+### Step 3: Switch (SW) Configuration
+
+**What:** Configure VLANs, trunk uplink to R2, and access ports for each VLAN.
+
+**Switch Configuration (IOSvL2):**
+
+```bash
+enable
+configure terminal
+
+hostname SW
+
+vlan 20
+ name Other
+vlan 30
+ name Member
+vlan 101
+ name WebServer
+vlan 201
+ name FtpServer
+
+
+! ตั้ง trunk ไป R2
+interface GigabitEthernet1/3
+ description Trunk to R2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ no shutdown
+
+! Access port สำหรับแต่ละ VLAN
+interface GigabitEthernet0/0
+ description Access VLAN 20
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+
+interface GigabitEthernet0/1
+ description Access VLAN 30
+ switchport mode access
+ switchport access vlan 30
+ no shutdown
+
+interface GigabitEthernet1/0
+ description Access VLAN 101
+ switchport mode access
+ switchport access vlan 101
+ no shutdown
+
+interface GigabitEthernet1/1
+ description Access VLAN 201
+ switchport mode access
+ switchport access vlan 201
+ no shutdown
+
+write memory
+```
+
 > **Purpose:** Configure IP addresses and routing before applying NAT.
 
 ### Step 1: R1 (Edge Router) Configuration
@@ -343,56 +387,559 @@ configure terminal
 
 hostname R1
 
-# Configure INSIDE interface (Internal LAN)
+! ตั้งค่า interface ฝั่ง WAN (รับ DHCP จาก ISP)
 interface GigabitEthernet0/0
- description Internal LAN
- ip address 192.168.1.1 255.255.255.0
+ description WAN to ISP (DHCP)
+ ip address dhcp
+ ip nat outside
  no shutdown
  exit
 
-# Configure OUTSIDE interface (WAN to ISP)
+! ตั้งค่า interface ฝั่ง LAN (ไป R2)
 interface GigabitEthernet0/1
- description WAN to ISP
- ip address 203.0.113.1 255.255.255.252
- no shutdown
- exit
+ description LAN to R2
+ ip address 10.10.10.1 255.255.255.0
+ ip address 20.0.0.1 255.255.255.0
 
-# Configure default route to ISP
-ip route 0.0.0.0 0.0.0.0 203.0.113.2
 
-write memory
-```
+## R1 Configuration (Edge Router & NAT)
 
----
 
-### Step 2: R2 (ISP Router) Configuration
+R1 acts as the Edge Router connecting the internal network to the Internet (ISP) and serves as the NAT Gateway (PAT) so that internal IPs can access the Internet.
 
-**What:** Configure ISP router to simulate Internet connectivity.
+### Configuration Commands
 
-**R2 Configuration:**
+Copy and paste the following commands into the R1 console:
 
 ```bash
 enable
 configure terminal
+hostname R1
 
-hostname R2_ISP
-
-# Configure WAN interface (connection to R1)
+! 1. Configure Internet-facing Interface (WAN)
 interface GigabitEthernet0/0
- description WAN to Customer R1
- ip address 203.0.113.2 255.255.255.252
+ description Connection to ISP
+ ip address dhcp
+ ip nat outside
  no shutdown
- exit
+exit
 
-# Configure loopback to simulate Internet host (8.8.8.8)
-interface Loopback0
- description Simulated Internet Host
- ip address 8.8.8.8 255.255.255.255
+! 2. Configure Internal-facing Interface (LAN)
+interface GigabitEthernet0/1
+ description Connection to R2
+ ip address 10.10.10.1 255.255.255.0
+ ip nat inside
  no shutdown
- exit
+exit
 
-# Static route to NAT pool (so R2 knows how to reach translated IPs)
-ip route 203.0.113.0 255.255.255.240 203.0.113.1
+! 3. Configure NAT Overload (PAT)
+access-list 1 permit any
+ip nat inside source list 1 interface GigabitEthernet0/0 overload
+
+! 4. Configure OSPF and Default Route
+router ospf 1
+ network 10.10.10.0 0.0.0.255 area 0
+ default-information originate
+exit
+
+end
+write memory
+```
+
+![R1 Configuration Example](imgs/R1_config.png)
+*Figure: R1 configuration in the EVE-NG console*
+
+### Additional Recommendations After Configuration
+
+- Check WAN IP: `show ip interface brief` (verify Gi0/0 received IP from DHCP)
+- Check Routing Table: `show ip route`
+- Check NAT status: `show ip nat translations` (should see entries when traffic passes)
+
+---
+
+
+## R2 Configuration (Core Router)
+
+
+R2 acts as the Core Router (Transit) between R1 (Edge Router) and SW (Layer 3 Switch), using OSPF for internal routing.
+
+### Configuration Commands
+
+Copy and paste the following commands into the R2 console:
+
+```bash
+enable
+configure terminal
+hostname R2
+
+! 1. Configure Interface to R1
+interface GigabitEthernet0/0
+ description Connection to R1
+ ip address 10.10.10.2 255.255.255.0
+ no shutdown
+exit
+
+! 2. Configure Interface to Switch (SW)
+interface GigabitEthernet0/1
+ description Connection to SW
+ ip address 5.0.0.1 255.255.255.0
+ no shutdown
+exit
+
+! 3. Configure OSPF Routing
+! Advertise directly connected networks so other routers learn the routes
+router ospf 1
+ network 10.10.10.0 0.0.0.255 area 0
+ network 5.0.0.0 0.0.0.255 area 0
+exit
+
+end
+write memory
+```
+
+![R2 Configuration Example](imgs/R2_config.png)
+*Figure: R2 configuration in the EVE-NG console*
+
+### Additional Recommendations After Configuration
+
+- Check OSPF Neighbors: `show ip ospf neighbor` (should see R1 in FULL state)
+- Check Routing Table: `show ip route` (should see Default Route O*E2 from R1)
+- Test connectivity: `ping 10.10.10.1` (R1's IP)
+
+---
+
+
+## SW Configuration (Layer 3 Switch)
+
+
+SW acts as the Layer 3 Switch, providing gateway IPs for all endpoints (PC1, PC2, Web_SV, Ftp_SV) and connecting OSPF routing back to R2 for Internet access.
+
+### Configuration Commands
+
+Copy and paste the following commands into the SW console:
+
+```bash
+enable
+configure terminal
+hostname SW
+
+! Enable routing on the switch (critical)
+ip routing
+
+! 1. Configure Uplink Interface to R2
+interface GigabitEthernet1/3
+ description Connection to R2
+ no switchport
+ ip address 5.0.0.2 255.255.255.0
+ no shutdown
+exit
+
+! 2. Configure Interface for PC1 (Gateway for 50.0.0.0/24)
+interface GigabitEthernet0/0
+ description Gateway for PC1
+ no switchport
+ ip address 50.0.0.1 255.255.255.0
+ no shutdown
+exit
+
+! 3. Configure Interface for PC2 (Gateway for 60.0.0.0/24)
+interface GigabitEthernet0/1
+ description Gateway for PC2
+ no switchport
+ ip address 60.0.0.1 255.255.255.0
+ no shutdown
+exit
+
+! 4. Configure Interface for Web_SV (Gateway for 100.0.0.8/30)
+! Subnet /30 has two usable IPs: .9 (gateway), .10 (host)
+interface GigabitEthernet1/0
+ description Gateway for Web_SV
+ no switchport
+ ip address 100.0.0.9 255.255.255.252
+ no shutdown
+exit
+
+! 5. Configure Interface for Ftp_SV (Gateway for 200.0.0.8/30)
+interface GigabitEthernet1/1
+ description Gateway for Ftp_SV
+ no switchport
+ ip address 200.0.0.9 255.255.255.252
+ no shutdown
+exit
+
+! 6. Configure OSPF Routing
+! Advertise all directly connected networks so R1 and R2 learn routes to PCs/Servers
+router ospf 1
+ network 5.0.0.0 0.0.0.255 area 0
+ network 50.0.0.0 0.0.0.255 area 0
+ network 60.0.0.0 0.0.0.255 area 0
+ network 100.0.0.8 0.0.0.3 area 0
+ network 200.0.0.8 0.0.0.3 area 0
+exit
+
+end
+write memory
+```
+
+![SW Configuration Example](imgs/SW_config.png)
+*Figure: Layer 3 Switch configuration in the EVE-NG console*
+
+### Additional Recommendations After Configuration
+
+- Check port and IP status: `show ip interface brief` (all ports should have correct IP and be up/up)
+- Check OSPF Neighbors: `show ip ospf neighbor` (should see R2 IP 5.0.0.1 in FULL state)
+- Check Routing Table: `show ip route` (should see O*E2 or Default Route via 5.0.0.1 from R1)
+
+---
+
+
+## PC/Server (VPC/Linux) Configuration
+
+
+**PC1:** ip 50.0.0.10/24 50.0.0.1
+
+**PC2:** ip 60.0.0.10/24 60.0.0.1
+
+**Web_SV:** ip 100.0.0.10/30 100.0.0.9
+
+**Ftp_SV:** ip 200.0.0.10/30 200.0.0.9
+
+### PC1 and PC2 (Linux Slax) Configuration
+
+For Linux Slax nodes in EVE-NG, the default interface is usually eth0. Open a terminal and use the following commands to set IP, default gateway, and DNS server:
+
+#### 🖥️ PC1 Configuration
+
+Network Info: IP 50.0.0.10/24, Gateway 50.0.0.1
+
+Type these commands one by one in PC1's terminal:
+
+# 1. Set IP address and subnet mask on eth0 and bring it up
+ifconfig eth0 50.0.0.10 netmask 255.255.255.0 up
+
+# Or with ip command (modern Linux):
+# ip addr add 50.0.0.10/24 dev eth0
+# ip link set eth0 up
+
+# 2. Set default gateway to the switch (SW)
+route add default gw 50.0.0.1
+
+# 3. Set DNS server (for domain name resolution)
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+
+![PC1 Configuration Example](imgs/PC1_Config.png)
+*Figure: PC1 network configuration*
+
+
+#### 🖥️ PC2 Configuration
+
+Network Info: IP 60.0.0.10/24, Gateway 60.0.0.1
+
+Type these commands one by one in PC2's terminal:
+
+# 1. Set IP address and subnet mask on eth0 and bring it up
+ifconfig eth0 60.0.0.10 netmask 255.255.255.0 up
+
+# Or with ip command (modern Linux):
+# ip addr add 60.0.0.10/24 dev eth0
+# ip link set eth0 up
+
+# 2. Set default gateway to the switch (SW)
+route add default gw 60.0.0.1
+
+# 3. Set DNS server
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+
+![PC2 Configuration Example](imgs/PC2_Config.png)
+*Figure: PC2 network configuration*
+
+
+
+![PC1 Test Example](imgs/PC1_Test_All.png)
+*Figure: PC1 connectivity and verification test*
+
+![PC2 Test Example](imgs/PC2_Test_All.png)
+*Figure: PC2 connectivity and verification test*
+
+After configuration, use these commands to verify correctness:
+
+Check IP address:
+ifconfig eth0 or ip a
+
+Check routing table (gateway):
+route -n or ip route
+
+Test ping to gateway (switch):
+ping -c 4 50.0.0.1 (for PC1)
+ping -c 4 60.0.0.1 (for PC2)
+
+Test ping to Internet:
+ping -c 4 8.8.8.8
+ping -c 4 google.com (if this works, DNS is working)
+
+---
+
+
+## Web_SV (Linux) Configuration
+
+
+Web_SV acts as the internal web server, connected to the switch (SW) in a /30 subnet as follows:
+
+IP Address: 100.0.0.10
+
+Subnet Mask: 255.255.255.252 (/30)
+
+Gateway: 100.0.0.9 (SW IP)
+
+### 1. Network (IP & Gateway) Configuration
+
+Open Web_SV's terminal and type these commands:
+
+# 1. Set IP address and subnet mask on eth0
+ifconfig eth0 100.0.0.10 netmask 255.255.255.252 up
+
+# 2. Set default gateway to the switch (SW)
+route add default gw 100.0.0.9
+
+# 3. Set DNS server
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+
+![Web Server Example](imgs/Web_Server.png)
+*Figure: Web_SV configuration and HTTP server test*
+
+
+Test connectivity: Try `ping 100.0.0.9` (should reach SW) and `ping 8.8.8.8` (should reach Internet)
+
+### 2. Simulate Web Server (HTTP)
+
+In EVE-NG, you can run a web server on a Linux node in several ways. Choose one of the following:
+
+**Method 1: Quick Python Web Server (recommended for lab)**
+
+If Python is installed, run a quick web server:
+
+# Create a temporary index.html
+echo "<h1>Welcome to Web_SV (100.0.0.10)</h1>" > index.html
+
+# Run web server on port 80 (keep terminal open)
+python3 -m http.server 80
+# Or for Python 2: python -m SimpleHTTPServer 80
+
+
+**Method 2: Install Apache Web Server (standard)**
+
+If you want a real web server and Web_SV can access the Internet:
+
+# Update package list and install Apache2
+apt-get update
+apt-get install -y apache2
+
+# Create a test web page
+echo "<h1>Welcome to Web_SV on EVE-NG</h1>" > /var/www/html/index.html
+
+# Start Apache2
+/etc/init.d/apache2 start
+# Or: systemctl start apache2
+
+
+### 3. Test from Client (PC1 / PC2)
+
+After running the web server, go to PC1 (50.0.0.10) or PC2 (60.0.0.10) and use curl or wget to fetch the page:
+
+# Download web page from Web_SV
+curl http://100.0.0.10
+
+# Or with wget
+wget -qO- http://100.0.0.10
+
+
+If you see the <h1>Welcome to...</h1> message, routing between 50.0.0.0/24 and 100.0.0.8/30 via the switch and web server is working!
+
+---
+
+
+## Ftp_SV (Linux) Configuration
+
+
+Ftp_SV acts as the internal FTP server, connected to the switch (SW) in a /30 subnet as follows:
+
+IP Address: 200.0.0.10
+
+Subnet Mask: 255.255.255.252 (/30)
+
+Gateway: 200.0.0.9 (SW IP)
+
+### 1. Network (IP & Gateway) Configuration
+
+Open Ftp_SV's terminal and type these commands:
+
+# 1. Set IP address and subnet mask on eth0
+ifconfig eth0 200.0.0.10 netmask 255.255.255.252 up
+
+# 2. Set default gateway to the switch (SW)
+route add default gw 200.0.0.9
+
+# 3. Set DNS server (for package installation)
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+
+![FTP Server Example](imgs/Ftp_Server.png)
+*Figure: Ftp_SV configuration and FTP server test*
+
+
+Test connectivity: Try `ping 200.0.0.9` (should reach SW) and `ping 8.8.8.8` (should reach Internet)
+
+### 2. Install and Start FTP Server (vsftpd)
+
+For Linux (Debian/Ubuntu/Slax with apt), install vsftpd to quickly simulate an FTP server:
+
+# 1. Update package list and install vsftpd
+apt-get update
+apt-get install -y vsftpd
+
+# 2. Create a user for FTP login
+useradd -m ftpuser
+passwd ftpuser 
+
+# 3. Create a test file in ftpuser's home
+echo "This is a test file from FTP Server." > /home/ftpuser/testfile.txt
+
+# 4. Start FTP service
+/etc/init.d/vsftpd start
+# Or: service vsftpd start
+
+
+### 3. Test from Client (PC1 / PC2)
+
+After running the FTP server, go to PC1 (50.0.0.10) or PC2 (60.0.0.10) and test FTP connection and file download:
+
+# Connect to FTP server
+ftp 200.0.0.10
+
+
+When prompted:
+
+Name: type ftpuser
+Password: type the password you set above
+
+Once you see "Login successful", you are in.
+
+Basic FTP commands:
+
+ls : list files (should see testfile.txt)
+get testfile.txt : download file to PC
+put <filename> : upload file to server
+quit or exit : leave FTP
+
+If you can download the file to PC1 or PC2, routing from PC -> Switch -> FTP Server is working!
+
+---
+
+
+## NAT/PAT Verification & Testing on R1
+
+
+In EVE-NG, after configuring NAT (PAT/Overload for outbound Internet, Static NAT/Port Forwarding for inbound Web/FTP), use these commands on R1 to verify correct operation:
+
+### 1. Show NAT Translations Table (most important)
+
+This shows which inside local IPs are being translated to which inside global IPs and ports:
+
+show ip nat translations
+
+![PAT Verification Example](imgs/R1_pat.png)
+*Figure: PAT/NAT translation table on R1*
+
+
+Example of correct output:
+
+Pro Inside global         Inside local          Outside local         Outside global
+tcp 192.168.80.136:80     100.0.0.10:80         ---                   ---
+tcp 192.168.80.136:21     200.0.0.10:21         ---                   ---
+ no shutdown
+
+
+Explanation:
+
+First two lines are Static NAT (Port Forwarding) for Web (80) and FTP (21)
+
+Last line is PAT (Overload) from PC1 (50.0.0.10) pinging 8.8.8.8, translated to R1's WAN IP (192.168.80.136)
+
+### 2. Show NAT Statistics
+
+This shows overall NAT operation, inside/outside interfaces, and hit/miss counts:
+
+show ip nat statistics
+
+
+Key points to check:
+
+- Outside interfaces: should be GigabitEthernet0/0
+- Inside interfaces: should be GigabitEthernet0/1
+- Hits: should increase as traffic passes (means NAT is working)
+- Misses: should be 0 or very low (high means traffic is not matching any rule)
+
+### 3. Clear NAT Translations Table
+
+If you change NAT config or want to clear old sessions (e.g., stuck Telnet/FTP), use:
+
+clear ip nat translation *
+
+
+(Note: This does not remove Static NAT config, only active sessions)
+
+### 4. Debug NAT in Real-time
+
+Warning: Debug will print lots of messages to the console. Use only for step-by-step testing.
+
+! Enable NAT debug
+debug ip nat
+
+! Test: have PC1 ping 8.8.8.8 or access web from outside
+! Console will show messages like:
+! NAT*: s=50.0.0.10->192.168.80.136, d=8.8.8.8 [123]
+
+! Disable debug (important after testing)
+undebug all
+! Or: u all
+
+
+
+![Lab Topology Diagram](imgs/diagram.png)
+*Figure: Overall lab topology for NAT/PAT testing*
+
+To ensure NAT works both ways, follow these steps:
+
+**Outbound Test (PAT/Overload):**
+
+On PC1 or PC2, run: ping 8.8.8.8
+
+On R1, run: show ip nat translations (should see icmp protocol with translated IP)
+
+**Inbound Test (Static NAT/Port Forwarding):**
+
+On your host PC (Windows), run: telnet 192.168.80.136 80 (or use a browser)
+
+On R1, run: show ip nat translations (should see a line showing port 80 mapped to 100.0.0.10)
+
+Repeat for port 21 (FTP)
+
+interface GigabitEthernet0/3.30
+ encapsulation dot1Q 30
+ ip address 30.0.0.1 255.255.255.0
+ no shutdown
+
+interface GigabitEthernet0/3.101
+ encapsulation dot1Q 101
+ ip address 101.0.0.1 255.255.255.252
+ no shutdown
+
+interface GigabitEthernet0/3.201
+ encapsulation dot1Q 201
+ ip address 201.0.0.1 255.255.255.252
+ no shutdown
+
+! ตั้งค่า default route ให้ออกเน็ตผ่าน R1
+ip route 0.0.0.0 0.0.0.0 10.10.10.1
 
 write memory
 ```
@@ -407,14 +954,15 @@ write memory
 
 **Option 1: Using VPCS**
 ```bash
-ip 192.168.1.10/24 192.168.1.1
+ip 20.0.0.10/24 20.0.0.1
 save
 ```
 
 **Option 2: Using Linux**
 ```bash
-sudo ip addr add 192.168.1.10/24 dev ens3
-sudo ip route add default via 192.168.1.1 dev ens3
+sudo ip addr add 20.0.0.10/24 dev ens3
+# หรือใช้คำสั่งนี้ (legacy):
+sudo route add default gw 20.0.0.1 ens3
 
 # Make persistent (Ubuntu/Debian)
 sudo nano /etc/netplan/00-installer-config.yaml
@@ -423,10 +971,10 @@ sudo nano /etc/netplan/00-installer-config.yaml
 #   ethernets:
 #     ens3:
 #       addresses:
-#         - 192.168.1.10/24
+#         - 20.0.0.10/24
 #       routes:
 #         - to: default
-#           via: 192.168.1.1
+#           via: 20.0.0.1
 #   version: 2
 
 sudo netplan apply
@@ -974,51 +1522,38 @@ telnet 203.0.113.1 25
 
 > **Purpose:** Verify NAT is working and troubleshoot common issues.
 
-### Verification Commands
+### Verification Commands (R1)
 
-**1. Show all NAT translations:**
+**1. ตรวจสอบ IP ที่ได้รับจาก DHCP (WAN):**
+```bash
+show ip interface brief
+show dhcp lease
+```
 
+**2. ตรวจสอบ routing table (default route จาก DHCP):**
+```bash
+show ip route
+```
+
+**3. ตรวจสอบ NAT translations (PAT):**
 ```bash
 show ip nat translations
-
-# Shows:
-# - Static NAT entries
-# - Dynamic NAT entries
-# - PAT entries with ports
-# - Port forwarding entries
-```
-
-**2. Show NAT statistics:**
-
-```bash
 show ip nat statistics
-
-# Shows:
-# - Total active translations
-# - Hits/misses
-# - Inside/outside interfaces
-# - Pool statistics (if using pools)
 ```
 
-**3. Show detailed translation:**
-
+**4. ตรวจสอบ access-list ที่ใช้กับ NAT:**
 ```bash
-show ip nat translations verbose
-
-# Shows additional info:
-# - Creation time
-# - Last use time
-# - Flags (extended, static, etc.)
+show access-lists
 ```
 
-**4. Clear NAT translations (for testing):**
-
+**5. ตรวจสอบสถานะ interface:**
 ```bash
-# Clear dynamic NAT translations (not static)
-clear ip nat translation *
+show interfaces status
+```
 
-# Clear specific translation
-clear ip nat translation inside 192.168.1.10 outside 8.8.8.8
+**6. ตรวจสอบ log ล่าสุด (ดู DHCP, NAT, interface):**
+```bash
+show logging | include DHCP|NAT|Gigabit
 ```
 
 ---
