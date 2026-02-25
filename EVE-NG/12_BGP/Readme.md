@@ -188,7 +188,7 @@ ip address 10.10.1.1 255.255.255.252
 no shutdown
 exit
 
-interface gigabitEthernet 0/2
+interface gigabitEthernet 0/1
 ip address 5.0.17.1 255.255.255.252
 no shutdown
 exit
@@ -200,12 +200,51 @@ exit
 
 router eigrp 100
 network 10.10.1.0 0.0.0.3
+network 5.0.14.0 0.0.0.3
 no auto-summary
 exit
 end
 ```
 
-**Configure on R2 and R3:** (Similar with additional network statements)
+**Configure on R2:**
+```bash
+enable
+configure terminal
+hostname R2
+interface gigabitEthernet 0/0
+ip address 10.10.1.2 255.255.255.252
+no shutdown
+exit
+
+interface gigabitEthernet 0/1
+ip address 10.10.2.1 255.255.255.252
+no shutdown
+exit
+
+router eigrp 100
+network 10.10.1.0 0.0.0.3
+network 10.10.2.0 0.0.0.3
+no auto-summary
+exit
+end
+```
+
+**Configure on R3:**
+```bash
+enable
+configure terminal
+hostname R3
+interface gigabitEthernet 0/0
+ip address 10.10.2.2 255.255.255.252
+no shutdown
+exit
+
+router eigrp 100
+network 10.10.2.0 0.0.0.3
+no auto-summary
+exit
+end
+```
 
 > **ℹ️ Note:** EIGRP AS 100 handles R1-R3 connectivity.
 
@@ -236,12 +275,54 @@ exit
 router rip
 version 2
 network 192.10.1.0
+network 5.0.14.0
+network 5.0.47.0
 no auto-summary
 exit
 end
 ```
 
-**Configure on R5 and R6:** (Similar with additional networks)
+**Configure on R5:**
+```bash
+enable
+configure terminal
+hostname R5
+interface gigabitEthernet 0/1
+ip address 192.10.1.2 255.255.255.252
+no shutdown
+exit
+
+interface gigabitEthernet 0/0
+ip address 192.10.2.1 255.255.255.252
+no shutdown
+exit
+
+router rip
+version 2
+network 192.10.1.0
+network 192.10.2.0
+no auto-summary
+exit
+end
+```
+
+**Configure on R6:**
+```bash
+enable
+configure terminal
+hostname R6
+interface gigabitEthernet 0/0
+ip address 192.10.2.2 255.255.255.252
+no shutdown
+exit
+
+router rip
+version 2
+network 192.10.2.0
+no auto-summary
+exit
+end
+```
 
 > **ℹ️ Note:** RIP v2 handles R4-R6 connectivity.
 
@@ -259,7 +340,7 @@ ip address 172.1.1.1 255.255.255.252
 no shutdown
 exit
 
-interface gigabitEthernet 0/1
+interface gigabitEthernet 0/3
 ip address 5.0.17.2 255.255.255.252
 no shutdown
 exit
@@ -271,11 +352,49 @@ exit
 
 router ospf 1
 network 172.1.1.0 0.0.0.3 area 0
+network 5.0.17.0 0.0.0.3 area 0
+network 5.0.47.0 0.0.0.3 area 0
 exit
 end
 ```
 
-**Configure on R8 and R9:** (Similar with additional networks)
+**Configure on R8:**
+```bash
+enable
+configure terminal
+hostname R8
+interface gigabitEthernet 0/0
+ip address 172.1.2.1 255.255.255.252
+no shutdown
+exit
+
+interface gigabitEthernet 0/1
+ip address 172.1.1.2 255.255.255.252
+no shutdown
+exit
+
+router ospf 1
+network 172.1.1.0 0.0.0.3 area 0
+network 172.1.2.0 0.0.0.3 area 0
+exit
+end
+```
+
+**Configure on R9:**
+```bash
+enable
+configure terminal
+hostname R9
+interface gigabitEthernet 0/0
+ip address 172.1.2.2 255.255.255.252
+no shutdown
+exit
+
+router ospf 1
+network 172.1.2.0 0.0.0.3 area 0
+exit
+end
+```
 
 > **✅ Checkpoint:** All IGP domains are now configured and converged.
 
