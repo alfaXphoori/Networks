@@ -45,7 +45,7 @@ For questions or suggestions, open an issue or contact the maintainer.
 
 ---
 ## 🛠️ Work
-06_BGP_Route: [BGP_Route](https://docs.google.com/forms/d/e/1FAIpQLSfiv658S7GOgn1wV8S8JkcoR-6xAVMJcpTH-950K8uapWiV8g/viewform?usp=dialog)
+06_BGP_Route: [BGP_Route](https://docs.google.com/forms/d/e/1FAIpQLSfiv658S7GOgn1wV8S8JkcoR-6xAVMJcpTH-950K8uapWiV8g/viewform?usp=dialog) | [Image](EVE-NG/imgs/10_bgp.png)
 
 ---
 
