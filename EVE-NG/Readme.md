@@ -19,7 +19,6 @@ This repository contains a comprehensive set of hands-on networking labs designe
 - **12_BGP/**: BGP basics and Internet routing
 - **13_ACL_Security/**: Access Control Lists and network security
 - **14_NAT_Configuration/**: NAT, PAT, and port forwarding labs
-- **Dev/**: Advanced, integrated, and exam-style scenarios
 
 ## 🛠️ Requirements
 - EVE-NG Community or Professional Edition
@@ -45,7 +44,8 @@ Contributions, corrections, and new labs are welcome! Please fork the repository
 For questions or suggestions, open an issue or contact the maintainer.
 
 ---
-Happy labbing and good luck on your networking journey!
+## 🛠️ Work
+06_BGP_Route: [BGP_Route](https://docs.google.com/forms/d/e/1FAIpQLSfiv658S7GOgn1wV8S8JkcoR-6xAVMJcpTH-950K8uapWiV8g/viewform?usp=dialog)
 
 ---
 
