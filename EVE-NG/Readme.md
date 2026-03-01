@@ -19,6 +19,9 @@ This repository contains a comprehensive set of hands-on networking labs designe
 - **12_BGP/**: BGP basics and Internet routing
 - **13_ACL_Security/**: Access Control Lists and network security
 - **14_NAT_Configuration/**: NAT, PAT, and port forwarding labs
+- **15_DHCP/**: DHCP server and relay configuration
+- **16_DNS/**: DNS server setup and troubleshooting
+- **17_VPN/**: VPN technologies and configuration
 
 ## 🛠️ Requirements
 - EVE-NG Community or Professional Edition
