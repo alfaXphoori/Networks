@@ -17,7 +17,7 @@
 4. [IP Addressing Plan](#ip-addressing-plan)
 5. [Lab Topology](#lab-topology)
 6. [Creating the Lab](#creating-the-lab)
-7. [Step-by-Step Configuration](#step-by-step-configuration)
+7. [Step-by-Step Configuration](#-step-by-step-configuration)
 8. [Verification & Testing](#verification--testing)
 9. [Troubleshooting](#troubleshooting)
 10. [Summary & Next Steps](#summary--next-steps)
@@ -28,7 +28,7 @@
 
 > **Purpose:** Master hybrid DHCP (local + relay), NAT, port forwarding, and web server setup in a multi-site environment.
 
-### By the end of this lab, you will:
+### By the end of this lab, you will
 
 - ✅ Configure local DHCP on router
 - ✅ Configure DHCP relay to Linux server
@@ -68,6 +68,7 @@
 ### What is DHCP?
 
 **Dynamic Host Configuration Protocol (DHCP)** automatically assigns IP addresses and network settings to devices, enabling:
+
 - ✅ **Automatic IP assignment** - No manual configuration needed
 - ✅ **Centralized management** - All IP settings from one server
 - ✅ **Address reuse** - IPs are recycled when devices disconnect
@@ -113,6 +114,7 @@ When clients and DHCP servers are on different subnets, the router must forward 
 ## 🖼️ Lab Topology
 
 ### Official EVE-NG Topology
+
 ![EVE-NG Lab Topology](imgs/diagram.png)
 
 ```
@@ -128,6 +130,7 @@ When clients and DHCP servers are on different subnets, the router must forward 
 ```
 
 ### Detailed Device Connections
+
 | From Device | Interface | To Device | Interface | IP Subnet |
 |-------------|-----------|-----------|-----------|-----------|
 | R1 | Gi0/0 | Net | - | DHCP (Internet) |
@@ -341,7 +344,6 @@ write memory
 
 ---
 
-
 ### 🟢 3. R3 Configuration (DHCP Relay)
 
 R3 acts as the Site 2 router, forwarding DHCP requests from the 192.168.20.0/24 LAN to the Linux DHCP server at 192.168.100.10, and routing traffic between sites.
@@ -388,7 +390,6 @@ write memory
 
 ---
 
-
 ### 🟠 4. Linux DHCP Server Configuration
 
 The Linux DHCP server provides IP address assignments for the Site 2 LAN (192.168.20.0/24) and listens on the 192.168.100.0/24 network.
@@ -428,7 +429,6 @@ systemctl enable isc-dhcp-server
 
 ---
 
-
 ### 🟣 5. Web_Server Configuration (Fixed IP)
 
 The Web Server provides a static HTTP service at 192.168.20.10, accessible both locally and via NAT port forwarding from the Internet.
@@ -457,7 +457,6 @@ systemctl enable apache2
 
 ---
 
-
 ### 🟤 6. Client PC Configuration (Linux Slax - DHCP Client)
 
 This configuration works for PC1, PC2 (Site 1) and PC3 (Site 2) — just change the network details as needed.
@@ -482,7 +481,6 @@ ping 8.8.8.8 -c 2
 
 ---
 
-
 ---
 
 ## 🔎 Verification & Testing
@@ -499,10 +497,13 @@ ping 8.8.8.8 -c 2
   - Open browser on Host → `http://<WAN_IP_R1>` → See Apache web page (PAT)
 
 ---
+
 ## 📊 Lab Test Results & Screenshots
 
 ### 1. DHCP Server Status
+
 ![DHCP Server Running](imgs/DHCP_server.png)
+
 ```bash
 root@slax:~# systemctl status isc-dhcp-server
 ● isc-dhcp-server.service - LSB: DHCP server
@@ -511,7 +512,9 @@ root@slax:~# systemctl status isc-dhcp-server
 ```
 
 ### 2. PC1 (Site 1) DHCP Lease
+
 ![PC1 IP Configuration](imgs/PC1.png)
+
 ```bash
 VPCS> show ip
 NAME            : VPCS[1]
@@ -522,7 +525,9 @@ DHCP SERVER     : 192.168.10.1
 ```
 
 ### 3. PC2 (Site 1) Connectivity & Web Test
+
 ![PC2 Web Test](imgs/PC2.png)
+
 ```bash
 root@slax:~# wget http://192.168.20.10
 --2026-02-26 09:30:11--  http://192.168.20.10/
@@ -533,7 +538,9 @@ Saving to: 'index.html'
 ```
 
 ### 4. PC3 (Site 2) DHCP Lease
+
 ![PC3 IP Configuration](imgs/PC3.png)
+
 ```bash
 VPCS> show ip
 NAME            : VPCS[1]
@@ -543,7 +550,9 @@ DHCP SERVER     : 192.168.100.10
 ```
 
 ### 5. R1 Routing & NAT Translations
+
 ![R1 Routing & NAT](imgs/R1_config.png)
+
 ```bash
 R1# show ip route
 S*      0.0.0.0/0 [254/0] via 192.168.80.2
@@ -565,7 +574,9 @@ udp 192.168.80.136:60955 192.168.20.10:60955 202.28.117.7:123 202.28.117.7:123
 ```
 
 ### 6. R2 Routing Table
+
 ![R2 Routing](imgs/R2_config.png)
+
 ```bash
 R2# show ip route
 O*E2  0.0.0.0/0 [110/1] via 10.1.12.1, 07:57:56, GigabitEthernet0/0
@@ -581,7 +592,9 @@ O        192.168.100.0/24 [110/3] via 10.1.12.1, 07:40:26, GigabitEthernet0/0
 ```
 
 ### 7. R3 Routing Table
+
 ![R3 Routing](imgs/R3_config.png)
+
 ```bash
 R3# show ip route
 O*E2  0.0.0.0/0 [110/1] via 10.1.13.1, 07:41:39, GigabitEthernet0/0
@@ -597,7 +610,9 @@ L        192.168.100.1/32 is directly connected, GigabitEthernet0/2
 ```
 
 ### 8. Web Server Status
+
 ![Web Server Status](imgs/Web_server.png)
+
 ```bash
 root@slax:~# systemctl status apache2
 ● apache2.service - The Apache HTTP Server
@@ -606,6 +621,7 @@ root@slax:~# systemctl status apache2
 ```
 
 ---
+
 ## �️ Troubleshooting
 
 ### Issue 1: Site 1 Clients Not Getting IP
@@ -613,6 +629,7 @@ root@slax:~# systemctl status apache2
 **Symptoms:** PC1/PC2 cannot get IP from R2.
 
 **Checklist:**
+
 ```bash
 # On R2
 show ip dhcp binding
@@ -630,6 +647,7 @@ show run | include dhcp
 **Symptoms:** PC3 cannot get IP from Linux DHCP server.
 
 **Checklist:**
+
 ```bash
 # On R3
 show ip interface GigabitEthernet0/1
@@ -649,6 +667,7 @@ cat /var/log/syslog | grep dhcpd
 **Symptoms:** Cannot access web server via R1 WAN IP.
 
 **Checklist:**
+
 ```bash
 # On R1
 show ip nat translations
@@ -669,6 +688,7 @@ netstat -tuln | grep :80
 **Symptoms:** Routers cannot reach each other.
 
 **Checklist:**
+
 ```bash
 # On each router
 show ip ospf neighbor
@@ -685,24 +705,29 @@ show ip interface brief
 ### What You Learned
 
 ✅ **DHCP Fundamentals**
+
 - DHCP process (Discover/Offer/Request/Ack)
 - Local DHCP configuration on Cisco routers
 - DHCP Relay (IP Helper) configuration
 
 ✅ **Hybrid DHCP Architecture**
+
 - Local DHCP for Site 1 (R2)
 - DHCP Relay to Linux server for Site 2 (R3)
 - Multiple DHCP scopes management
 
 ✅ **Fixed IP Configuration**
+
 - Static IP assignment for web server
 - Apache web server setup
 
 ✅ **NAT and Port Forwarding**
+
 - PAT for Internet access
 - Port forwarding for web server access
 
 ✅ **Troubleshooting**
+
 - DHCP binding verification
 - NAT translation verification
 - OSPF neighbor verification
@@ -764,20 +789,24 @@ Next labs:
 ## 🎓 Practice Exercises
 
 **Exercise 1: Basic DHCP Setup**
+
 - Configure local DHCP on R2 for Site 1
 - Verify PC1/PC2 receive correct IP addresses
 - Test Internet connectivity from Site 1 clients
 
 **Exercise 2: DHCP Relay Configuration**
+
 - Configure DHCP relay on R3 for Site 2
 - Verify PC3 receives IP addresses from the Linux DHCP server
 - Test cross-site connectivity
 
 **Exercise 3: NAT & Port Forwarding**
+
 - Verify PAT is working for all internal clients
 - Test external access to the web server via R1's WAN IP
 
 **Exercise 4: Troubleshooting Lab**
+
 - Intentionally break a DHCP configuration
 - Use verification commands to identify and fix the issue
 - Document your troubleshooting process
@@ -789,24 +818,29 @@ Next labs:
 ### What You Learned
 
 ✅ **DHCP Fundamentals**
+
 - DHCP process (Discover/Offer/Request/Ack)
 - Local DHCP configuration on Cisco routers
 - DHCP Relay (IP Helper) configuration
 
 ✅ **Hybrid DHCP Architecture**
+
 - Local DHCP for Site 1 (R2)
 - DHCP Relay to Linux server for Site 2 (R3)
 - Multiple DHCP scopes management
 
 ✅ **Fixed IP Configuration**
+
 - Static IP assignment for web server
 - Apache web server setup
 
 ✅ **NAT and Port Forwarding**
+
 - PAT for Internet access
 - Port forwarding for web server access
 
 ✅ **Troubleshooting**
+
 - DHCP binding verification
 - NAT translation verification
 - OSPF neighbor verification
@@ -864,6 +898,7 @@ Next labs:
 ```
 
 **Career Impact:**
+
 - ✅ DHCP is ESSENTIAL skill for any network role
 - ✅ Used in 99% of enterprise networks
 - ✅ Interview question staple
