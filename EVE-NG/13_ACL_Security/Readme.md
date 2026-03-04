@@ -445,7 +445,7 @@ save
 sudo ip addr add 10.1.1.10/24 dev ens3
 
 # Add default gateway
-sudo ip route add default via 10.1.1.1 dev ens3
+sudo route add default gw 10.1.1.1 ens3
 
 # Verify configuration
 ip addr show ens3
