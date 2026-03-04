@@ -381,27 +381,6 @@ write memory
 
 **R1 Configuration:**
 
-```bash
-enable
-configure terminal
-
-hostname R1
-
-! ตั้งค่า interface ฝั่ง WAN (รับ DHCP จาก ISP)
-interface GigabitEthernet0/0
- description WAN to ISP (DHCP)
- ip address dhcp
- ip nat outside
- no shutdown
- exit
-
-! ตั้งค่า interface ฝั่ง LAN (ไป R2)
-interface GigabitEthernet0/1
- description LAN to R2
- ip address 10.10.10.1 255.255.255.0
- ip address 20.0.0.1 255.255.255.0
-
-
 ## R1 Configuration (Edge Router & NAT)
 
 
@@ -614,6 +593,7 @@ Network Info: IP 50.0.0.10/24, Gateway 50.0.0.1
 
 Type these commands one by one in PC1's terminal:
 
+```bash
 # 1. Set IP address and subnet mask on eth0 and bring it up
 ifconfig eth0 50.0.0.10 netmask 255.255.255.0 up
 
@@ -626,6 +606,7 @@ route add default gw 50.0.0.1
 
 # 3. Set DNS server (for domain name resolution)
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
+```
 
 ![PC1 Configuration Example](imgs/PC1_Config.png)
 *Figure: PC1 network configuration*
@@ -637,6 +618,7 @@ Network Info: IP 60.0.0.10/24, Gateway 60.0.0.1
 
 Type these commands one by one in PC2's terminal:
 
+```bash
 # 1. Set IP address and subnet mask on eth0 and bring it up
 ifconfig eth0 60.0.0.10 netmask 255.255.255.0 up
 
@@ -649,6 +631,7 @@ route add default gw 60.0.0.1
 
 # 3. Set DNS server
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
+```
 
 ![PC2 Configuration Example](imgs/PC2_Config.png)
 *Figure: PC2 network configuration*
@@ -663,19 +646,21 @@ echo "nameserver 8.8.8.8" > /etc/resolv.conf
 
 After configuration, use these commands to verify correctness:
 
-Check IP address:
-ifconfig eth0 or ip a
+```bash
+# Check IP address
+ifconfig eth0  # or: ip a
 
-Check routing table (gateway):
-route -n or ip route
+# Check routing table (gateway)
+route -n  # or: ip route
 
-Test ping to gateway (switch):
-ping -c 4 50.0.0.1 (for PC1)
-ping -c 4 60.0.0.1 (for PC2)
+# Test ping to gateway (switch)
+ping -c 4 50.0.0.1  # for PC1
+ping -c 4 60.0.0.1  # for PC2
 
-Test ping to Internet:
+# Test ping to Internet
 ping -c 4 8.8.8.8
-ping -c 4 google.com (if this works, DNS is working)
+ping -c 4 google.com  # if this works, DNS is working
+```
 
 ---
 
@@ -695,6 +680,7 @@ Gateway: 100.0.0.9 (SW IP)
 
 Open Web_SV's terminal and type these commands:
 
+```bash
 # 1. Set IP address and subnet mask on eth0
 ifconfig eth0 100.0.0.10 netmask 255.255.255.252 up
 
@@ -703,6 +689,7 @@ route add default gw 100.0.0.9
 
 # 3. Set DNS server
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
+```
 
 ![Web Server Example](imgs/Web_Server.png)
 *Figure: Web_SV configuration and HTTP server test*
@@ -718,18 +705,21 @@ In EVE-NG, you can run a web server on a Linux node in several ways. Choose one 
 
 If Python is installed, run a quick web server:
 
+```bash
 # Create a temporary index.html
 echo "<h1>Welcome to Web_SV (100.0.0.10)</h1>" > index.html
 
 # Run web server on port 80 (keep terminal open)
 python3 -m http.server 80
 # Or for Python 2: python -m SimpleHTTPServer 80
+```
 
 
 **Method 2: Install Apache Web Server (standard)**
 
 If you want a real web server and Web_SV can access the Internet:
 
+```bash
 # Update package list and install Apache2
 apt-get update
 apt-get install -y apache2
@@ -740,17 +730,20 @@ echo "<h1>Welcome to Web_SV on EVE-NG</h1>" > /var/www/html/index.html
 # Start Apache2
 /etc/init.d/apache2 start
 # Or: systemctl start apache2
+```
 
 
 ### 3. Test from Client (PC1 / PC2)
 
 After running the web server, go to PC1 (50.0.0.10) or PC2 (60.0.0.10) and use curl or wget to fetch the page:
 
+```bash
 # Download web page from Web_SV
 curl http://100.0.0.10
 
 # Or with wget
 wget -qO- http://100.0.0.10
+```
 
 
 If you see the <h1>Welcome to...</h1> message, routing between 50.0.0.0/24 and 100.0.0.8/30 via the switch and web server is working!
@@ -773,6 +766,7 @@ Gateway: 200.0.0.9 (SW IP)
 
 Open Ftp_SV's terminal and type these commands:
 
+```bash
 # 1. Set IP address and subnet mask on eth0
 ifconfig eth0 200.0.0.10 netmask 255.255.255.252 up
 
@@ -781,6 +775,7 @@ route add default gw 200.0.0.9
 
 # 3. Set DNS server (for package installation)
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
+```
 
 ![FTP Server Example](imgs/Ftp_Server.png)
 *Figure: Ftp_SV configuration and FTP server test*
@@ -792,13 +787,14 @@ Test connectivity: Try `ping 200.0.0.9` (should reach SW) and `ping 8.8.8.8` (sh
 
 For Linux (Debian/Ubuntu/Slax with apt), install vsftpd to quickly simulate an FTP server:
 
+```bash
 # 1. Update package list and install vsftpd
 apt-get update
 apt-get install -y vsftpd
 
 # 2. Create a user for FTP login
 useradd -m ftpuser
-passwd ftpuser 
+passwd ftpuser
 
 # 3. Create a test file in ftpuser's home
 echo "This is a test file from FTP Server." > /home/ftpuser/testfile.txt
@@ -806,14 +802,17 @@ echo "This is a test file from FTP Server." > /home/ftpuser/testfile.txt
 # 4. Start FTP service
 /etc/init.d/vsftpd start
 # Or: service vsftpd start
+```
 
 
 ### 3. Test from Client (PC1 / PC2)
 
 After running the FTP server, go to PC1 (50.0.0.10) or PC2 (60.0.0.10) and test FTP connection and file download:
 
+```bash
 # Connect to FTP server
 ftp 200.0.0.10
+```
 
 
 When prompted:
@@ -844,7 +843,9 @@ In EVE-NG, after configuring NAT (PAT/Overload for outbound Internet, Static NAT
 
 This shows which inside local IPs are being translated to which inside global IPs and ports:
 
+```bash
 show ip nat translations
+```
 
 ![PAT Verification Example](imgs/R1_pat.png)
 *Figure: PAT/NAT translation table on R1*
@@ -852,10 +853,11 @@ show ip nat translations
 
 Example of correct output:
 
+```
 Pro Inside global         Inside local          Outside local         Outside global
 tcp 192.168.80.136:80     100.0.0.10:80         ---                   ---
 tcp 192.168.80.136:21     200.0.0.10:21         ---                   ---
- no shutdown
+```
 
 
 Explanation:
@@ -868,7 +870,9 @@ Last line is PAT (Overload) from PC1 (50.0.0.10) pinging 8.8.8.8, translated to 
 
 This shows overall NAT operation, inside/outside interfaces, and hit/miss counts:
 
+```bash
 show ip nat statistics
+```
 
 
 Key points to check:
