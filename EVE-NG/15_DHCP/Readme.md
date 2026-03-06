@@ -1,4 +1,3 @@
----
 # 🖧 Hybrid DHCP & Fixed Web Server Lab
 
 > Complete hands-on lab to configure hybrid DHCP (local + relay), NAT, and fixed web server in a multi-site topology.
