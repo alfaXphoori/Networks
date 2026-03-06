@@ -314,15 +314,20 @@ route add default gw 100.0.0.9
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 ```
 
-#### 2. Start HTTP Server
+#### 2. Install & Start Apache Web Server
 
 ```bash
-# Quick Python web server
-echo "<h1>Web_SV - 100.0.0.10</h1>" > index.html
-python3 -m http.server 80
+sudo apt update
+sudo apt install apache2 -y
+sudo systemctl start apache2
+sudo systemctl status apache2
 ```
 
-> Or install Apache: `apt-get update && apt-get install -y apache2 && /etc/init.d/apache2 start`
+#### 3. Set Custom HTML Page
+
+```bash
+echo "<html><body><h1>KSU EN CE</h1><p>IP: 100.0.0.10 | Port: 80</p></body></html>" | tee /var/www/html/index.html
+```
 
 ![Web Server Configuration](imgs/Web_Server.png)
 
@@ -343,7 +348,7 @@ echo "nameserver 8.8.8.8" > /etc/resolv.conf
 ```bash
 apt-get update
 apt-get install -y vsftpd
-useradd -m ftpuser
+adduser ftpuser
 passwd ftpuser
 echo "test file from Ftp_SV" > /home/ftpuser/test.txt
 /etc/init.d/vsftpd start
