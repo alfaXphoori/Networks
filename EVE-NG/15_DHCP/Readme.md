@@ -135,8 +135,8 @@ When clients and DHCP servers are on different subnets, the router must forward 
 | R1 | Gi0/0 | Net | - | DHCP (Internet) |
 | R1 | Gi0/2 | R2 | Gi0/0 | 10.1.12.0/30 |
 | R1 | Gi0/3 | R3 | Gi0/0 | 10.1.13.0/30 |
-| R2 | Gi0/1 | SW1 | - | 192.168.10.0/24 |
-| R3 | Gi0/1 | SW2 | - | 192.168.20.0/24 |
+| R2 | Gi0/1 | SW1 | Gi0/0 | 192.168.10.0/24 |
+| R3 | Gi0/1 | SW2 | Gi0/0 | 192.168.20.0/24 |
 | R3 | Gi0/2 | DHCP_Server | ens3 | 192.168.100.0/24 |
 | SW1 | Gi0/1 | PC1 | eth0 | DHCP Client |
 | SW1 | Gi0/2 | PC2 | eth0 | DHCP Client |
