@@ -75,8 +75,6 @@
 
 ## 🗺️ IP Addressing Plan
 
-### 🗺️ แผนผัง IP Address (IP Addressing Plan)
-
 - **R1 (Edge Router):**
   - Gi0/0: DHCP (WAN)
   - Gi0/2: 10.1.12.1/30 (ต่อกับ R2)
@@ -103,7 +101,7 @@
 ## 🖼️ Lab Topology
 
 ### Official EVE-NG Topology
-![Centralized DHCP & DNS Lab Topology](imgs/diagram.png)
+![EVE-NG Lab Topology](imgs/diagram.png)
 
 ```
                     [Internet / ISP]
