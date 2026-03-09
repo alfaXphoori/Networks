@@ -50,7 +50,7 @@ For questions or suggestions, open an issue or contact the maintainer.
 ## 🛠️ Work
 - 06_BGP_Route: [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSfiv658S7GOgn1wV8S8JkcoR-6xAVMJcpTH-950K8uapWiV8g/viewform?usp=dialog) | [Image](https://github.com/alfaXphoori/Networks/blob/main/EVE-NG/imgs/10_bgp.png)
 - 07_ACL: [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSfDR6Iyc2wSa5soKV9Wk-BRSTWcVjF4ocVAACtz9pwLxkUvnQ/viewform?usp=dialog) | [Image](https://github.com/alfaXphoori/Networks/blob/main/EVE-NG/imgs/13_acl.png)
-
+- 08_NAT_DHCP: [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSfspQnSl_rKxPIKH1k_2n__zA92cOxhvobZllhjnYry_IbUPg/viewform?usp=dialog) |
 ---
 
 ## 👤 Author
