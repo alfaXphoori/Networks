@@ -103,19 +103,29 @@
 ## 🖼️ Lab Topology
 
 ### Official EVE-NG Topology
-![Centralized DHCP & DNS Lab Topology](imgs/topology.png)
+![Centralized DHCP & DNS Lab Topology](imgs/diagram.png)
 
 ```
-         [Internet]
-             |
-           [R1]
-         /      \
-      [R2]    [R3]
-      |         |   \
-   [SW1]    [SW2]  [SW3]
-     |         |         |
-   [PC1/2]   [PC3]   [Servers]
+                    [Internet / ISP]
+                          |
+                       Gi0/0 (DHCP)
+                        [R1]
+                   Gi0/2/    \Gi0/3
+                     /          \
+              Gi0/0 [R2]        [R3] Gi0/0
+                     |         /        \
+                   Gi0/1    Gi0/1       Gi0/2
+                   [SW1]   [SW2]        [SW3]
+                  /    \      |       /   |   \
+              Gi0/1  Gi0/2  Gi0/1  Gi0/1 Gi0/2 Gi0/3
+              [PC1]  [PC2] [PC3] [DHCP] [DNS] [Web]
+               DHCP   DHCP  DHCP  _Srv   _Srv  _Srv
+              Site1  Site1  Site2  192.168.100.x
 ```
+> **หมายเหตุ:**
+> - **Site 1 (R2):** PC1, PC2 รับ IP จาก DHCP_Server ผ่าน R2 `ip helper-address`
+> - **Site 2 (R3 Gi0/1):** PC3 รับ IP จาก DHCP_Server ผ่าน R3 `ip helper-address`
+> - **Server Zone (R3 Gi0/2):** DHCP_Server, DNS_Server, Web_Server ต่อผ่าน SW3 ที่ `192.168.100.0/24`
 
 ### Detailed Device Connections
 | From Device | Interface | To Device | Interface | IP Subnet |
