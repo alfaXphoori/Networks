@@ -129,18 +129,18 @@
 
 ให้แนบ Screenshot พิสูจน์การทำงานของแต่ละอุปกรณ์ตามรายการด้านล่าง (ภาพละ **2 คะแนน** รวม **20 คะแนน**):
 
-| # | อุปกรณ์ | ไฟล์รูปภาพ | คะแนน |
+| # | อุปกรณ์ | ภาพหน้าจอ | คะแนน |
 |:-:|---------|:---------:|:-----:|
-| 1 | Router R1 | `imgs/R1.png` | 2 |
-| 2 | Router R2 | `imgs/R2.png` | 2 |
-| 3 | Router R3 | `imgs/R3.png` | 2 |
-| 4 | Switch SW1 | `imgs/SW1.png` | 2 |
-| 5 | PC_Linux_1 | `imgs/PC_1.png` | 2 |
-| 6 | VPC | `imgs/VPC.png` | 2 |
-| 7 | PC_Linux_2 | `imgs/PC_2.png` | 2 |
-| 8 | WEB_SV | `imgs/WEB_SV.png` | 2 |
-| 9 | FTP_SV | `imgs/FTP_SV.png` | 2 |
-| 10 | Access Website จากภายนอก (Host) | `imgs/Host.png` | 2 |
+| 1 | Router R1 | ![R1](imgs/R1.png) | 2 |
+| 2 | Router R2 | ![R2](imgs/R2.png) | 2 |
+| 3 | Router R3 | ![R3](imgs/R3.png) | 2 |
+| 4 | Switch SW1 | ![SW1](imgs/SW1.png) | 2 |
+| 5 | PC_Linux_1 | ![PC_1](imgs/PC_1.png) | 2 |
+| 6 | VPC | ![VPC](imgs/VPC.png) | 2 |
+| 7 | PC_Linux_2 | ![PC_2](imgs/PC_2.png) | 2 |
+| 8 | WEB_SV | ![WEB_SV](imgs/WEB_SV.png) | 2 |
+| 9 | FTP_SV | ![FTP_SV](imgs/FTP_SV.png) | 2 |
+| 10 | Access Website จากภายนอก | ![Host](imgs/Host.png) | 2 |
 | | | **รวม** | **20** |
 
 > [!IMPORTANT]
