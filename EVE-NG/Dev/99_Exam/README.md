@@ -131,23 +131,22 @@
 
 | # | อุปกรณ์ | ภาพหน้าจอ | คะแนน |
 |:-:|---------|:---------:|:-----:|
-| 1 | Router R1 | ![R1](imgs/R1.png) | 2 |
-| 2 | Router R2 | ![R2](imgs/R2.png) | 2 |
-| 3 | Router R3 | ![R3](imgs/R3.png) | 2 |
-| 4 | Switch SW1 | ![SW1](imgs/SW1.png) | 2 |
-| 5 | PC_Linux_1 | ![PC_1](imgs/PC_1.png) | 2 |
-| 6 | VPC | ![VPC](imgs/VPC.png) | 2 |
-| 7 | PC_Linux_2 | ![PC_2](imgs/PC_2.png) | 2 |
-| 8 | WEB_SV | ![WEB_SV](imgs/WEB_SV.png) | 2 |
-| 9 | FTP_SV | ![FTP_SV](imgs/FTP_SV.png) | 2 |
-| 10 | Access Website จากภายนอก | ![Host](imgs/Host.png) | 2 |
+| 1 | Router R1 | <img src="imgs/R1.png" width="250"> | 2 |
+| 2 | Router R2 | <img src="imgs/R2.png" width="250"> | 2 |
+| 3 | Router R3 | <img src="imgs/R3.png" width="250"> | 2 |
+| 4 | Switch SW1 | <img src="imgs/SW1.png" width="250"> | 2 |
+| 5 | PC_Linux_1 | <img src="imgs/PC_1.png" width="250"> | 2 |
+| 6 | VPC | <img src="imgs/VPC.png" width="250"> | 2 |
+| 7 | PC_Linux_2 | <img src="imgs/PC_2.png" width="250"> | 2 |
+| 8 | WEB_SV | <img src="imgs/WEB_SV.png" width="250"> | 2 |
+| 9 | FTP_SV | <img src="imgs/FTP_SV.png" width="250"> | 2 |
+| 10 | Access Website จากภายนอก | <img src="imgs/Host.png" width="250"> | 2 |
 | | | **รวม** | **20** |
 
 > [!IMPORTANT]
 > ⏰ **กำหนดส่งงาน:** วันที่ **11 มีนาคม 2569** ก่อนเวลา **12:15 น.**
 >
 > 📎 **ลิงก์ส่งงาน:** [คลิกที่นี่เพื่อส่งงาน](https://docs.google.com/forms/d/e/1FAIpQLSdLHUciaf3cJjiIDmuTo0gAaURIteK5Ts3W5YXX-_dOid8KYA/viewform?usp=dialog)
-
 
 > **โชคดีกับการสอบ!** 🎯 &nbsp;—&nbsp; [@alfaXphoori](https://www.github.com/alfaXphoori)
 
