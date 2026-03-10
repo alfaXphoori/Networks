@@ -48,7 +48,9 @@
     DHCP      DHCP
 ```
 
-![Exam Topology](imgs/Topology.png)
+<p align="center">
+  <img src="imgs/Topology.png" width="700" alt="Exam Topology Diagram">
+</p>
 
 ### WAN Point-to-Point Links
 
@@ -135,12 +137,13 @@
 | 2 | Router R2 | <img src="imgs/R2.png" width="250"> | 2 |
 | 3 | Router R3 | <img src="imgs/R3.png" width="250"> | 2 |
 | 4 | Switch SW1 | <img src="imgs/SW1.png" width="250"> | 2 |
-| 5 | PC_Linux_1 | <img src="imgs/PC_1.png" width="250"> | 2 |
-| 6 | VPC | <img src="imgs/VPC.png" width="250"> | 2 |
-| 7 | PC_Linux_2 | <img src="imgs/PC_2.png" width="250"> | 2 |
-| 8 | WEB_SV | <img src="imgs/WEB_SV.png" width="250"> | 2 |
-| 9 | FTP_SV | <img src="imgs/FTP_SV.png" width="250"> | 2 |
+| 5 | PC_Linux_1 | <img src="imgs/PC1.png" width="250"> | 1 |
+| 6 | VPC | <img src="imgs/VPC.png" width="250"> | 1 |
+| 7 | PC_Linux_2 | <img src="imgs/PC2.png" width="250"> | 1 |
+| 8 | WEB_SV | <img src="imgs/WEB_SV.png" width="250"> | 1 |
+| 9 | FTP_SV | <img src="imgs/FTP_SV.png" width="250"> | 1 |
 | 10 | Access Website จากภายนอก | <img src="imgs/Host.png" width="250"> | 2 |
+| 11 | Topology (EVE-NG Lab) | <img src="imgs/Topology.png" width="250"> | 5 |
 | | | **รวม** | **20** |
 
 > [!IMPORTANT]
