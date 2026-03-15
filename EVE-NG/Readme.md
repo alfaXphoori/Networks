@@ -50,6 +50,11 @@ For questions or suggestions, open an issue or contact the maintainer.
 ## 🛠️ Score
 - 📊 [Total Score](https://docs.google.com/spreadsheets/d/1fv8meYnEHkDAolsOsWm2ifJHauJS12IrC-ZjG2OsXE4/edit?usp=sharing)
 ---
+---
+## 🚀 Slide 
+- [Network Services](https://www.canva.com/design/DAHDt9QTdpM/lskzzN79dPG2yXHVrTJO2g/view?utm_content=DAHDt9QTdpM&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hf30e51edfc)
+---
+
 
 ## 👤 Author
 
